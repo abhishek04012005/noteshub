@@ -1,0 +1,159 @@
+/* ========== BUY NOTES BUTTON ========== */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.buyButton {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--primary-600);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.buyButton:hover {
+  background-color: var(--primary-700);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+.buyButton:active {
+  transform: translateY(0);
+}
+
+/* ========== PAYMENT FORM ========== */
+
+.paymentForm {
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background: var(--background-secondary);
+}
+
+.formTitle {
+  font-weight: bold;
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+  color: var(--foreground);
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--neutral-300);
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--primary-600);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input::placeholder {
+  color: var(--neutral-400);
+}
+
+/* ========== DIVIDER ========== */
+
+.divider {
+  border-top: 1px solid var(--neutral-300);
+  padding-top: 1rem;
+}
+
+.totalSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+
+.totalAmount {
+  font-weight: bold;
+  color: var(--primary-600);
+}
+
+/* ========== BUTTONS ========== */
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--secondary-600);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: var(--secondary-500);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+  transform: translateY(-2px);
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  color: var(--primary-600);
+  border: 2px solid var(--primary-600);
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.cancelButton:hover {
+  background-color: var(--primary-50);
+  transform: translateY(-2px);
+}
+
+/* ========== FOOTER ========== */
+
+.footer {
+  color: var(--text-light);
+  font-size: 0.75rem;
+  text-align: center;
+  margin-top: 1rem;
+}

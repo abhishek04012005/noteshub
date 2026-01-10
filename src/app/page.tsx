@@ -1,65 +1,251 @@
-import Image from "next/image";
+'use client';
+
+import { NotesList } from '@/components/NotesCard';
+import Link from 'next/link';
+import styles from './page.module.css';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main className={styles.main}>
+      {/* ========== NAVIGATION ========== */}
+      <header className={styles.header}>
+        <div className={styles.headerContainer}>
+          <Link href="/" className={styles.logo}>
+            <div className={styles.logoIcon}>📚</div>
+            <span className={styles.logoText}>NotesHub</span>
+          </Link>
+
+          <nav className={styles.nav}>
+            {['Home', 'Browse', 'Features'].map((item) => (
+              <Link 
+                key={item}
+                href={item === 'Browse' ? '/student/browse' : '/'} 
+                className={styles.navLink}>
+                {item}
+              </Link>
+            ))}
+          </nav>
+
+          <Link href="/admin/login" className={styles.adminBtn}>
+            Admin
+          </Link>
+        </div>
+      </header>
+
+      {/* ========== HERO SECTION ========== */}
+      <section className={styles.hero}>
+        <div className={styles.heroBackground}>
+          <div className={styles.heroBlur1}></div>
+          <div className={styles.heroBlur2}></div>
+        </div>
+
+        <div className={styles.heroContent}>
+          <div className={styles.heroBadge}>
+            <span>🎯 Trusted by 50,000+ Students</span>
+          </div>
+
+          <h1 className={styles.heroTitle}>
+            Master Your Studies with <span className={styles.heroTitleHighlight}>Expert Notes</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className={styles.heroDescription}>
+            Access premium study materials from top educators. Learn smarter, study less, achieve more.
           </p>
+
+          <div className={styles.heroCTAContainer}>
+            <Link href="/student/browse" className={styles.heroCTAPrimary}>
+              Browse Notes Now
+            </Link>
+            <Link href="/admin/login" className={styles.heroCTASecondary}>
+              Become Educator →
+            </Link>
+          </div>
+
+          <div className={styles.heroStats}>
+            <div className={styles.heroStat}>
+              <div className={styles.heroStatNumber}>10K+</div>
+              <div className={styles.heroStatLabel}>Premium Notes</div>
+            </div>
+            <div className={styles.heroStat}>
+              <div className={styles.heroStatNumber}>500+</div>
+              <div className={styles.heroStatLabel}>Expert Teachers</div>
+            </div>
+            <div className={styles.heroStat}>
+              <div className={styles.heroStatNumber}>99%</div>
+              <div className={styles.heroStatLabel}>Success Rate</div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* ========== FEATURES GRID ========== */}
+      <section className={styles.features}>
+        <div className={styles.featuresContainer}>
+          <div className={styles.featuresHeader}>
+            <h2 className={styles.featuresTitle}>Why Students Love NotesHub</h2>
+            <p className={styles.featuresSubtitle}>Everything you need to ace your exams</p>
+          </div>
+
+          <div className={styles.featuresGrid}>
+            {[
+              { 
+                icon: '⚡', 
+                title: 'Instant Access', 
+                desc: 'Get your notes immediately after purchase. Download anytime, anywhere.' 
+              },
+              { 
+                icon: '🔐', 
+                title: 'Secure & Safe', 
+                desc: 'Your data is encrypted. Trusted payment gateway with zero fraud.' 
+              },
+              { 
+                icon: '🎓', 
+                title: 'Verified Experts', 
+                desc: 'Only notes from experienced educators and top performers.' 
+              },
+              { 
+                icon: '💎', 
+                title: 'Premium Quality', 
+                desc: 'High-quality, organized notes that are easy to understand.' 
+              },
+              { 
+                icon: '📱', 
+                title: 'Mobile Ready', 
+                desc: 'Perfect for phones, tablets, and all devices.' 
+              },
+              { 
+                icon: '💰', 
+                title: 'Affordable Prices', 
+                desc: 'Quality education at pocket-friendly rates.' 
+              }
+            ].map((feature, i) => (
+              <div key={i} className={styles.featureCard}>
+                <div className={styles.featureIcon}>{feature.icon}</div>
+                <h3 className={styles.featureTitle}>{feature.title}</h3>
+                <p className={styles.featureDesc}>{feature.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ========== FEATURED NOTES ========== */}
+      <section className={styles.featured}>
+        <div className={styles.featuredContainer}>
+          <div className={styles.featuredHeader}>
+            <div>
+              <div className={styles.featuredBadge}>🌟 TRENDING NOW</div>
+              <h2 className={styles.featuredTitle}>Most Downloaded Notes</h2>
+            </div>
+            <Link href="/student/browse" className={styles.featuredViewAll}>
+              View All →
+            </Link>
+          </div>
+
+          <NotesList />
+
+          <div className={styles.featuredCTA}>
+            <Link href="/student/browse" className={styles.featuredCTABtn}>
+              Explore Full Library
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== TESTIMONIAL BANNER ========== */}
+      <section className={styles.testimonial}>
+        <div className={styles.testimonialContainer}>
+          <div className={styles.testimonialCard}>
+            <div className={styles.testimonialStars}>⭐⭐⭐⭐⭐</div>
+            <h3 className={styles.testimonialTitle}>Join Thousands of Successful Students</h3>
+            <p className={styles.testimonialDesc}>
+              Our users have improved their grades by an average of 15-20 points after using NotesHub
+            </p>
+            <Link href="/student/browse" className={styles.testimonialBtn}>
+              Start Your Success Story
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== PROCESS SECTION ========== */}
+      <section className={styles.process}>
+        <div className={styles.processContainer}>
+          <h2 className={styles.processTitle}>How It Works</h2>
+          <p className={styles.processSubtitle}>Get quality notes in 3 simple steps</p>
+
+          <div className={styles.processGrid}>
+            {[
+              { step: '1', icon: '🔍', title: 'Browse', desc: 'Explore thousands of notes' },
+              { step: '2', icon: '💳', title: 'Purchase', desc: 'Secure payment in seconds' },
+              { step: '3', icon: '📥', title: 'Download', desc: 'Instant access to your files' }
+            ].map((item, i) => (
+              <div key={i} className={styles.processItem}>
+                <div className={styles.processStep}>{item.step}</div>
+                <div className={styles.processIcon}>{item.icon}</div>
+                <h3 className={styles.processItemTitle}>{item.title}</h3>
+                <p className={styles.processItemDesc}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ========== FINAL CTA ========== */}
+      <section className={styles.finalCTA}>
+        <div className={styles.finalCTAContainer}>
+          <div className={styles.finalCTACard}>
+            <h2 className={styles.finalCTATitle}>Ready to Excel?</h2>
+            <p className={styles.finalCTADesc}>
+              Start your journey to academic success today. No registration needed to browse.
+            </p>
+            <Link href="/student/browse" className={styles.finalCTABtn}>
+              Browse Free Now
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== FOOTER ========== */}
+      <footer className={styles.footer}>
+        <div className={styles.footerContainer}>
+          <div className={styles.footerGrid}>
+            <div className={styles.footerColumn}>
+              <h4>Platform</h4>
+              <ul className={styles.footerList}>
+                <li><Link href="/" className={styles.footerLink}>Home</Link></li>
+                <li><Link href="/student/browse" className={styles.footerLink}>Browse Notes</Link></li>
+              </ul>
+            </div>
+            <div className={styles.footerColumn}>
+              <h4>For Educators</h4>
+              <ul className={styles.footerList}>
+                <li><Link href="/admin/login" className={styles.footerLink}>Upload Notes</Link></li>
+                <li><Link href="/admin/login" className={styles.footerLink}>Dashboard</Link></li>
+              </ul>
+            </div>
+            <div className={styles.footerColumn}>
+              <h4>Legal</h4>
+              <ul className={styles.footerList}>
+                <li><Link href="#" className={styles.footerLink}>Privacy</Link></li>
+                <li><Link href="#" className={styles.footerLink}>Terms</Link></li>
+              </ul>
+            </div>
+            <div className={styles.footerColumn}>
+              <h4>Contact</h4>
+              <ul className={styles.footerList}>
+                <li><a href="mailto:support@noteshub.com" className={styles.footerLink}>Email</a></li>
+                <li><a href="#" className={styles.footerLink}>Support</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className={styles.footerBottom}>
+            <p className={styles.footerCopy}>© 2024 NotesHub. All rights reserved.</p>
+            <p className={styles.footerCopy}>Made with ❤️ by the NotesHub Team</p>
+          </div>
+        </div>
+      </footer>
+    </main>
   );
 }

@@ -1,0 +1,173 @@
+/* ========== UPLOAD FORM ========== */
+
+.formCard {
+  background-color: var(--background);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+@media (min-width: 640px) {
+  .formCard {
+    padding: 2rem;
+  }
+}
+
+.formTitle {
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: var(--foreground);
+}
+
+/* ========== SUCCESS MESSAGE ========== */
+
+.successMessage {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  color: white;
+  font-weight: 500;
+  background: var(--success);
+}
+
+/* ========== FORM LAYOUT ========== */
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .formGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+/* ========== FORM ELEMENTS ========== */
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--neutral-300);
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--primary-600);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--neutral-400);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+/* ========== FILE UPLOAD ========== */
+
+.fileUploadContainer {
+  border: 2px dashed var(--neutral-300);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.fileUploadContainer:hover {
+  border-color: var(--primary-600);
+}
+
+.fileUploadContainer.hasFile {
+  border-color: var(--primary-600);
+  background-color: var(--primary-50, rgba(59, 130, 246, 0.05));
+}
+
+.fileInputHidden {
+  display: none;
+}
+
+.fileUploadLabel {
+  cursor: pointer;
+  display: block;
+}
+
+.fileUploadIcon {
+  font-size: 2.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.fileUploadText {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.fileUploadSubtext {
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+
+/* ========== SUBMIT BUTTON ========== */
+
+.submitButton {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--primary-600);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: var(--primary-700);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========== FOOTER TEXT ========== */
+
+.footerText {
+  font-size: 0.75rem;
+  text-align: center;
+  margin-top: 1rem;
+  color: var(--text-light);
+}
