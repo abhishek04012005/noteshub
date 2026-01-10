@@ -105,11 +105,7 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
-          <div className={styles.divider}>
-            <p className={styles.demoText}>
-              Demo: Any email + password <span className={styles.demoMono}>admin</span>
-            </p>
-          </div>
+         
         </div>
 
         {/* Back Link */}
