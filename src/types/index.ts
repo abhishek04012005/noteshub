@@ -5,6 +5,7 @@ export interface Notes {
   description: string;
   university?: string;
   course?: string;
+  branch?: string;
   semester?: string;
   subject: string;
   chapter_no?: string;

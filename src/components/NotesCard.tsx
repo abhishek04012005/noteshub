@@ -24,10 +24,10 @@ export default function NotesCard({ notes }: { notes: Notes }) {
         </div>
 
         <div className={styles.content}>
-          {/* University, Course, Semester Badge */}
-          {(notes.university || notes.course || notes.semester) && (
+          {/* University, Course, Branch, Semester Badge */}
+          {(notes.university || notes.course || notes.branch || notes.semester) && (
             <span className={styles.badge}>
-              {[notes.university, notes.course, notes.semester].filter(Boolean).join(' • ')}
+              {[notes.university, notes.course, notes.branch, notes.semester].filter(Boolean).join(' • ')}
             </span>
           )}
 

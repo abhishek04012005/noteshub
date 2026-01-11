@@ -11,6 +11,7 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File;
     const university = formData.get('university') as string;
     const course = formData.get('course') as string;
+    const branch = formData.get('branch') as string;
     const semester = formData.get('semester') as string;
     const subject = formData.get('subject') as string;
     const chapter_no = formData.get('chapter_no') as string;
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     const author = formData.get('author') as string;
 
     console.log('📋 Form data:', { 
-      university, course, semester, subject, chapter_no, 
+      university, course, branch, semester, subject, chapter_no, 
       title, description, original_price, discounted_price, author, 
       fileName: file?.name 
     });
@@ -88,6 +89,7 @@ export async function POST(request: NextRequest) {
     const noteData = {
       university,
       course,
+      branch,
       semester,
       subject,
       chapter_no,

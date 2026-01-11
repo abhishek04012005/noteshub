@@ -14,6 +14,7 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
   const [formData, setFormData] = useState({
     university: '',
     course: '',
+    branch: '',
     semester: '',
     subject: '',
     chapter_no: '',
@@ -29,6 +30,7 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
   const [dropdownOptions, setDropdownOptions] = useState({
     universities: [] as string[],
     courses: [] as string[],
+    branches: [] as string[],
     semesters: [] as string[],
     subjects: [] as string[],
   });
@@ -45,12 +47,14 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
         const parsed = JSON.parse(savedOptions) as {
           universities?: string[];
           courses?: string[];
+          branches?: string[];
           semesters?: string[];
           subjects?: string[];
         };
         setDropdownOptions({
           universities: [...new Set(parsed.universities || [])] as string[],
           courses: [...new Set(parsed.courses || [])] as string[],
+          branches: [...new Set(parsed.branches || [])] as string[],
           semesters: [...new Set(parsed.semesters || [])] as string[],
           subjects: [...new Set([...defaultSubjects, ...(parsed.subjects || [])])] as string[],
         });
@@ -90,6 +94,7 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
     if (
       !formData.university ||
       !formData.course ||
+      !formData.branch ||
       !formData.semester ||
       !formData.subject ||
       !formData.chapter_no ||
@@ -110,6 +115,7 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
     const updatedOptions = {
       universities: [...new Set([...(currentOptions.universities || []), formData.university])],
       courses: [...new Set([...(currentOptions.courses || []), formData.course])],
+      branches: [...new Set([...(currentOptions.branches || []), formData.branch])],
       semesters: [...new Set([...(currentOptions.semesters || []), formData.semester])],
       subjects: [...new Set([...(currentOptions.subjects || []), formData.subject])],
     };
@@ -121,6 +127,7 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
       const uploadFormData = new FormData();
       uploadFormData.append('university', formData.university);
       uploadFormData.append('course', formData.course);
+      uploadFormData.append('branch', formData.branch);
       uploadFormData.append('semester', formData.semester);
       uploadFormData.append('subject', formData.subject);
       uploadFormData.append('chapter_no', formData.chapter_no);
@@ -141,6 +148,7 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
       setFormData({
         university: '',
         course: '',
+        branch: '',
         semester: '',
         subject: '',
         chapter_no: '',
@@ -222,6 +230,28 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
           <datalist id="course-list">
             {dropdownOptions.courses.map((course) => (
               <option key={course} value={course} />
+            ))}
+          </datalist>
+        </div>
+
+        {/* Branch */}
+        <div>
+          <label className={styles.label}>
+            Branch *
+          </label>
+          <input
+            className={styles.input}
+            type="text"
+            name="branch"
+            list="branch-list"
+            placeholder="Type or select branch..."
+            value={formData.branch}
+            onChange={handleChange}
+            required
+          />
+          <datalist id="branch-list">
+            {dropdownOptions.branches.map((branch) => (
+              <option key={branch} value={branch} />
             ))}
           </datalist>
         </div>
