@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { MenuBook, ArrowBack } from '@mui/icons-material';
 import styles from './login.module.css';
 
 export default function AdminLoginPage() {
@@ -50,7 +51,9 @@ export default function AdminLoginPage() {
       <div className={styles.container}>
         {/* Logo/Brand */}
         <div className={styles.brandSection}>
-          <div className={styles.logo}>📚</div>
+          <div className={styles.logo}>
+            <MenuBook sx={{ fontSize: '2.5rem', color: 'var(--primary-600)' }} />
+          </div>
           <h1 className={styles.brandTitle}>NotesHub</h1>
           <p className={styles.brandSubtitle}>Educator Dashboard</p>
         </div>
@@ -111,7 +114,8 @@ export default function AdminLoginPage() {
         {/* Back Link */}
         <div className={styles.footer}>
           <a href="/" className={styles.backLink}>
-            ← Back to Home
+            <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+            Back to Home
           </a>
         </div>
       </div>

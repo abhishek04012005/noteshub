@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { ArrowBack } from '@mui/icons-material';
 import UploadNotesForm from '@/components/UploadNotesForm';
 import styles from './upload.module.css';
 
@@ -36,7 +37,8 @@ export default function AdminUploadPage() {
               onClick={() => router.back()}
               className={styles.backBtn}
             >
-              ← Back
+              <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+              Back
             </button>
             <h1 className={styles.title}>Upload New Notes</h1>
             <p className={styles.subtitle}>Share your notes with students</p>

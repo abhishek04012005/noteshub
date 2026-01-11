@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import { MenuBook, Add, TrendingUp, DeleteOutline, FolderOff } from '@mui/icons-material';
 import { Notes } from '@/types';
 import styles from './dashboard.module.css';
 
@@ -73,17 +74,22 @@ export default function AdminDashboardPage() {
       <header className={styles.headerFixed}>
         <div className={styles.headerContainer}>
           <div className={styles.headerInfo}>
-            <h1 className={styles.headerTitle}>📚 Notes Dashboard</h1>
+            <h1 className={styles.headerTitle}>
+              <MenuBook sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} />
+              Notes Dashboard
+            </h1>
             <p className={styles.headerEmail}>
               {localStorage.getItem('adminEmail')}
             </p>
           </div>
           <div className={styles.headerActions}>
             <Link href="/admin/dashboard/upload" className={styles.uploadBtn}>
-              ➕ Upload Notes
+              <Add sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+              Upload Notes
             </Link>
             <Link href="/admin/dashboard/sales" className={styles.salesBtn}>
-              💰 View Sales
+              <TrendingUp sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+              View Sales
             </Link>
             <button onClick={handleLogout} className={styles.logoutBtn}>
               Logout
@@ -97,7 +103,10 @@ export default function AdminDashboardPage() {
         <div className={styles.contentContainer}>
           {/* Notes Table Section */}
           <div className={styles.tableSection}>
-            <h2 className={styles.sectionTitle}>📖 Your Uploaded Notes</h2>
+            <h2 className={styles.sectionTitle}>
+              <MenuBook sx={{ fontSize: '1.25rem', marginRight: '0.5rem', verticalAlign: 'middle' }} />
+              Your Uploaded Notes
+            </h2>
 
             {loading ? (
               <div className={styles.loadingContainer}>
@@ -105,12 +114,13 @@ export default function AdminDashboardPage() {
               </div>
             ) : notes.length === 0 ? (
               <div className={styles.emptyState}>
-                <p className={styles.emptyIcon}>📭</p>
+                <FolderOff sx={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--text-light)' }} />
                 <p className={styles.emptyMessage}>
                   No notes uploaded yet. Start uploading your notes now!
                 </p>
                 <Link href="/admin/dashboard/upload" className={styles.emptyBtn}>
-                  ➕ Upload Your First Notes
+                  <Add sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+                  Upload Your First Notes
                 </Link>
               </div>
             ) : (
@@ -161,7 +171,8 @@ export default function AdminDashboardPage() {
                             onClick={() => handleDelete(note.id)}
                             className={styles.deleteBtn}
                           >
-                            🗑️ Delete
+                            <DeleteOutline sx={{ fontSize: '1rem', marginRight: '0.25rem' }} />
+                            Delete
                           </button>
                         </td>
                       </tr>

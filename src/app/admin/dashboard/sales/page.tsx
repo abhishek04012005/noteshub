@@ -3,6 +3,14 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import {
+  TrendingUp,
+  ArrowBack,
+  BarChart,
+  AttachMoney,
+  FolderOff,
+  Logout,
+} from '@mui/icons-material';
 import { Purchase } from '@/types';
 import styles from './sales.module.css';
 
@@ -71,7 +79,10 @@ export default function AdminSalesPage() {
       <header className={styles.headerFixed}>
         <div className={styles.headerContainer}>
           <div className={styles.headerInfo}>
-            <h1 className={styles.headerTitle}>💰 Sales Dashboard</h1>
+            <h1 className={styles.headerTitle}>
+              <TrendingUp sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} />
+              Sales Dashboard
+            </h1>
             <p className={styles.headerEmail}>
               {localStorage.getItem('adminEmail')}
             </p>
@@ -81,9 +92,11 @@ export default function AdminSalesPage() {
               onClick={() => router.push('/admin/dashboard')}
               className={styles.navBtn}
             >
-              ← Back to Dashboard
+              <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+              Back to Dashboard
             </button>
             <button onClick={handleLogout} className={styles.logoutBtn}>
+              <Logout sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
               Logout
             </button>
           </div>
@@ -96,14 +109,18 @@ export default function AdminSalesPage() {
           {/* Stats Section */}
           <div className={styles.statsSection}>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>📊</div>
+              <div className={styles.statIcon}>
+                <BarChart sx={{ fontSize: '2.5rem', color: 'var(--primary-600)' }} />
+              </div>
               <div className={styles.statContent}>
                 <p className={styles.statLabel}>Total Sales</p>
                 <p className={styles.statValue}>{totalSales}</p>
               </div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statIcon}>₹</div>
+              <div className={styles.statIcon}>
+                <AttachMoney sx={{ fontSize: '2.5rem', color: 'var(--success)' }} />
+              </div>
               <div className={styles.statContent}>
                 <p className={styles.statLabel}>Total Revenue</p>
                 <p className={styles.statValue}>₹{totalRevenue.toLocaleString('en-IN')}</p>
@@ -113,7 +130,10 @@ export default function AdminSalesPage() {
 
           {/* Purchases Table */}
           <div className={styles.tableSection}>
-            <h2 className={styles.sectionTitle}>📋 Purchase History</h2>
+            <h2 className={styles.sectionTitle}>
+              <BarChart sx={{ fontSize: '1.25rem', marginRight: '0.5rem', verticalAlign: 'middle' }} />
+              Purchase History
+            </h2>
 
             {loading ? (
               <div className={styles.loadingContainer}>
@@ -121,7 +141,7 @@ export default function AdminSalesPage() {
               </div>
             ) : purchases.length === 0 ? (
               <div className={styles.emptyState}>
-                <p className={styles.emptyIcon}>📭</p>
+                <FolderOff sx={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--text-light)' }} />
                 <p className={styles.emptyMessage}>
                   No purchases yet. When students buy your notes, they'll appear here.
                 </p>

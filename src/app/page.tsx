@@ -2,6 +2,7 @@
 
 import { NotesList } from '@/components/NotesCard';
 import Link from 'next/link';
+import { MenuBook, Lock, School, Phone, TrendingUp, Star } from '@mui/icons-material';
 import styles from './page.module.css';
 
 export default function Home() {
@@ -11,7 +12,9 @@ export default function Home() {
       <header className={styles.header}>
         <div className={styles.headerContainer}>
           <Link href="/" className={styles.logo}>
-            <div className={styles.logoIcon}>📚</div>
+            <div className={styles.logoIcon}>
+              <MenuBook sx={{ fontSize: '1.5rem', color: 'var(--primary-600)' }} />
+            </div>
             <span className={styles.logoText}>NotesHub</span>
           </Link>
 
@@ -41,7 +44,8 @@ export default function Home() {
 
         <div className={styles.heroContent}>
           <div className={styles.heroBadge}>
-            <span>🎯 Trusted by 50,000+ Students</span>
+            <TrendingUp sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+            Trusted by 50,000+ Students
           </div>
 
           <h1 className={styles.heroTitle}>
@@ -89,42 +93,37 @@ export default function Home() {
           <div className={styles.featuresGrid}>
             {[
               { 
-                icon: '⚡', 
-                title: 'Instant Access', 
-                desc: 'Get your notes immediately after purchase. Download anytime, anywhere.' 
-              },
-              { 
-                icon: '🔐', 
+                icon: Lock,
                 title: 'Secure & Safe', 
                 desc: 'Your data is encrypted. Trusted payment gateway with zero fraud.' 
               },
               { 
-                icon: '🎓', 
+                icon: School,
                 title: 'Verified Experts', 
                 desc: 'Only notes from experienced educators and top performers.' 
               },
               { 
-                icon: '💎', 
-                title: 'Premium Quality', 
-                desc: 'High-quality, organized notes that are easy to understand.' 
-              },
-              { 
-                icon: '📱', 
+                icon: Phone,
                 title: 'Mobile Ready', 
                 desc: 'Perfect for phones, tablets, and all devices.' 
               },
               { 
-                icon: '💰', 
+                icon: TrendingUp,
                 title: 'Affordable Prices', 
                 desc: 'Quality education at pocket-friendly rates.' 
               }
-            ].map((feature, i) => (
-              <div key={i} className={styles.featureCard}>
-                <div className={styles.featureIcon}>{feature.icon}</div>
-                <h3 className={styles.featureTitle}>{feature.title}</h3>
-                <p className={styles.featureDesc}>{feature.desc}</p>
-              </div>
-            ))}
+            ].map((feature, i) => {
+              const IconComponent = feature.icon;
+              return (
+                <div key={i} className={styles.featureCard}>
+                  <div className={styles.featureIcon}>
+                    <IconComponent sx={{ fontSize: '2rem', color: 'var(--primary-600)' }} />
+                  </div>
+                  <h3 className={styles.featureTitle}>{feature.title}</h3>
+                  <p className={styles.featureDesc}>{feature.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -134,7 +133,10 @@ export default function Home() {
         <div className={styles.featuredContainer}>
           <div className={styles.featuredHeader}>
             <div>
-              <div className={styles.featuredBadge}>🌟 TRENDING NOW</div>
+              <div className={styles.featuredBadge}>
+                <Star sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+                TRENDING NOW
+              </div>
               <h2 className={styles.featuredTitle}>Most Downloaded Notes</h2>
             </div>
             <Link href="/student/browse" className={styles.featuredViewAll}>
@@ -156,7 +158,11 @@ export default function Home() {
       <section className={styles.testimonial}>
         <div className={styles.testimonialContainer}>
           <div className={styles.testimonialCard}>
-            <div className={styles.testimonialStars}>⭐⭐⭐⭐⭐</div>
+            <div className={styles.testimonialStars}>
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} sx={{ fontSize: '1.5rem', color: '#FFB800' }} />
+              ))}
+            </div>
             <h3 className={styles.testimonialTitle}>Join Thousands of Successful Students</h3>
             <p className={styles.testimonialDesc}>
               Our users have improved their grades by an average of 15-20 points after using NotesHub

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import { MenuBook } from '@mui/icons-material';
 import { Notes } from '@/types';
 import styles from './NotesCard.module.css';
 
@@ -12,7 +13,7 @@ export default function NotesCard({ notes }: { notes: Notes }) {
       <div className={styles.card}>
         {/* Image Placeholder */}
         <div className={styles.imageContainer}>
-          📖
+          <MenuBook sx={{ fontSize: '2.5rem', color: 'white' }} />
         </div>
 
         <div className={styles.content}>
