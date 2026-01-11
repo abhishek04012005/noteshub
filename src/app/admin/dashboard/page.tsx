@@ -149,7 +149,7 @@ export default function AdminDashboardPage() {
                         </td>
                         <td className={styles.tableCell}>
                           <span className={styles.priceCell}>
-                            ₹{note.price.toLocaleString('en-IN')}
+                            ₹{(note.discounted_price || note.price || 0).toLocaleString('en-IN')}
                           </span>
                         </td>
                         <td className={styles.tableCell}>

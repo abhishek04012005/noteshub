@@ -8,6 +8,13 @@ import { Notes } from '@/types';
 import styles from './NotesCard.module.css';
 
 export default function NotesCard({ notes }: { notes: Notes }) {
+  // Use discounted_price if available, otherwise fall back to price for backward compatibility
+  const displayPrice = notes.discounted_price || notes.price || 0;
+  const originalPrice = notes.original_price || (notes.price ? notes.price * 1.5 : 0);
+  const discount = originalPrice && displayPrice 
+    ? Math.round(((originalPrice - displayPrice) / originalPrice) * 100)
+    : 0;
+
   return (
     <Link href={`/student/notes/${notes.id}`} className={styles.cardLink}>
       <div className={styles.card}>
@@ -17,10 +24,24 @@ export default function NotesCard({ notes }: { notes: Notes }) {
         </div>
 
         <div className={styles.content}>
-          {/* Subject Badge */}
-          <span className={styles.badge}>
-            {notes.subject}
-          </span>
+          {/* University, Course, Semester Badge */}
+          {(notes.university || notes.course || notes.semester) && (
+            <span className={styles.badge}>
+              {[notes.university, notes.course, notes.semester].filter(Boolean).join(' • ')}
+            </span>
+          )}
+
+          {/* Subject & Chapter Badge */}
+          <div className={styles.badgeRow}>
+            <span className={styles.badge}>
+              {notes.subject}
+            </span>
+            {notes.chapter_no && (
+              <span className={styles.badge}>
+                {notes.chapter_no}
+              </span>
+            )}
+          </div>
 
           {/* Title */}
           <h3 className={styles.title}>
@@ -35,7 +56,15 @@ export default function NotesCard({ notes }: { notes: Notes }) {
           {/* Footer */}
           <div className={styles.footer}>
             <div className={styles.footerRow}>
-              <span className={styles.price}>₹{notes.price}</span>
+              <div className={styles.priceSection}>
+                {discount > 0 && (
+                  <>
+                    <span className={styles.originalPrice}>₹{Math.round(originalPrice)}</span>
+                    <span className={styles.discountBadge}>{discount}% OFF</span>
+                  </>
+                )}
+                <span className={styles.price}>₹{Math.round(displayPrice)}</span>
+              </div>
               <span className={styles.author}>By {notes.author}</span>
             </div>
             <button 

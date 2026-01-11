@@ -9,13 +9,22 @@ export async function POST(request: NextRequest) {
     
     const formData = await request.formData();
     const file = formData.get('file') as File;
+    const university = formData.get('university') as string;
+    const course = formData.get('course') as string;
+    const semester = formData.get('semester') as string;
+    const subject = formData.get('subject') as string;
+    const chapter_no = formData.get('chapter_no') as string;
     const title = formData.get('title') as string;
     const description = formData.get('description') as string;
-    const subject = formData.get('subject') as string;
-    const price = parseFloat(formData.get('price') as string);
+    const original_price = parseFloat(formData.get('original_price') as string);
+    const discounted_price = parseFloat(formData.get('discounted_price') as string);
     const author = formData.get('author') as string;
 
-    console.log('📋 Form data:', { title, description, subject, price, author, fileName: file?.name });
+    console.log('📋 Form data:', { 
+      university, course, semester, subject, chapter_no, 
+      title, description, original_price, discounted_price, author, 
+      fileName: file?.name 
+    });
 
     if (!file) {
       console.error('❌ No file provided');
@@ -77,10 +86,15 @@ export async function POST(request: NextRequest) {
     // Store notes in Supabase with actual Google Drive data
     console.log('💾 Inserting record into Supabase...');
     const noteData = {
+      university,
+      course,
+      semester,
+      subject,
+      chapter_no,
       title,
       description,
-      subject,
-      price,
+      original_price,
+      discounted_price,
       author,
       google_drive_file_id: driveResponse.file_id,
       download_url: driveResponse.download_link,

@@ -3,8 +3,14 @@ export interface Notes {
   id: string;
   title: string;
   description: string;
+  university?: string;
+  course?: string;
+  semester?: string;
   subject: string;
-  price: number;
+  chapter_no?: string;
+  price?: number; // Keep for backward compatibility
+  original_price: number;
+  discounted_price: number;
   author: string;
   image_url?: string;
   created_at: string;

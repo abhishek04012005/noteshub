@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './UploadNotesForm.module.css';
 
@@ -12,13 +12,63 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({
+    university: '',
+    course: '',
+    semester: '',
+    subject: '',
+    chapter_no: '',
     title: '',
     description: '',
-    subject: '',
-    price: '',
+    original_price: '',
+    discounted_price: '',
     author: '',
   });
   const [file, setFile] = useState<File | null>(null);
+
+  // Dropdown options for previously entered values
+  const [dropdownOptions, setDropdownOptions] = useState({
+    universities: [] as string[],
+    courses: [] as string[],
+    semesters: [] as string[],
+    subjects: [] as string[],
+  });
+
+  // Default options
+  const defaultSubjects = ['Physics', 'Chemistry', 'Biology', 'Mathematics', 'English', 'History', 'Geography', 'Computer Science', 'Economics'];
+  const defaultSemesters = ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7', 'Sem 8'];
+
+  // Load saved options from localStorage on mount
+  useEffect(() => {
+    const savedOptions = localStorage.getItem('notesFormOptions');
+    if (savedOptions) {
+      try {
+        const parsed = JSON.parse(savedOptions) as {
+          universities?: string[];
+          courses?: string[];
+          semesters?: string[];
+          subjects?: string[];
+        };
+        setDropdownOptions({
+          universities: [...new Set(parsed.universities || [])] as string[],
+          courses: [...new Set(parsed.courses || [])] as string[],
+          semesters: [...new Set(parsed.semesters || [])] as string[],
+          subjects: [...new Set([...defaultSubjects, ...(parsed.subjects || [])])] as string[],
+        });
+      } catch (e) {
+        console.error('Error loading saved options:', e);
+        setDropdownOptions(prev => ({
+          ...prev,
+          subjects: defaultSubjects,
+        }));
+      }
+    } else {
+      setDropdownOptions(prev => ({
+        ...prev,
+        subjects: defaultSubjects,
+        semesters: defaultSemesters,
+      }));
+    }
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -38,10 +88,15 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
     setSuccess(false);
 
     if (
+      !formData.university ||
+      !formData.course ||
+      !formData.semester ||
+      !formData.subject ||
+      !formData.chapter_no ||
       !formData.title ||
       !formData.description ||
-      !formData.subject ||
-      !formData.price ||
+      !formData.original_price ||
+      !formData.discounted_price ||
       !formData.author ||
       !file
     ) {
@@ -49,14 +104,30 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
       return;
     }
 
+    // Save form options to localStorage for future dropdowns
+    const savedOptions = localStorage.getItem('notesFormOptions');
+    const currentOptions = savedOptions ? JSON.parse(savedOptions) : {};
+    const updatedOptions = {
+      universities: [...new Set([...(currentOptions.universities || []), formData.university])],
+      courses: [...new Set([...(currentOptions.courses || []), formData.course])],
+      semesters: [...new Set([...(currentOptions.semesters || []), formData.semester])],
+      subjects: [...new Set([...(currentOptions.subjects || []), formData.subject])],
+    };
+    localStorage.setItem('notesFormOptions', JSON.stringify(updatedOptions));
+
     setLoading(true);
 
     try {
       const uploadFormData = new FormData();
+      uploadFormData.append('university', formData.university);
+      uploadFormData.append('course', formData.course);
+      uploadFormData.append('semester', formData.semester);
+      uploadFormData.append('subject', formData.subject);
+      uploadFormData.append('chapter_no', formData.chapter_no);
       uploadFormData.append('title', formData.title);
       uploadFormData.append('description', formData.description);
-      uploadFormData.append('subject', formData.subject);
-      uploadFormData.append('price', formData.price);
+      uploadFormData.append('original_price', formData.original_price);
+      uploadFormData.append('discounted_price', formData.discounted_price);
       uploadFormData.append('author', formData.author);
       uploadFormData.append('file', file);
 
@@ -68,10 +139,15 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
 
       setSuccess(true);
       setFormData({
+        university: '',
+        course: '',
+        semester: '',
+        subject: '',
+        chapter_no: '',
         title: '',
         description: '',
-        subject: '',
-        price: '',
+        original_price: '',
+        discounted_price: '',
         author: '',
       });
       setFile(null);
@@ -93,8 +169,6 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
     }
   };
 
-  const subjects = ['Physics', 'Chemistry', 'Biology', 'Mathematics', 'English', 'History', 'Geography', 'Computer Science', 'Economics'];
-
   return (
     <form onSubmit={handleSubmit} className={styles.formCard}>
       <h2 className={styles.formTitle}>
@@ -108,6 +182,107 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
       )}
 
       <div className={styles.formGrid}>
+        {/* University */}
+        <div>
+          <label className={styles.label}>
+            University Name *
+          </label>
+          <input
+            className={styles.input}
+            type="text"
+            name="university"
+            list="university-list"
+            placeholder="Type or select university..."
+            value={formData.university}
+            onChange={handleChange}
+            required
+          />
+          <datalist id="university-list">
+            {dropdownOptions.universities.map((uni) => (
+              <option key={uni} value={uni} />
+            ))}
+          </datalist>
+        </div>
+
+        {/* Course */}
+        <div>
+          <label className={styles.label}>
+            Course *
+          </label>
+          <input
+            className={styles.input}
+            type="text"
+            name="course"
+            list="course-list"
+            placeholder="Type or select course..."
+            value={formData.course}
+            onChange={handleChange}
+            required
+          />
+          <datalist id="course-list">
+            {dropdownOptions.courses.map((course) => (
+              <option key={course} value={course} />
+            ))}
+          </datalist>
+        </div>
+
+        {/* Semester */}
+        <div>
+          <label className={styles.label}>
+            Semester *
+          </label>
+          <select
+            className={styles.select}
+            name="semester"
+            value={formData.semester}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Semester</option>
+            {dropdownOptions.semesters.map((sem) => (
+              <option key={sem} value={sem}>{sem}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Subject */}
+        <div>
+          <label className={styles.label}>
+            Subject *
+          </label>
+          <input
+            className={styles.input}
+            type="text"
+            name="subject"
+            list="subject-list"
+            placeholder="Type or select subject..."
+            value={formData.subject}
+            onChange={handleChange}
+            required
+          />
+          <datalist id="subject-list">
+            {dropdownOptions.subjects.map((sub) => (
+              <option key={sub} value={sub} />
+            ))}
+          </datalist>
+        </div>
+
+        {/* Chapter No */}
+        <div>
+          <label className={styles.label}>
+            Chapter Number *
+          </label>
+          <input
+            className={styles.input}
+            type="text"
+            name="chapter_no"
+            placeholder="e.g., Chapter 1"
+            value={formData.chapter_no}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
         {/* Title */}
         <div className={styles.fullWidth}>
           <label className={styles.label}>
@@ -117,7 +292,7 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
             className={styles.input}
             type="text"
             name="title"
-            placeholder="e.g., Physics Chapter 1: Motion"
+            placeholder="e.g., Motion and Laws of Motion"
             value={formData.title}
             onChange={handleChange}
             required
@@ -140,39 +315,38 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
           />
         </div>
 
-        {/* Subject */}
+        {/* Original Price */}
         <div>
           <label className={styles.label}>
-            Subject *
-          </label>
-          <select
-            className={styles.select}
-            name="subject"
-            value={formData.subject}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Subject</option>
-            {subjects.map((sub) => (
-              <option key={sub} value={sub}>{sub}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* Price */}
-        <div>
-          <label className={styles.label}>
-            Price (₹) *
+            Original Price (₹) *
           </label>
           <input
             className={styles.input}
             type="number"
-            name="price"
-            placeholder="99"
-            value={formData.price}
+            name="original_price"
+            placeholder="199"
+            value={formData.original_price}
             onChange={handleChange}
             required
             min="1"
+          />
+        </div>
+
+        {/* Discounted Price */}
+        <div>
+          <label className={styles.label}>
+            Discounted Price (₹) *
+          </label>
+          <input
+            className={styles.input}
+            type="number"
+            name="discounted_price"
+            placeholder="99"
+            value={formData.discounted_price}
+            onChange={handleChange}
+            required
+            min="1"
+            max={parseFloat(formData.original_price) || undefined}
           />
         </div>
 
@@ -235,3 +409,8 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
     </form>
   );
 }
+
+
+
+
+

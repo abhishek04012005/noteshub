@@ -145,13 +145,20 @@ export default function NotesDetailPage({
                   <div>
                     <p className={styles.priceLabel}>Price</p>
                     <div className={styles.priceDisplay}>
-                      ₹{notes.price}
+                      {notes.original_price && notes.discounted_price ? (
+                        <>
+                          <span className={styles.originalPrice}>₹{Math.round(notes.original_price)}</span>
+                          <span className={styles.discountedPrice}>₹{Math.round(notes.discounted_price)}</span>
+                        </>
+                      ) : (
+                        <>₹{Math.round(notes.price || notes.discounted_price || 0)}</>
+                      )}
                     </div>
                   </div>
 
                   <BuyNotesButton
                     notesId={notes.id}
-                    price={notes.price}
+                    price={notes.discounted_price || notes.price || 0}
                     title={notes.title}
                   />
                 </div>
