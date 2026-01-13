@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import { MenuBook, Add, TrendingUp, DeleteOutline, FolderOff } from '@mui/icons-material';
+import { MenuBook, Add, TrendingUp, DeleteOutline, FolderOff, EditOutlined } from '@mui/icons-material';
 import { Notes } from '@/types';
 import styles from './dashboard.module.css';
 
@@ -167,13 +167,22 @@ export default function AdminDashboardPage() {
                           </span>
                         </td>
                         <td className={styles.tableCell}>
-                          <button
-                            onClick={() => handleDelete(note.id)}
-                            className={styles.deleteBtn}
-                          >
-                            <DeleteOutline sx={{ fontSize: '1rem', marginRight: '0.25rem' }} />
-                            Delete
-                          </button>
+                          <div className={styles.actionButtons}>
+                            <button
+                              onClick={() => router.push(`/admin/dashboard/edit/${note.id}`)}
+                              className={styles.editBtn}
+                            >
+                              <EditOutlined sx={{ fontSize: '1rem', marginRight: '0.25rem' }} />
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDelete(note.id)}
+                              className={styles.deleteBtn}
+                            >
+                              <DeleteOutline sx={{ fontSize: '1rem', marginRight: '0.25rem' }} />
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
