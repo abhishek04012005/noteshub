@@ -195,6 +195,15 @@
   font-size: 2.25rem;
   font-weight: bold;
   color: var(--primary-600);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.originalPrice {
+  font-size: 1rem;
+  color: var(--text-light);
+  text-decoration: line-through;
 }
 
 .priceLabel {
