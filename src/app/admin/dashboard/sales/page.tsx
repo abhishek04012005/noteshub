@@ -23,8 +23,8 @@ export default function AdminSalesPage() {
   const [totalRevenue, setTotalRevenue] = useState(0);
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
+    const isLoggedIn = localStorage.getItem('isAdminLoggedIn');
+    if (!isLoggedIn) {
       router.push('/admin/login');
       return;
     }
@@ -60,8 +60,10 @@ export default function AdminSalesPage() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
     localStorage.removeItem('adminEmail');
+    localStorage.removeItem('adminId');
+    localStorage.removeItem('isAdminLoggedIn');
+    document.cookie = 'isAdminLoggedIn=; path=/; max-age=0';
     router.push('/admin/login');
   };
 

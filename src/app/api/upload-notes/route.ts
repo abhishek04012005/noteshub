@@ -35,10 +35,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check admin authorization
-    const adminToken = request.headers.get('authorization');
-    if (!adminToken) {
-      console.error('❌ No authorization token provided');
+    // Check admin authorization - just verify Authorization header is present
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader) {
+      console.error('❌ No authorization header provided');
       return NextResponse.json(
         { error: 'Unauthorized: Admin access required' },
         { status: 401 }

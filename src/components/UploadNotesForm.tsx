@@ -140,7 +140,7 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
 
       const response = await axios.post('/api/upload-notes', uploadFormData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
+          Authorization: `Bearer ${localStorage.getItem('adminEmail')}`,
         },
       });
 

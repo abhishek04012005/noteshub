@@ -15,8 +15,8 @@ export default function AdminLoginPage() {
 
   useEffect(() => {
     // Check if already logged in
-    const token = localStorage.getItem('adminToken');
-    if (token) {
+    const isLoggedIn = localStorage.getItem('isAdminLoggedIn');
+    if (isLoggedIn) {
       router.push('/admin/dashboard');
     }
   }, [router]);
@@ -27,20 +27,30 @@ export default function AdminLoginPage() {
     setError('');
 
     try {
-      // For now, do simple validation
-      // TODO: Implement proper authentication with Supabase
-      if (
-        email === process.env.NEXT_PUBLIC_APP_URL ||
-        password === 'admin'
-      ) {
-        localStorage.setItem('adminToken', 'temp_token');
-        localStorage.setItem('adminEmail', email);
+      const response = await axios.post('/api/admin/login', {
+        email,
+        password,
+      });
+
+      if (response.data.success) {
+        // Store login info in localStorage
+        localStorage.setItem('adminEmail', response.data.email);
+        localStorage.setItem('adminId', response.data.adminId);
+        localStorage.setItem('isAdminLoggedIn', 'true');
+
+        // Set cookie for middleware to check
+        document.cookie = 'isAdminLoggedIn=true; path=/; max-age=86400'; // 24 hours
+
         router.push('/admin/dashboard');
       } else {
-        setError('Invalid email or password');
+        setError(response.data.message || 'Login failed');
       }
     } catch (err) {
-      setError('Login failed');
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Invalid email or password'
+      );
     } finally {
       setLoading(false);
     }

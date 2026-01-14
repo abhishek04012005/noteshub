@@ -151,7 +151,7 @@ export default function EditNotesForm({ noteId, onSuccess }: EditNotesFormProps)
     try {
       await axios.put(`/api/notes/${noteId}`, formData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('adminToken')}`,
+          Authorization: `Bearer ${localStorage.getItem('adminEmail')}`,
         },
       });
 

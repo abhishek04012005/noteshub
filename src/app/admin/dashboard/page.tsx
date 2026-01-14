@@ -15,8 +15,8 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
+    const isLoggedIn = localStorage.getItem('isAdminLoggedIn');
+    if (!isLoggedIn) {
       router.push('/admin/login');
       return;
     }
@@ -36,8 +36,10 @@ export default function AdminDashboardPage() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
     localStorage.removeItem('adminEmail');
+    localStorage.removeItem('adminId');
+    localStorage.removeItem('isAdminLoggedIn');
+    document.cookie = 'isAdminLoggedIn=; path=/; max-age=0'; // Clear cookie
     router.push('/admin/login');
   };
 

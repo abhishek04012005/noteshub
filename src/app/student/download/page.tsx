@@ -18,19 +18,34 @@ function DownloadContent() {
   const email = searchParams.get('email');
   const [purchase, setPurchase] = useState<Purchase | null>(null);
   const [loading, setLoading] = useState(true);
+  const [paymentStatus, setPaymentStatus] = useState<'completed' | 'pending' | 'failed' | null>(null);
 
   useEffect(() => {
     const fetchPurchase = async () => {
-      if (!email) return;
+      if (!email) {
+        setLoading(false);
+        return;
+      }
 
       try {
         const response = await axios.get(`/api/purchases?email=${email}`);
         if (response.data.data && response.data.data.length > 0) {
           const latestPurchase = response.data.data[0];
-          setPurchase(latestPurchase);
+          // Only set purchase if payment is completed
+          if (latestPurchase.status === 'completed') {
+            setPurchase(latestPurchase);
+            setPaymentStatus('completed');
+          } else if (latestPurchase.status === 'failed') {
+            setPaymentStatus('failed');
+          } else {
+            setPaymentStatus('pending');
+          }
+        } else {
+          setPaymentStatus('pending');
         }
       } catch (error) {
         console.error('Error fetching purchase:', error);
+        setPaymentStatus('failed');
       } finally {
         setLoading(false);
       }
@@ -47,6 +62,85 @@ function DownloadContent() {
           <p className={styles.loadingText}>Loading your download...</p>
         </div>
       </div>
+    );
+  }
+
+  // Show error if no email provided
+  if (!email) {
+    return (
+      <main className={styles.main}>
+        <header className={styles.headerFixed}>
+          <div className={styles.headerContainer}>
+            <h1 className={styles.headerTitle}>📥 Download</h1>
+          </div>
+        </header>
+        <div className={styles.contentWrapper}>
+          <div className={styles.contentContainer}>
+            <div className={styles.card}>
+              <div className={styles.successIcon}>❌</div>
+              <h1 className={styles.successTitle}>Invalid Request</h1>
+              <p className={styles.message}>Email address is required to access downloads.</p>
+              <Link href="/student/browse" className={styles.continueBtn}>
+                ← Go Back to Browse
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Show pending payment status
+  if (paymentStatus === 'pending') {
+    return (
+      <main className={styles.main}>
+        <header className={styles.headerFixed}>
+          <div className={styles.headerContainer}>
+            <h1 className={styles.headerTitle}>📥 Download</h1>
+          </div>
+        </header>
+        <div className={styles.contentWrapper}>
+          <div className={styles.contentContainer}>
+            <div className={styles.card}>
+              <div className={styles.successIcon}>⏳</div>
+              <h1 className={styles.successTitle}>Payment Pending</h1>
+              <p className={styles.message}>
+                Your payment is being processed. Please wait or check your email for updates.
+              </p>
+              <Link href="/student/browse" className={styles.continueBtn}>
+                ← Continue Shopping
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Show failed payment status
+  if (paymentStatus === 'failed') {
+    return (
+      <main className={styles.main}>
+        <header className={styles.headerFixed}>
+          <div className={styles.headerContainer}>
+            <h1 className={styles.headerTitle}>📥 Download</h1>
+          </div>
+        </header>
+        <div className={styles.contentWrapper}>
+          <div className={styles.contentContainer}>
+            <div className={styles.card}>
+              <div className={styles.successIcon}>❌</div>
+              <h1 className={styles.successTitle}>Payment Failed</h1>
+              <p className={styles.message}>
+                Your payment could not be completed. Please try again or contact support.
+              </p>
+              <Link href="/student/browse" className={styles.continueBtn}>
+                ← Try Again
+              </Link>
+            </div>
+          </div>
+        </div>
+      </main>
     );
   }
 
