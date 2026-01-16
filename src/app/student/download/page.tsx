@@ -6,7 +6,14 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import styles from './download.module.css';
-import { Download } from '@mui/icons-material';
+import {
+  ArrowBack,
+  HourglassEmpty,
+  EmojiEvents,
+  Download,
+  ErrorOutline,
+  Info,
+} from '@mui/icons-material';
 
 interface Purchase {
   download_url: string;
@@ -72,17 +79,23 @@ function DownloadContent() {
       <main className={styles.main}>
         <header className={styles.headerFixed}>
           <div className={styles.headerContainer}>
-              <h1 className={styles.headerTitle}><Download sx={{ marginRight: '0.5rem' }} /> Download</h1>
+            <h1 className={styles.headerTitle}>
+              <Download sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+              Download
+            </h1>
           </div>
         </header>
         <div className={styles.contentWrapper}>
           <div className={styles.contentContainer}>
             <div className={styles.card}>
-              <div className={styles.successIcon}>❌</div>
+              <div className={styles.successIcon}>
+                <ErrorOutline sx={{ fontSize: '3rem', color: 'var(--primary)' }} />
+              </div>
               <h1 className={styles.successTitle}>Invalid Request</h1>
               <p className={styles.message}>Email address is required to access downloads.</p>
               <Link href="/student/browse" className={styles.continueBtn}>
-                ← Go Back to Browse
+                <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+                Go Back to Browse
               </Link>
             </div>
           </div>
@@ -97,19 +110,25 @@ function DownloadContent() {
       <main className={styles.main}>
         <header className={styles.headerFixed}>
           <div className={styles.headerContainer}>
-            <h1 className={styles.headerTitle}><Download sx={{ marginRight: '0.5rem' }} /> Download</h1>
+            <h1 className={styles.headerTitle}>
+              <Download sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+              Download
+            </h1>
           </div>
         </header>
         <div className={styles.contentWrapper}>
           <div className={styles.contentContainer}>
             <div className={styles.card}>
-              <div className={styles.successIcon}>⏳</div>
+              <div className={styles.successIcon}>
+                <HourglassEmpty sx={{ fontSize: '3rem', color: 'var(--secondary)' }} />
+              </div>
               <h1 className={styles.successTitle}>Payment Pending</h1>
               <p className={styles.message}>
                 Your payment is being processed. Please wait or check your email for updates.
               </p>
               <Link href="/student/browse" className={styles.continueBtn}>
-                ← Continue Shopping
+                <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+                Continue Shopping
               </Link>
             </div>
           </div>
@@ -124,19 +143,25 @@ function DownloadContent() {
       <main className={styles.main}>
         <header className={styles.headerFixed}>
           <div className={styles.headerContainer}>
-            <h1 className={styles.headerTitle}><Download sx={{ marginRight: '0.5rem' }} /> Download</h1>
+            <h1 className={styles.headerTitle}>
+              <Download sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+              Download
+            </h1>
           </div>
         </header>
         <div className={styles.contentWrapper}>
           <div className={styles.contentContainer}>
             <div className={styles.card}>
-              <div className={styles.successIcon}>❌</div>
+              <div className={styles.successIcon}>
+                <ErrorOutline sx={{ fontSize: '3rem', color: 'var(--primary)' }} />
+              </div>
               <h1 className={styles.successTitle}>Payment Failed</h1>
               <p className={styles.message}>
                 Your payment could not be completed. Please try again or contact support.
               </p>
               <Link href="/student/browse" className={styles.continueBtn}>
-                ← Try Again
+                <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+                Try Again
               </Link>
             </div>
           </div>
@@ -150,7 +175,10 @@ function DownloadContent() {
       {/* Header */}
       <header className={styles.headerFixed}>
         <div className={styles.headerContainer}>
-          <h1 className={styles.headerTitle}><Download sx={{ marginRight: '0.5rem' }} /> Download</h1>
+          <h1 className={styles.headerTitle}>
+            <Download sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+            Download
+          </h1>
         </div>
       </header>
 
@@ -159,7 +187,9 @@ function DownloadContent() {
         <div className={styles.contentContainer}>
           <div className={styles.card}>
             {/* Success Icon */}
-            <div className={styles.successIcon}>🎉</div>
+            <div className={styles.successIcon}>
+              <EmojiEvents sx={{ fontSize: '3rem', color: 'var(--secondary)' }} />
+            </div>
 
             {/* Heading */}
             <h1 className={styles.successTitle}>
@@ -181,7 +211,8 @@ function DownloadContent() {
                   rel="noopener noreferrer"
                   className={styles.downloadBtn}
                 >
-                  <Download sx={{ marginRight: '0.5rem' }} /> Download Your Notes
+                  <Download sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+                  Download Your Notes
                 </a>
               </div>
             )}
@@ -189,7 +220,8 @@ function DownloadContent() {
             {/* Info Box */}
             <div className={styles.infoBox}>
               <p className={styles.infoBgText}>
-                <span style={{ fontWeight: 600 }}>💡 Tip:</span> The download link is also available in your email inbox for future reference.
+                <Info sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+                <span style={{ fontWeight: 600 }}>Tip:</span> The download link is also available in your email inbox for future reference.
               </p>
             </div>
 
@@ -198,7 +230,8 @@ function DownloadContent() {
               href="/student/browse"
               className={styles.continueBtn}
             >
-              ← Continue Shopping
+              <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+              Continue Shopping
             </Link>
           </div>
         </div>

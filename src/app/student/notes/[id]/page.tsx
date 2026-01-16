@@ -5,8 +5,17 @@ import axios from 'axios';
 import { Notes } from '@/types';
 import BuyNotesButton from '@/components/BuyNotesButton';
 import Link from 'next/link';
+import {
+  ArrowBack,
+  MenuBook,
+  School,
+  LibraryBooks,
+  AccountBalance,
+  DateRange,
+  ListAlt,
+  Error as ErrorIcon,
+} from '@mui/icons-material';
 import styles from './notes.module.css';
-import { SentimentDissatisfied, MenuBook, Apartment, LibraryBooks, SchoolOutlined, CalendarToday } from '@mui/icons-material';
 
 export default function NotesDetailPage({
   params,
@@ -55,10 +64,13 @@ export default function NotesDetailPage({
     return (
       <div className={styles.errorContainer}>
         <div className={styles.errorContent}>
-          <SentimentDissatisfied sx={{ fontSize: 48, color: '#F4A261' }} />
+          <div className={styles.errorIcon}>
+            <ErrorIcon sx={{ fontSize: '3rem', color: 'var(--primary)' }} />
+          </div>
           <p className={styles.errorMessage}>Notes not found</p>
           <Link href="/student/browse" className={styles.errorLink}>
-            ← Back to Browse
+            <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+            Back to Browse
           </Link>
         </div>
       </div>
@@ -71,7 +83,8 @@ export default function NotesDetailPage({
       <header className={styles.headerFixed}>
         <div className={styles.headerContainer}>
           <Link href="/student/browse" className={styles.backLink}>
-            ← Back to Browse
+            <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+            Back to Browse
           </Link>
         </div>
       </header>
@@ -91,7 +104,7 @@ export default function NotesDetailPage({
                   />
                 ) : (
                   <div className={styles.imagePlaceholder}>
-                    <MenuBook sx={{ fontSize: 48, color: '#F4A261' }} />
+                    <MenuBook sx={{ fontSize: '3rem', color: 'var(--primary)' }} />
                   </div>
                 )}
               </div>
@@ -118,36 +131,31 @@ export default function NotesDetailPage({
                   <div className={styles.keyDetailsGrid}>
                     {notes.university && (
                       <div className={styles.keyDetailItem}>
-                        <span className={styles.keyDetailLabelIcon}><Apartment sx={{ fontSize: 18 }} /></span>
-                        <p className={styles.keyDetailLabel}>University</p>
+                        <p className={styles.keyDetailLabel}><School sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} /> University</p>
                         <p className={styles.keyDetailValue}>{notes.university}</p>
                       </div>
                     )}
                     {notes.course && (
                       <div className={styles.keyDetailItem}>
-                        <span className={styles.keyDetailLabelIcon}><LibraryBooks sx={{ fontSize: 18 }} /></span>
-                        <p className={styles.keyDetailLabel}>Course</p>
+                        <p className={styles.keyDetailLabel}><LibraryBooks sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} /> Course</p>
                         <p className={styles.keyDetailValue}>{notes.course}</p>
                       </div>
                     )}
                     {notes.branch && (
                       <div className={styles.keyDetailItem}>
-                        <span className={styles.keyDetailLabelIcon}><SchoolOutlined sx={{ fontSize: 18 }} /></span>
-                        <p className={styles.keyDetailLabel}>Branch</p>
+                        <p className={styles.keyDetailLabel}><AccountBalance sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} /> Branch</p>
                         <p className={styles.keyDetailValue}>{notes.branch}</p>
                       </div>
                     )}
                     {notes.semester && (
                       <div className={styles.keyDetailItem}>
-                        <span className={styles.keyDetailLabelIcon}><CalendarToday sx={{ fontSize: 18 }} /></span>
-                        <p className={styles.keyDetailLabel}>Semester</p>
+                        <p className={styles.keyDetailLabel}><DateRange sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} /> Semester</p>
                         <p className={styles.keyDetailValue}>{notes.semester}</p>
                       </div>
                     )}
                     {notes.chapter_no && (
                       <div className={styles.keyDetailItem}>
-                        <span className={styles.keyDetailLabelIcon}><MenuBook sx={{ fontSize: 18 }} /></span>
-                        <p className={styles.keyDetailLabel}>Chapter</p>
+                        <p className={styles.keyDetailLabel}><ListAlt sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} /> Chapter</p>
                         <p className={styles.keyDetailValue}>{notes.chapter_no}</p>
                       </div>
                     )}

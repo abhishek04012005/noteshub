@@ -22,16 +22,6 @@ import {
   AccountCircle as IconAccount,
   Lock as IconLock,
   Email as IconEmail,
-  Search as IconSearch,
-  Payment as IconPayment,
-  Download as IconDownload,
-  BusinessOutlined as IconUniversity,
-  LibraryBooks as IconCourse,
-  SchoolOutlined as IconBranch,
-  CalendarToday as IconCalendar,
-  SentimentSatisfied as IconHappy,
-  SentimentDissatisfied as IconSad,
-  ShoppingCart as IconCart,
 } from '@mui/icons-material';
 
 export const ICONS = {
@@ -49,18 +39,12 @@ export const ICONS = {
   add: IconAdd,
   delete: IconDelete,
   upload: IconUpload,
-  search: IconSearch,
-  payment: IconPayment,
-  download: IconDownload,
-  cart: IconCart,
   
   // Status
   money: IconMoney,
   complete: IconComplete,
   loading: IconLoading,
   empty: IconEmpty,
-  happy: IconHappy,
-  sad: IconSad,
   
   // Features
   security: IconSecurity,
@@ -68,12 +52,6 @@ export const ICONS = {
   mobile: IconMobile,
   price: IconPrice,
   star: IconStar,
-  
-  // Details (Notes Page)
-  university: IconUniversity,
-  course: IconCourse,
-  branch: IconBranch,
-  calendar: IconCalendar,
   
   // Forms
   lock: IconLock,

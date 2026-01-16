@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Notes } from '@/types';
 import styles from './UploadNotesForm.module.css';
+import {
+  CheckCircle,
+  HourglassEmpty,
+  Save,
+  Edit as EditIcon,
+} from '@mui/icons-material';
 
 interface EditNotesFormProps {
   noteId: string;
@@ -184,12 +190,14 @@ export default function EditNotesForm({ noteId, onSuccess }: EditNotesFormProps)
   return (
     <form onSubmit={handleSubmit} className={styles.formCard}>
       <h2 className={styles.formTitle}>
-        ✏️ Edit Notes Details
+        <EditIcon sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+        Edit Notes Details
       </h2>
 
       {success && (
         <div className={styles.successMessage}>
-          ✓ Notes updated successfully!
+          <CheckCircle sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+          Notes updated successfully!
         </div>
       )}
 
@@ -406,7 +414,17 @@ export default function EditNotesForm({ noteId, onSuccess }: EditNotesFormProps)
         disabled={saving}
         className={styles.submitButton}
       >
-        {saving ? '⏳ Saving...' : '💾 Save Changes'}
+        {saving ? (
+          <>
+            <HourglassEmpty sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+            Saving...
+          </>
+        ) : (
+          <>
+            <Save sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+            Save Changes
+          </>
+        )}
       </button>
     </form>
   );

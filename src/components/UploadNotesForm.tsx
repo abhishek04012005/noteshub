@@ -3,6 +3,12 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './UploadNotesForm.module.css';
+import {
+  CheckCircle,
+  HourglassEmpty,
+  Rocket,
+  Description as DescriptionIcon,
+} from '@mui/icons-material';
 
 interface UploadNotesFormProps {
   onSuccess?: () => void;
@@ -180,12 +186,14 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
   return (
     <form onSubmit={handleSubmit} className={styles.formCard}>
       <h2 className={styles.formTitle}>
-        📤 Upload Your Notes
+        <Rocket sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+        Upload Your Notes
       </h2>
 
       {success && (
         <div className={styles.successMessage}>
-          ✓ Notes uploaded successfully!
+          <CheckCircle sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+          Notes uploaded successfully!
         </div>
       )}
 
@@ -413,12 +421,21 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
               required
             />
             <label htmlFor="file-input" className={styles.fileUploadLabel}>
-              <div className={styles.fileUploadIcon}>📄</div>
+              <div className={styles.fileUploadIcon}>
+                <DescriptionIcon sx={{ fontSize: '2rem', color: 'var(--primary)' }} />
+              </div>
               <p className={styles.fileUploadText}>
                 {file ? file.name : 'Click to upload PDF'}
               </p>
               <p className={styles.fileUploadSubtext}>
-                {file ? '✓ Ready to upload' : 'or drag and drop'}
+                {file ? (
+                  <>
+                    <CheckCircle sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+                    Ready to upload
+                  </>
+                ) : (
+                  'or drag and drop'
+                )}
               </p>
             </label>
           </div>
@@ -430,7 +447,17 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
         disabled={loading}
         className={styles.submitButton}
       >
-        {loading ? '⏳ Uploading...' : '🚀 Upload Notes'}
+        {loading ? (
+          <>
+            <HourglassEmpty sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+            Uploading...
+          </>
+        ) : (
+          <>
+            <Rocket sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+            Upload Notes
+          </>
+        )}
       </button>
 
       <p className={styles.footerText}>

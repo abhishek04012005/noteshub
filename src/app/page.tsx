@@ -164,14 +164,19 @@ export default function Home() {
               { step: '1', icon: Search, title: 'Browse', desc: 'Explore thousands of notes' },
               { step: '2', icon: Payment, title: 'Purchase', desc: 'Secure payment in seconds' },
               { step: '3', icon: Download, title: 'Download', desc: 'Instant access to your files' }
-            ].map((item, i) => (
-              <div key={i} className={styles.processItem}>
-                <div className={styles.processStep}>{item.step}</div>
-                <div className={styles.processIcon}><item.icon sx={{ fontSize: 40 }} /></div>
-                <h3 className={styles.processItemTitle}>{item.title}</h3>
-                <p className={styles.processItemDesc}>{item.desc}</p>
-              </div>
-            ))}
+            ].map((item, i) => {
+              const IconComponent = item.icon;
+              return (
+                <div key={i} className={styles.processItem}>
+                  <div className={styles.processStep}>{item.step}</div>
+                  <div className={styles.processIcon}>
+                    <IconComponent sx={{ fontSize: '2rem', color: 'var(--primary-600)' }} />
+                  </div>
+                  <h3 className={styles.processItemTitle}>{item.title}</h3>
+                  <p className={styles.processItemDesc}>{item.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

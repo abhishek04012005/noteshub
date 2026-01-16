@@ -198,14 +198,6 @@
   flex-direction: column;
 }
 
-.keyDetailLabelIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--secondary);
-  margin-bottom: 0.5rem;
-}
-
 .keyDetailLabel {
   font-size: 0.75rem;
   color: var(--tertiary);

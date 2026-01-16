@@ -4,6 +4,11 @@ import { useState } from 'react';
 import { loadScript } from '../utils/razorpay-loader';
 import axios from 'axios';
 import styles from './BuyNotesButton.module.css';
+import {
+  Payment as CreditCardIcon,
+  HourglassEmpty,
+  CheckCircle,
+} from '@mui/icons-material';
 
 interface BuyNotesButtonProps {
   notesId: string;
@@ -106,7 +111,8 @@ export default function BuyNotesButton({
           onClick={() => setShowForm(true)}
           className={styles.buyButton}
         >
-          💳 Buy Now - ₹{price}
+          <CreditCardIcon sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+          Buy Now - ₹{price}
         </button>
       ) : (
         <div className={styles.paymentForm}>
@@ -154,7 +160,17 @@ export default function BuyNotesButton({
                 disabled={loading || !email || !name}
                 className={styles.submitButton}
               >
-                {loading ? '⏳ Processing...' : '✓ Complete Payment'}
+                {loading ? (
+                  <>
+                    <HourglassEmpty sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+                    Complete Payment
+                  </>
+                )}
               </button>
 
               <button

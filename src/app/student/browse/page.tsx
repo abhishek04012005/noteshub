@@ -3,6 +3,7 @@
 import { NotesList } from '@/components/NotesCard';
 import Link from 'next/link';
 import styles from './browse.module.css';
+import { ArrowBack } from '@mui/icons-material';
 
 export default function BrowseNotesPage() {
   return (
@@ -11,7 +12,8 @@ export default function BrowseNotesPage() {
       <header className={styles.header}>
         <div className={styles.headerContainer}>
           <Link href="/" className={styles.backLink}>
-            ← Back Home
+            <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+            Back Home
           </Link>
           <h1 className={styles.title}>
             Browse All Notes
