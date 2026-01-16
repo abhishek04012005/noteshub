@@ -43,10 +43,7 @@ export default function Home() {
         </div>
 
         <div className={styles.heroContent}>
-          <div className={styles.heroBadge}>
-            <TrendingUp sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
-            Trusted by 50,000+ Students
-          </div>
+          
 
           <h1 className={styles.heroTitle}>
             Master Your Studies with <span className={styles.heroTitleHighlight}>Expert Notes</span>
@@ -60,24 +57,6 @@ export default function Home() {
             <Link href="/student/browse" className={styles.heroCTAPrimary}>
               Browse Notes Now
             </Link>
-            <Link href="/admin/login" className={styles.heroCTASecondary}>
-              Become Educator →
-            </Link>
-          </div>
-
-          <div className={styles.heroStats}>
-            <div className={styles.heroStat}>
-              <div className={styles.heroStatNumber}>10K+</div>
-              <div className={styles.heroStatLabel}>Premium Notes</div>
-            </div>
-            <div className={styles.heroStat}>
-              <div className={styles.heroStatNumber}>500+</div>
-              <div className={styles.heroStatLabel}>Expert Teachers</div>
-            </div>
-            <div className={styles.heroStat}>
-              <div className={styles.heroStatNumber}>99%</div>
-              <div className={styles.heroStatLabel}>Success Rate</div>
-            </div>
           </div>
         </div>
       </section>
