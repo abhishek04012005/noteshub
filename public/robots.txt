@@ -1,0 +1,43 @@
+# Robots.txt for NotesHub - Study Notes Marketplace
+
+# Allow all major search engines to crawl the site
+User-agent: *
+Allow: /
+Allow: /student/browse
+Allow: /student/notes/
+Allow: /
+Allow: /api/notes
+
+# Disallow admin pages and sensitive paths
+Disallow: /admin/
+Disallow: /api/payment/
+Disallow: /api/upload-notes/
+Disallow: /api/purchases/
+Disallow: /student/download
+
+# Allow search engines to crawl API notes (for rich snippets)
+Allow: /api/notes/
+
+# Specific rules for Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Specific rules for Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Point to sitemap
+Sitemap: https://noteshub.example.com/sitemap.xml
+Sitemap: https://noteshub.example.com/sitemap-notes.xml

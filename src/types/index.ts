@@ -20,6 +20,7 @@ export interface Notes {
 
 // Purchase Types
 export interface Purchase {
+  email: string;
   id: string;
   notes_id: string;
   customer_email: string;

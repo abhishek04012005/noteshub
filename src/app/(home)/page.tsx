@@ -43,8 +43,6 @@ export default function Home() {
         </div>
 
         <div className={styles.heroContent}>
-          
-
           <h1 className={styles.heroTitle}>
             Master Your Studies with <span className={styles.heroTitleHighlight}>Expert Notes</span>
           </h1>

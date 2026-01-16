@@ -29,49 +29,27 @@ export default function AdminSalesPage() {
       return;
     }
     setIsAdmin(true);
-    fetchPurchases();
+    fetchSalesData();
   }, [router]);
 
-  const fetchPurchases = async () => {
+  const fetchSalesData = async () => {
     try {
-      // Fetch all purchases from admin endpoint
       const response = await axios.get('/api/admin/purchases');
-      const purchaseData = response.data.data || [];
-      setPurchases(purchaseData);
-
-      // Calculate total sales and revenue
-      const totalCount = purchaseData.length;
-      const totalAmount = purchaseData.reduce(
-        (sum: number, purchase: Purchase) => sum + purchase.amount,
-        0
-      );
-
-      setTotalSales(totalCount);
-      setTotalRevenue(totalAmount);
+      const data = response.data.data || [];
+      setPurchases(data);
+      setTotalSales(data.length);
+      setTotalRevenue(data.reduce((sum: number, purchase: Purchase) => sum + (purchase.amount || 0), 0));
     } catch (error) {
-      console.error('Error fetching purchases:', error);
-      // Show empty state if error
-      setPurchases([]);
-      setTotalSales(0);
-      setTotalRevenue(0);
+      console.error('Error fetching sales data:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      // Call logout endpoint to clear server-side cookie
-      await axios.post('/api/admin/logout');
-    } catch (err) {
-      console.error('Logout error:', err);
-    }
-    
-    // Clear client-side data
+  const handleLogout = () => {
     localStorage.removeItem('adminEmail');
     localStorage.removeItem('adminId');
     localStorage.removeItem('isAdminLoggedIn');
-    
     router.push('/admin/login');
   };
 
@@ -91,141 +69,101 @@ export default function AdminSalesPage() {
           <div className={styles.headerInfo}>
             <h1 className={styles.headerTitle}>
               <TrendingUp sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} />
-              Sales Dashboard
+              Sales Analytics
             </h1>
-            <p className={styles.headerEmail}>
-              {localStorage.getItem('adminEmail')}
-            </p>
+            <p className={styles.headerEmail}>Track your earnings and sales performance</p>
           </div>
+
           <div className={styles.headerActions}>
             <button
-              onClick={() => router.push('/admin/dashboard')}
+              onClick={() => router.back()}
               className={styles.navBtn}
+              title="Go back"
             >
-              <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
-              Back to Dashboard
+              <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle' }} />
+              Back
             </button>
             <button onClick={handleLogout} className={styles.logoutBtn}>
-              <Logout sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+              <Logout sx={{ fontSize: '1rem', marginRight: '0.25rem' }} />
               Logout
             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className={styles.mainContent}>
-        <div className={styles.contentContainer}>
-          {/* Stats Section */}
-          <div className={styles.statsSection}>
-            <div className={styles.statCard}>
-              <div className={styles.statIcon}>
-                <BarChart sx={{ fontSize: '2.5rem', color: 'var(--primary-600)' }} />
-              </div>
-              <div className={styles.statContent}>
-                <p className={styles.statLabel}>Total Sales</p>
-                <p className={styles.statValue}>{totalSales}</p>
-              </div>
+      {/* Stats Section */}
+      <div style={{  padding: '2rem 1rem' }}>
+        <section className={styles.statsSection}>
+          {/* Total Sales Card */}
+          <div className={styles.statCard}>
+            <div className={styles.statIcon}>
+              <BarChart sx={{ fontSize: '2rem', color: 'var(--primary-600)' }} />
             </div>
-            <div className={styles.statCard}>
-              <div className={styles.statIcon}>
-                <AttachMoney sx={{ fontSize: '2.5rem', color: 'var(--success)' }} />
-              </div>
-              <div className={styles.statContent}>
-                <p className={styles.statLabel}>Total Revenue</p>
-                <p className={styles.statValue}>₹{totalRevenue.toLocaleString('en-IN')}</p>
-              </div>
+            <div className={styles.statContent}>
+              <p className={styles.statLabel}>Total Sales</p>
+              <p className={styles.statValue}>{totalSales}</p>
             </div>
           </div>
 
-          {/* Purchases Table */}
-          <div className={styles.tableSection}>
-            <h2 className={styles.sectionTitle}>
-              <BarChart sx={{ fontSize: '1.25rem', marginRight: '0.5rem', verticalAlign: 'middle' }} />
-              Purchase History
-            </h2>
+          {/* Total Revenue Card */}
+          <div className={styles.statCard}>
+            <div className={styles.statIcon}>
+              <AttachMoney sx={{ fontSize: '2rem', color: 'var(--success-600)' }} />
+            </div>
+            <div className={styles.statContent}>
+              <p className={styles.statLabel}>Total Revenue</p>
+              <p className={styles.statValue}>₹{totalRevenue.toLocaleString('en-IN')}</p>
+            </div>
+          </div>
+        </section>
 
-            {loading ? (
-              <div className={styles.loadingContainer}>
-                <p className={styles.loadingText}>Loading purchases...</p>
-              </div>
-            ) : purchases.length === 0 ? (
-              <div className={styles.emptyState}>
-                <FolderOff sx={{ fontSize: '3rem', marginBottom: '1rem', color: 'var(--text-light)' }} />
-                <p className={styles.emptyMessage}>
-                  No purchases yet. When students buy your notes, they'll appear here.
-                </p>
-              </div>
-            ) : (
-              <div className={styles.tableWrapper}>
-                <table className={styles.table}>
-                  <thead className={styles.tableHead}>
-                    <tr className={styles.tableRow}>
-                      <th className={styles.tableHeader}>Customer Name</th>
-                      <th className={styles.tableHeader}>Email</th>
-                      <th className={styles.tableHeader}>Amount</th>
-                      <th className={styles.tableHeader}>Transaction ID</th>
-                      <th className={styles.tableHeader}>Status</th>
-                      <th className={styles.tableHeader}>Date</th>
+        {/* Sales Table Section */}
+        <section className={styles.tableSection}>
+          <h2 className={styles.sectionTitle}>Recent Purchases</h2>
+          
+          {loading ? (
+            <div className={styles.loadingContainer}>
+              <p className={styles.loadingText}>Loading sales data...</p>
+            </div>
+          ) : purchases.length === 0 ? (
+            <div className={styles.emptyState}>
+              <FolderOff className={styles.emptyIcon} sx={{ fontSize: '3rem' }} />
+              <p className={styles.emptyMessage}>No sales yet</p>
+              <p className={styles.emptyMessage} style={{ fontSize: '0.875rem', opacity: 0.7 }}>Your sales will appear here once someone purchases your notes</p>
+            </div>
+          ) : (
+            <div className={styles.tableWrapper}>
+              <table className={styles.table}>
+                <thead className={styles.tableHead}>
+                  <tr>
+                    <th className={styles.tableHeader}>Date</th>
+                    <th className={styles.tableHeader}>Customer Name</th>
+                    <th className={styles.tableHeader}>Email</th>
+                    <th className={styles.tableHeader}>Amount</th>
+                    <th className={styles.tableHeader}>Payment ID</th>
+                    <th className={styles.tableHeader}>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {purchases.map((purchase) => (
+                    <tr key={purchase.id} className={styles.tableRow}>
+                      <td className={styles.tableCell}>{new Date(purchase.created_at).toLocaleDateString()}</td>
+                      <td className={`${styles.tableCell} ${styles.nameCell}`}>{purchase.customer_name || 'N/A'}</td>
+                      <td className={`${styles.tableCell} ${styles.emailCell}`}>{purchase.customer_email || purchase.email || 'N/A'}</td>
+                      <td className={`${styles.tableCell} ${styles.amountCell}`}>₹{purchase.amount?.toLocaleString('en-IN') || '0'}</td>
+                      <td className={`${styles.tableCell} ${styles.transactionId}`}>{purchase.razorpay_payment_id?.substring(0, 12)}...</td>
+                      <td className={styles.tableCell}>
+                        <span className={`${styles.statusBadge} ${styles[`status${purchase.status?.charAt(0).toUpperCase() + purchase.status?.slice(1).toLowerCase() || 'Pending'}`]}`}>
+                          {purchase.status?.charAt(0).toUpperCase() + purchase.status?.slice(1).toLowerCase() || 'Pending'}
+                        </span>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className={styles.tableBody}>
-                    {purchases.map((purchase) => (
-                      <tr key={purchase.id} className={styles.tableRow}>
-                        <td className={styles.tableCell}>
-                          <span className={styles.nameCell}>
-                            {purchase.customer_name}
-                          </span>
-                        </td>
-                        <td className={styles.tableCell}>
-                          <span className={styles.emailCell}>
-                            {purchase.customer_email}
-                          </span>
-                        </td>
-                        <td className={styles.tableCell}>
-                          <span className={styles.amountCell}>
-                            ₹{purchase.amount.toLocaleString('en-IN')}
-                          </span>
-                        </td>
-                        <td className={styles.tableCell}>
-                          <code className={styles.transactionId}>
-                            {purchase.razorpay_payment_id.slice(0, 12)}...
-                          </code>
-                        </td>
-                        <td className={styles.tableCell}>
-                          <span
-                            className={`${styles.statusBadge} ${
-                              purchase.status === 'completed'
-                                ? styles.statusCompleted
-                                : purchase.status === 'pending'
-                                ? styles.statusPending
-                                : styles.statusFailed
-                            }`}
-                          >
-                            {purchase.status.charAt(0).toUpperCase() +
-                              purchase.status.slice(1)}
-                          </span>
-                        </td>
-                        <td className={styles.tableCell}>
-                          <span className={styles.dateCell}>
-                            {new Date(purchase.created_at).toLocaleDateString(
-                              'en-IN',
-                              {
-                                year: 'numeric',
-                                month: 'short',
-                                day: 'numeric',
-                              }
-                            )}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </div>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
       </div>
     </main>
   );
