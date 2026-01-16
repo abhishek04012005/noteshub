@@ -1,26 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // Check if the request is to an admin route
   const pathname = request.nextUrl.pathname;
+  const isAdminRoute = pathname.startsWith('/admin');
+  const isLoginPage = pathname === '/admin/login';
+  
+  // Check for admin login cookie
+  const cookie = request.cookies.get('isAdminLoggedIn');
+  const isLoggedIn = !!cookie && cookie.value === 'true';
 
-  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
-    // Check if user is logged in by looking for adminToken in cookies
-    // Since we can't access localStorage in middleware, we'll use a cookie
-    const isLoggedIn = request.cookies.get('isAdminLoggedIn');
-
-    if (!isLoggedIn) {
-      // Redirect to login if not logged in
-      return NextResponse.redirect(new URL('/admin/login', request.url));
-    }
+  // If accessing admin routes (except login), require authentication
+  if (isAdminRoute && !isLoginPage && !isLoggedIn) {
+    return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
-  // Allow other routes to proceed
+  // If already logged in and trying to access login page, redirect to dashboard
+  if (isLoginPage && isLoggedIn) {
+    return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/admin/:path*',
-  ],
+  matcher: ['/admin/:path*'],
 };

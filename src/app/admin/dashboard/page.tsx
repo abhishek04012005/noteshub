@@ -35,11 +35,19 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      // Call logout endpoint to clear server-side cookie
+      await axios.post('/api/admin/logout');
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+    
+    // Clear client-side data
     localStorage.removeItem('adminEmail');
     localStorage.removeItem('adminId');
     localStorage.removeItem('isAdminLoggedIn');
-    document.cookie = 'isAdminLoggedIn=; path=/; max-age=0'; // Clear cookie
+    
     router.push('/admin/login');
   };
 

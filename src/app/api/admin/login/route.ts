@@ -37,13 +37,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Return success with user data (no JWT token)
-    return NextResponse.json({
+    // Create response with success data
+    const response = NextResponse.json({
       success: true,
       adminId: data.id,
       email: data.email,
       message: 'Login successful',
     });
+
+    // Set secure cookie on server side
+    response.cookies.set('isAdminLoggedIn', 'true', {
+      httpOnly: false, // Allow client-side JS to access for logout
+      secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+      sameSite: 'lax',
+      maxAge: 86400, // 24 hours
+      path: '/',
+    });
+
+    return response;
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(

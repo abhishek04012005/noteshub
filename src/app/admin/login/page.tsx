@@ -38,9 +38,7 @@ export default function AdminLoginPage() {
         localStorage.setItem('adminId', response.data.adminId);
         localStorage.setItem('isAdminLoggedIn', 'true');
 
-        // Set cookie for middleware to check
-        document.cookie = 'isAdminLoggedIn=true; path=/; max-age=86400'; // 24 hours
-
+        // Cookie is set server-side, just navigate to dashboard
         router.push('/admin/dashboard');
       } else {
         setError(response.data.message || 'Login failed');
