@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import styles from './download.module.css';
+import { Download } from '@mui/icons-material';
 
 interface Purchase {
   download_url: string;
@@ -71,7 +72,7 @@ function DownloadContent() {
       <main className={styles.main}>
         <header className={styles.headerFixed}>
           <div className={styles.headerContainer}>
-            <h1 className={styles.headerTitle}>📥 Download</h1>
+              <h1 className={styles.headerTitle}><Download sx={{ marginRight: '0.5rem' }} /> Download</h1>
           </div>
         </header>
         <div className={styles.contentWrapper}>
@@ -96,7 +97,7 @@ function DownloadContent() {
       <main className={styles.main}>
         <header className={styles.headerFixed}>
           <div className={styles.headerContainer}>
-            <h1 className={styles.headerTitle}>📥 Download</h1>
+            <h1 className={styles.headerTitle}><Download sx={{ marginRight: '0.5rem' }} /> Download</h1>
           </div>
         </header>
         <div className={styles.contentWrapper}>
@@ -123,7 +124,7 @@ function DownloadContent() {
       <main className={styles.main}>
         <header className={styles.headerFixed}>
           <div className={styles.headerContainer}>
-            <h1 className={styles.headerTitle}>📥 Download</h1>
+            <h1 className={styles.headerTitle}><Download sx={{ marginRight: '0.5rem' }} /> Download</h1>
           </div>
         </header>
         <div className={styles.contentWrapper}>
@@ -149,7 +150,7 @@ function DownloadContent() {
       {/* Header */}
       <header className={styles.headerFixed}>
         <div className={styles.headerContainer}>
-          <h1 className={styles.headerTitle}>📥 Download</h1>
+          <h1 className={styles.headerTitle}><Download sx={{ marginRight: '0.5rem' }} /> Download</h1>
         </div>
       </header>
 
@@ -180,7 +181,7 @@ function DownloadContent() {
                   rel="noopener noreferrer"
                   className={styles.downloadBtn}
                 >
-                  📥 Download Your Notes
+                  <Download sx={{ marginRight: '0.5rem' }} /> Download Your Notes
                 </a>
               </div>
             )}

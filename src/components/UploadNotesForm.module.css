@@ -1,7 +1,7 @@
 /* ========== UPLOAD FORM ========== */
 
 .formCard {
-  background-color: var(--background);
+  background-color: var(--background); 
   border-radius: 0.75rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 2rem;
@@ -79,8 +79,8 @@
 .textarea:focus,
 .select:focus {
   outline: none;
-  border-color: var(--primary-600);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
 }
 
 .input::placeholder,
@@ -96,7 +96,7 @@
 /* ========== FILE UPLOAD ========== */
 
 .fileUploadContainer {
-  border: 2px dashed var(--neutral-300);
+  border: 2px dashed var(--tertiary);
   border-radius: 0.5rem;
   padding: 2rem;
   text-align: center;
@@ -105,12 +105,12 @@
 }
 
 .fileUploadContainer:hover {
-  border-color: var(--primary-600);
+  border-color: var(--tertiary);
 }
 
 .fileUploadContainer.hasFile {
-  border-color: var(--primary-600);
-  background-color: var(--primary-50, rgba(59, 130, 246, 0.05));
+  border-color: var(--tertiary);
+  background-color: rgba(42, 157, 143, 0.05);
 }
 
 .fileInputHidden {
@@ -142,7 +142,7 @@
 .submitButton {
   width: 100%;
   padding: 0.75rem 1rem;
-  background-color: var(--primary-600);
+  background-color: var(--tertiary);
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -153,8 +153,8 @@
 }
 
 .submitButton:hover:not(:disabled) {
-  background-color: var(--primary-700);
-  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+  background-color: var(--primary);
+  box-shadow: 0 10px 25px rgba(30, 58, 95, 0.3);
   transform: translateY(-2px);
 }
 

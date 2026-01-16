@@ -12,9 +12,9 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%);
+  background: var(--primary);
   color: white;
-  border-bottom: 1px solid var(--primary-700);
+  border-bottom: 1px solid var(--tertiary);
   padding: 1rem;
 }
 
@@ -154,7 +154,7 @@
 
 .tableHead {
   background: var(--primary-50);
-  border-bottom: 2px solid var(--primary-200);
+  border-bottom: 2px solid var(--tertiary);
 }
 
 .tableRow {
@@ -174,7 +174,7 @@
 
 .tableHeader {
   font-weight: 600;
-  color: var(--primary-600);
+  color: var(--primary);
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -199,7 +199,7 @@
 .subjectBadge {
   display: inline-block;
   background: var(--primary-100);
-  color: var(--primary-700);
+  color: var(--primary);
   padding: 0.375rem 0.75rem;
   border-radius: 0.375rem;
   font-size: 0.8rem;
@@ -243,11 +243,11 @@
 }
 
 .editBtn {
-  background: var(--primary-600);
+  background: var(--primary);
 }
 
 .editBtn:hover {
-  background: var(--primary-700);
+  background: var(--tertiary);
   transform: scale(1.05);
 }
 
@@ -281,7 +281,7 @@
 
 .emptyBtn {
   display: inline-block;
-  background: var(--primary-600);
+  background: var(--primary);
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -291,7 +291,7 @@
 }
 
 .emptyBtn:hover {
-  background: var(--primary-700);
+  background: var(--tertiary);
 }
 
 /* ========== LOADING STATE ========== */

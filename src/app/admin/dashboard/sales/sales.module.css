@@ -12,9 +12,9 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%);
+  background: var(--primary);
   color: white;
-  border-bottom: 1px solid var(--primary-700);
+  border-bottom: 1px solid var(--tertiary);
   padding: 1rem;
 }
 
@@ -150,7 +150,7 @@
 .statValue {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--primary-600);
+  color: var(--primary);
   margin: 0.5rem 0 0 0;
 }
 
@@ -199,7 +199,7 @@
 
 .tableHead {
   background: var(--primary-50);
-  border-bottom: 2px solid var(--primary-200);
+  border-bottom: 2px solid var(--tertiary);
 }
 
 .tableRow {
@@ -219,7 +219,7 @@
 
 .tableHeader {
   font-weight: 600;
-  color: var(--primary-600);
+  color: var(--primary);
   font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -237,7 +237,7 @@
 }
 
 .emailCell {
-  color: var(--primary-600);
+  color: var(--primary);
 }
 
 .amountCell {

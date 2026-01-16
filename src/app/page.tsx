@@ -2,7 +2,7 @@
 
 import { NotesList } from '@/components/NotesCard';
 import Link from 'next/link';
-import { MenuBook, Lock, School, Phone, TrendingUp, Star } from '@mui/icons-material';
+import { MenuBook, Lock, School, Phone, TrendingUp, Star, Search, Payment, Download } from '@mui/icons-material';
 import styles from './page.module.css';
 
 export default function Home() {
@@ -161,13 +161,13 @@ export default function Home() {
 
           <div className={styles.processGrid}>
             {[
-              { step: '1', icon: '🔍', title: 'Browse', desc: 'Explore thousands of notes' },
-              { step: '2', icon: '💳', title: 'Purchase', desc: 'Secure payment in seconds' },
-              { step: '3', icon: '📥', title: 'Download', desc: 'Instant access to your files' }
+              { step: '1', icon: Search, title: 'Browse', desc: 'Explore thousands of notes' },
+              { step: '2', icon: Payment, title: 'Purchase', desc: 'Secure payment in seconds' },
+              { step: '3', icon: Download, title: 'Download', desc: 'Instant access to your files' }
             ].map((item, i) => (
               <div key={i} className={styles.processItem}>
                 <div className={styles.processStep}>{item.step}</div>
-                <div className={styles.processIcon}>{item.icon}</div>
+                <div className={styles.processIcon}><item.icon sx={{ fontSize: 40 }} /></div>
                 <h3 className={styles.processItemTitle}>{item.title}</h3>
                 <p className={styles.processItemDesc}>{item.desc}</p>
               </div>
@@ -185,7 +185,7 @@ export default function Home() {
               Start your journey to academic success today. No registration needed to browse.
             </p>
             <Link href="/student/browse" className={styles.finalCTABtn}>
-              Browse Free Now
+              Browse Now
             </Link>
           </div>
         </div>

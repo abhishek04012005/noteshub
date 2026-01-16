@@ -9,10 +9,10 @@
 /* ========== HEADER ========== */
 
 .header {
-  background: linear-gradient(135deg, var(--primary-600) 0%, var(--secondary-600) 100%);
+  background: var(--primary);
   color: white;
   padding: 2rem 1rem;
-  border-bottom: 1px solid var(--primary-700);
+  border-bottom: 1px solid var(--tertiary);
 }
 
 .headerContainer {
@@ -82,10 +82,10 @@
 }
 
 .formWrapper {
-  background: var(--background-secondary);
+  background: var(--background);
   border-radius: 0.75rem;
   padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(30, 58, 95, 0.1);
 }
 
 @media (min-width: 640px) {

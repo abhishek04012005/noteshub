@@ -6,6 +6,7 @@ import { Notes } from '@/types';
 import BuyNotesButton from '@/components/BuyNotesButton';
 import Link from 'next/link';
 import styles from './notes.module.css';
+import { SentimentDissatisfied, MenuBook, Apartment, LibraryBooks, SchoolOutlined, CalendarToday } from '@mui/icons-material';
 
 export default function NotesDetailPage({
   params,
@@ -54,7 +55,7 @@ export default function NotesDetailPage({
     return (
       <div className={styles.errorContainer}>
         <div className={styles.errorContent}>
-          <p className={styles.errorIcon}>😢</p>
+          <SentimentDissatisfied sx={{ fontSize: 48, color: '#F4A261' }} />
           <p className={styles.errorMessage}>Notes not found</p>
           <Link href="/student/browse" className={styles.errorLink}>
             ← Back to Browse
@@ -90,7 +91,7 @@ export default function NotesDetailPage({
                   />
                 ) : (
                   <div className={styles.imagePlaceholder}>
-                    📖
+                    <MenuBook sx={{ fontSize: 48, color: '#F4A261' }} />
                   </div>
                 )}
               </div>
@@ -113,6 +114,45 @@ export default function NotesDetailPage({
                     {notes.description}
                   </p>
 
+                  {/* Key Details Section */}
+                  <div className={styles.keyDetailsGrid}>
+                    {notes.university && (
+                      <div className={styles.keyDetailItem}>
+                        <span className={styles.keyDetailLabelIcon}><Apartment sx={{ fontSize: 18 }} /></span>
+                        <p className={styles.keyDetailLabel}>University</p>
+                        <p className={styles.keyDetailValue}>{notes.university}</p>
+                      </div>
+                    )}
+                    {notes.course && (
+                      <div className={styles.keyDetailItem}>
+                        <span className={styles.keyDetailLabelIcon}><LibraryBooks sx={{ fontSize: 18 }} /></span>
+                        <p className={styles.keyDetailLabel}>Course</p>
+                        <p className={styles.keyDetailValue}>{notes.course}</p>
+                      </div>
+                    )}
+                    {notes.branch && (
+                      <div className={styles.keyDetailItem}>
+                        <span className={styles.keyDetailLabelIcon}><SchoolOutlined sx={{ fontSize: 18 }} /></span>
+                        <p className={styles.keyDetailLabel}>Branch</p>
+                        <p className={styles.keyDetailValue}>{notes.branch}</p>
+                      </div>
+                    )}
+                    {notes.semester && (
+                      <div className={styles.keyDetailItem}>
+                        <span className={styles.keyDetailLabelIcon}><CalendarToday sx={{ fontSize: 18 }} /></span>
+                        <p className={styles.keyDetailLabel}>Semester</p>
+                        <p className={styles.keyDetailValue}>{notes.semester}</p>
+                      </div>
+                    )}
+                    {notes.chapter_no && (
+                      <div className={styles.keyDetailItem}>
+                        <span className={styles.keyDetailLabelIcon}><MenuBook sx={{ fontSize: 18 }} /></span>
+                        <p className={styles.keyDetailLabel}>Chapter</p>
+                        <p className={styles.keyDetailValue}>{notes.chapter_no}</p>
+                      </div>
+                    )}
+                  </div>
+
                   {/* Info Section */}
                   <div className={styles.infoDivider}>
                     <div className={styles.infoGrid}>
@@ -130,6 +170,18 @@ export default function NotesDetailPage({
                         </p>
                         <p className={styles.infoValue}>
                           {new Date(notes.created_at).toLocaleDateString('en-IN', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </p>
+                      </div>
+                      <div className={styles.infoItem}>
+                        <p className={styles.infoLabel}>
+                          Last Updated
+                        </p>
+                        <p className={styles.infoValue}>
+                          {new Date(notes.updated_at).toLocaleDateString('en-IN', {
                             year: 'numeric',
                             month: 'short',
                             day: 'numeric'
