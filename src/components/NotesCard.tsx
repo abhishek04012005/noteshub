@@ -11,12 +11,24 @@ export default function NotesCard({ notes }: { notes: Notes }) {
   // Use discounted_price if available, otherwise fall back to price for backward compatibility
   const displayPrice = notes.discounted_price || notes.price || 0;
   const originalPrice = notes.original_price || (notes.price ? notes.price * 1.5 : 0);
-  const discount = originalPrice && displayPrice 
+  const discount = originalPrice && displayPrice
     ? Math.round(((originalPrice - displayPrice) / originalPrice) * 100)
     : 0;
 
+  // Create URL path from university, course, subject, and chapter
+  const createUrlPath = () => {
+    const university = notes.university?.toLowerCase().replace(/\s+/g, '-') || 'unknown';
+    const course = notes.course?.toLowerCase().replace(/\s+/g, '-').replace(/\./g, '') || 'unknown';
+    const subject = notes.subject?.toLowerCase().replace(/\s+/g, '-') || 'unknown';
+    const chapter = notes.chapter_no?.toLowerCase().replace(/\s+/g, '-') || 'chapter1';
+    
+    return `/student/notes/${university}/${course}/${subject}/${chapter}`;
+  };
+
+  const notesLink = createUrlPath();
+
   return (
-    <Link href={`/student/notes/${notes.id}`} className={styles.cardLink}>
+    <Link href={notesLink} className={styles.cardLink}>
       <div className={styles.card}>
         {/* Image Placeholder */}
         <div className={styles.imageContainer}>
@@ -67,10 +79,10 @@ export default function NotesCard({ notes }: { notes: Notes }) {
               </div>
               <span className={styles.author}>By {notes.author}</span>
             </div>
-            <button 
+            <button
               className={styles.viewButton}
-              >
-               Buy Now
+            >
+              Buy Now
             </button>
           </div>
         </div>
@@ -79,7 +91,21 @@ export default function NotesCard({ notes }: { notes: Notes }) {
   );
 }
 
-export function NotesList() {
+export function NotesList({
+  searchQuery = '',
+  filterUniversity = '',
+  filterCourse = '',
+  filterBranch = '',
+  filterSemester = '',
+  filterSubject = '',
+}: {
+  searchQuery?: string;
+  filterUniversity?: string;
+  filterCourse?: string;
+  filterBranch?: string;
+  filterSemester?: string;
+  filterSubject?: string;
+}) {
   const [notes, setNotes] = useState<Notes[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -102,6 +128,45 @@ export function NotesList() {
 
     fetchNotes();
   }, []);
+
+  // Filter notes based on search query and filters
+  const filteredNotes = notes.filter((note) => {
+    const searchLower = searchQuery.toLowerCase();
+    const universityLower = filterUniversity.toLowerCase();
+    const courseLower = filterCourse.toLowerCase();
+    const branchLower = filterBranch.toLowerCase();
+    const semesterLower = filterSemester.toLowerCase();
+    const subjectLower = filterSubject.toLowerCase();
+
+    // Search query filter
+    const matchesSearch = searchLower === '' ||
+      note.title?.toLowerCase().includes(searchLower) ||
+      note.subject?.toLowerCase().includes(searchLower) ||
+      note.author?.toLowerCase().includes(searchLower) ||
+      note.description?.toLowerCase().includes(searchLower);
+
+    // University filter
+    const matchesUniversity = universityLower === '' ||
+      note.university?.toLowerCase().includes(universityLower);
+
+    // Course filter
+    const matchesCourse = courseLower === '' ||
+      note.course?.toLowerCase().includes(courseLower);
+
+    // Branch filter
+    const matchesBranch = branchLower === '' ||
+      note.branch?.toLowerCase().includes(branchLower);
+
+    // Semester filter
+    const matchesSemester = semesterLower === '' ||
+      note.semester?.toLowerCase().includes(semesterLower);
+
+    // Subject filter
+    const matchesSubject = subjectLower === '' ||
+      note.subject?.toLowerCase().includes(subjectLower);
+
+    return matchesSearch && matchesUniversity && matchesCourse && matchesBranch && matchesSemester && matchesSubject;
+  });
 
   if (loading) {
     return (
@@ -139,11 +204,26 @@ export function NotesList() {
     );
   }
 
+  if (filteredNotes.length === 0) {
+    return (
+      <div className={styles.emptyContainer}>
+        <p className={styles.emptyText}>
+          No notes found matching your filters. Try adjusting your search criteria.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className={styles.listContainer}>
-      {notes.map((note) => (
-        <NotesCard key={note.id} notes={note} />
-      ))}
-    </div>
+    <>
+      <div className={styles.resultsInfo}>
+        <p>Found <strong>{filteredNotes.length}</strong> note{filteredNotes.length !== 1 ? 's' : ''}</p>
+      </div>
+      <div className={styles.listContainer}>
+        {filteredNotes.map((note) => (
+          <NotesCard key={note.id} notes={note} />
+        ))}
+      </div>
+    </>
   );
 }

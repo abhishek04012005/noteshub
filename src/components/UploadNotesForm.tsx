@@ -61,7 +61,7 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
           universities: [...new Set(parsed.universities || [])] as string[],
           courses: [...new Set(parsed.courses || [])] as string[],
           branches: [...new Set(parsed.branches || [])] as string[],
-          semesters: [...new Set(parsed.semesters || [])] as string[],
+          semesters: [...new Set([...defaultSemesters])] as string[],
           subjects: [...new Set([...defaultSubjects, ...(parsed.subjects || [])])] as string[],
         });
       } catch (e) {

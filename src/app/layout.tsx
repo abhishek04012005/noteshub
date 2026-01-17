@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NotesHub - Premium Study Notes Marketplace | Buy & Sell Notes Online",
+  title: "NotesHub - Premium Study Notes Marketplace | Buy  Notes Online",
   description: "Access premium quality study notes from top educators. Browse thousands of notes for engineering, arts, and commerce students. Secure payments and instant downloads.",
   keywords: [
     "study notes",
@@ -38,13 +38,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://noteshub.example.com",
+    url: "https://abhishekchoudhary.co.in",
     title: "NotesHub - Premium Study Notes Marketplace",
     description: "Buy and sell quality study notes online. Instant access with secure payment.",
     siteName: "NotesHub",
     images: [
       {
-        url: "https://noteshub.example.com/og-image.png",
+        url: "https://abhishekchoudhary.co.in/og-image.png",
         width: 1200,
         height: 630,
         alt: "NotesHub - Study Notes Marketplace",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "NotesHub - Premium Study Notes",
     description: "Browse and buy quality study notes from top educators",
-    images: ["https://noteshub.example.com/twitter-image.png"],
+    images: ["https://abhishekchoudhary.co.in/twitter-image.png"],
   },
   robots: {
     index: true,
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     google: "LqdrH0oG-qXmeIiCTO9ba4rSrJ6Uek0HqYP8rnS_ZN8",
   },
   alternates: {
-    canonical: "https://noteshub.example.com",
+    canonical: "https://abhishekchoudhary.co.in",
   },
 };
 

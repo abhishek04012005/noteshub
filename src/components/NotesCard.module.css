@@ -244,3 +244,22 @@
   font-weight: 600;
   color: var(--error);
 }
+/* ========== RESULTS INFO ========== */
+
+.resultsInfo {
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  color: var(--text-light);
+  border-bottom: 1px solid var(--neutral-200);
+  display: block;
+}
+
+.resultsInfo p {
+  margin: 0;
+}
+
+.resultsInfo strong {
+  color: var(--primary);
+  font-weight: 600;
+}

@@ -2,20 +2,20 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Static pages sitemap -->
   <sitemap>
-    <loc>https://noteshub.example.com/sitemap.xml</loc>
+    <loc>https://abhishekchoudhary.co.in/sitemap.xml</loc>
     <lastmod>2026-01-16</lastmod>
   </sitemap>
 
   <!-- Dynamic notes sitemap (generated from API) -->
   <sitemap>
-    <loc>https://noteshub.example.com/api/sitemap</loc>
+    <loc>https://abhishekchoudhary.co.in/api/sitemap</loc>
     <lastmod>2026-01-16</lastmod>
   </sitemap>
 
   <!-- Future: Blog posts sitemap -->
   <!-- 
   <sitemap>
-    <loc>https://noteshub.example.com/sitemap-blog.xml</loc>
+    <loc>https://abhishekchoudhary.co.in/sitemap-blog.xml</loc>
     <lastmod>2026-01-16</lastmod>
   </sitemap>
   -->

@@ -20,7 +20,7 @@ export async function GET() {
     }
 
     // Base URL - Replace with your actual domain
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://noteshub.example.com';
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://abhishekchoudhary.co.in';
 
     // Generate sitemap XML
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';

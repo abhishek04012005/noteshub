@@ -5,7 +5,7 @@
   
   <!-- Home Page - Highest Priority -->
   <url>
-    <loc>https://noteshub.example.com/</loc>
+    <loc>https://abhishekchoudhary.co.in/</loc>
     <lastmod>2026-01-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -13,7 +13,7 @@
 
   <!-- Student Pages -->
   <url>
-    <loc>https://noteshub.example.com/student/browse</loc>
+    <loc>https://abhishekchoudhary.co.in/student/browse</loc>
     <lastmod>2026-01-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -21,7 +21,7 @@
 
   <!-- Admin Pages (Login - Accessible) -->
   <url>
-    <loc>https://noteshub.example.com/admin/login</loc>
+    <loc>https://abhishekchoudhary.co.in/admin/login</loc>
     <lastmod>2026-01-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -31,7 +31,7 @@
   <!-- Update this section dynamically when notes are added -->
   <!-- Example format:
   <url>
-    <loc>https://noteshub.example.com/student/notes/NOTE_ID</loc>
+    <loc>https://abhishekchoudhary.co.in/student/notes/NOTE_ID</loc>
     <lastmod>YYYY-MM-DD</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

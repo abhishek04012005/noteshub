@@ -4,13 +4,13 @@ export function HomePageSchema() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'NotesHub',
-    url: 'https://noteshub.example.com',
+    url: 'https://abhishekchoudhary.co.in',
     description: 'Premium study notes marketplace for students',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://noteshub.example.com/student/browse?search={search_term_string}',
+        urlTemplate: 'https://abhishekchoudhary.co.in/student/browse?search={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },
@@ -29,8 +29,8 @@ export function NotesMarketplaceSchema() {
     '@context': 'https://schema.org',
     '@type': 'OnlineBusiness',
     name: 'NotesHub',
-    url: 'https://noteshub.example.com',
-    logo: 'https://noteshub.example.com/logo.png',
+    url: 'https://abhishekchoudhary.co.in',
+    logo: 'https://abhishekchoudhary.co.in/logo.png',
     description: 'Buy and sell premium quality study notes',
     sameAs: [
       'https://www.facebook.com/noteshub',
@@ -86,7 +86,7 @@ export function ProductSchema({
     '@type': 'Product',
     name: title,
     description: description,
-    image: imageUrl || 'https://noteshub.example.com/default-note.png',
+    image: imageUrl || 'https://abhishekchoudhary.co.in/default-note.png',
     brand: {
       '@type': 'Brand',
       name: 'NotesHub',
@@ -97,7 +97,7 @@ export function ProductSchema({
     },
     offers: {
       '@type': 'Offer',
-      url: `https://noteshub.example.com/student/notes/${id}`,
+      url: `https://abhishekchoudhary.co.in/student/notes/${id}`,
       priceCurrency: 'INR',
       price: price.toString(),
       availability: 'https://schema.org/InStock',

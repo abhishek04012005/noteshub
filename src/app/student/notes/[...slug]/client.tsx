@@ -17,22 +17,185 @@ import {
 import BuyNotesButton from '@/components/BuyNotesButton';
 import styles from './notes.module.css';
 
+// Helper function to extract UUID from slug
+function extractIdFromSlug(slug: string): string {
+  // UUID pattern: 8-4-4-4-12 hex digits
+  const uuidPattern = /([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i;
+  const match = slug.match(uuidPattern);
+  return match ? match[1] : slug;
+}
+
+// Helper function to normalize strings for comparison
+function normalizeString(str: string | undefined): string {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .trim()
+    .replace(/-/g, ' ')
+    .replace(/\.\s*/g, '') // Remove dots and spaces around them
+    .replace(/\s+/g, ' ');
+}
+
+// Helper function to find note by university, course, subject, chapter
+async function findNoteByDetails(slugArray: string[]): Promise<Notes | null> {
+  if (slugArray.length >= 3) {
+    try {
+      const response = await axios.get('/api/notes');
+      const allNotes: Notes[] = response.data.data || [];
+
+      if (allNotes.length === 0) {
+        console.log('No notes available in database');
+        return null;
+      }
+
+      console.log('Total notes in database:', allNotes.length);
+      console.log('First few notes:', allNotes.slice(0, 3));
+
+      // For 4 parts: university/course/subject/chapter
+      if (slugArray.length === 4) {
+        const [university, course, subject, chapter] = slugArray;
+        const normalizedUniversity = normalizeString(decodeURIComponent(university));
+        const normalizedCourse = normalizeString(decodeURIComponent(course));
+        const normalizedSubject = normalizeString(decodeURIComponent(subject));
+        const normalizedChapter = normalizeString(decodeURIComponent(chapter));
+
+        console.log('Searching for 4-part match:', { normalizedUniversity, normalizedCourse, normalizedSubject, normalizedChapter });
+
+        const found = allNotes.find((note) => {
+          const noteUniversity = normalizeString(note.university);
+          const noteCourse = normalizeString(note.course);
+          const noteSubject = normalizeString(note.subject);
+          const noteChapter = normalizeString(note.chapter_no);
+
+          return (
+            noteUniversity === normalizedUniversity &&
+            noteCourse === normalizedCourse &&
+            noteSubject === normalizedSubject &&
+            noteChapter === normalizedChapter
+          );
+        });
+
+        if (found) {
+          console.log('Found exact match:', found);
+          return found;
+        }
+
+        // Fallback: try to match just university, course, subject
+        console.log('No exact 4-part match found, trying 3-part match');
+        const partialMatch = allNotes.find((note) => {
+          const noteUniversity = normalizeString(note.university);
+          const noteCourse = normalizeString(note.course);
+          const noteSubject = normalizeString(note.subject);
+
+          return (
+            noteUniversity === normalizedUniversity &&
+            noteCourse === normalizedCourse &&
+            noteSubject === normalizedSubject
+          );
+        });
+
+        if (partialMatch) {
+          console.log('Found partial match:', partialMatch);
+          return partialMatch;
+        }
+      }
+
+      // For 3 parts: university/course/subject
+      if (slugArray.length === 3) {
+        const [university, course, subject] = slugArray;
+        const normalizedUniversity = normalizeString(decodeURIComponent(university));
+        const normalizedCourse = normalizeString(decodeURIComponent(course));
+        const normalizedSubject = normalizeString(decodeURIComponent(subject));
+
+        console.log('Searching for 3-part match:', { normalizedUniversity, normalizedCourse, normalizedSubject });
+
+        const found = allNotes.find((note) => {
+          const noteUniversity = normalizeString(note.university);
+          const noteCourse = normalizeString(note.course);
+          const noteSubject = normalizeString(note.subject);
+
+          return (
+            noteUniversity === normalizedUniversity &&
+            noteCourse === normalizedCourse &&
+            noteSubject === normalizedSubject
+          );
+        });
+
+        if (found) {
+          console.log('Found 3-part match:', found);
+          return found;
+        }
+      }
+
+      console.log('No match found for any slug configuration');
+      return null;
+    } catch (error) {
+      console.error('Error finding note by details:', error);
+      return null;
+    }
+  }
+  return null;
+}
+
 export default function NotesDetailClient({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string[] }>;
 }) {
   const [notes, setNotes] = useState<Notes | null>(null);
   const [loading, setLoading] = useState(true);
   const [id, setId] = useState<string>('');
 
   useEffect(() => {
-    params.then(({ id }) => {
-      setId(id);
-    });
+    const loadNotes = async () => {
+      try {
+        const { slug } = await params;
+        console.log('Current URL slug:', slug);
+        setLoading(true);
+
+        // Try to find note by nested parameters (3 or 4 segments)
+        if (slug.length >= 3) {
+          console.log('Attempting to find note by nested params:', slug);
+          const foundNotes = await findNoteByDetails(slug);
+          if (foundNotes) {
+            console.log('Successfully found note by nested params');
+            setNotes(foundNotes);
+            setLoading(false);
+            return;
+          } else {
+            console.log('Could not find note by nested params, will show error');
+            setLoading(false);
+            return;
+          }
+        }
+
+        // Fall back to traditional slug format (single segment with UUID)
+        if (slug.length === 1) {
+          const extractedId = extractIdFromSlug(slug[0]);
+          console.log('Extracted ID from slug:', extractedId);
+          setId(extractedId);
+          return;
+        }
+
+        // If we got here, we couldn't process the URL
+        console.log('Could not process URL:', slug);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error loading notes params:', error);
+        setLoading(false);
+      }
+    };
+
+    loadNotes();
   }, [params]);
 
   useEffect(() => {
+    // If notes already loaded from nested route, skip
+    if (notes) {
+      setLoading(false);
+      return;
+    }
+
     if (!id) return;
 
     const fetchNotes = async () => {
@@ -47,7 +210,7 @@ export default function NotesDetailClient({
     };
 
     fetchNotes();
-  }, [id]);
+  }, [id, notes]);
 
   if (loading) {
     return (
