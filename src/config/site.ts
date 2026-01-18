@@ -5,7 +5,7 @@
 
 export const SITE_URL = 'https://noteshub.abhishekchoudhary.co.in';
 export const SITE_NAME = 'NotesHub';
-export const SITE_DESCRIPTION = 'NotesHub is a secure marketplace to buy and sell high-quality study notes. Connect with students, earn money from your notes, and access expertly curated study materials.';
+export const SITE_DESCRIPTION = 'NotesHub is a secure marketplace to buy  high-quality study notes. Connect with students, earn money from your notes, and access expertly curated study materials.';
 
 /**
  * OG Image URLs - replace with your actual image paths

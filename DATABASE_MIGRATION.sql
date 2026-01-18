@@ -42,7 +42,7 @@ CREATE INDEX IF NOT EXISTS idx_notes_university_course_semester ON notes(univers
 -- semester        : Semester (e.g., "Sem 1", "Sem 2")
 -- chapter_no      : Chapter number (e.g., "Chapter 1", "Ch 5")
 -- original_price  : Original/marked price of the notes
--- discounted_price: Selling/discounted price of the notes
+-- discounted_price: /discounted price of the notes
 
 -- ===================================================================
 -- OPTIONAL: If you want to reset and create a fresh table structure:

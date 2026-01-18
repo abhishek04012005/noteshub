@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://abhishekchoudhary.co.in",
     title: "NotesHub - Premium Study Notes Marketplace",
-    description: "Buy and sell quality study notes online. Instant access with secure payment.",
+    description: "Buy  quality study notes online. Instant access with secure payment.",
     siteName: "NotesHub",
     images: [
       {

@@ -31,7 +31,7 @@ export function NotesMarketplaceSchema() {
     name: 'NotesHub',
     url: 'https://abhishekchoudhary.co.in',
     logo: 'https://abhishekchoudhary.co.in/logo.png',
-    description: 'Buy and sell premium quality study notes',
+    description: 'Buy  premium quality study notes',
     sameAs: [
       'https://www.facebook.com/noteshub',
       'https://www.twitter.com/noteshub',

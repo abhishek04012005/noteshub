@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   keywords: SITE_KEYWORDS,
   openGraph: {
     title: `${SITE_NAME} - Premium Study Notes Marketplace`,
-    description: 'Buy and sell quality study notes online. Join thousands of students earning from their knowledge.',
+    description: 'Buy  quality study notes online. Join thousands of students earning from their knowledge.',
     type: 'website',
     locale: 'en_US',
     url: SITE_URL,

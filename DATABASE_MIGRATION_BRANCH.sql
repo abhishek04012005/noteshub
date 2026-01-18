@@ -49,7 +49,7 @@ CREATE INDEX IF NOT EXISTS idx_notes_university_course_branch ON notes(universit
 -- title               | VARCHAR(500)       | Notes title
 -- description         | TEXT               | Notes description
 -- original_price      | DECIMAL(10,2)      | Original/marked price
--- discounted_price    | DECIMAL(10,2)      | Selling price
+-- discounted_price    | DECIMAL(10,2)      |  price
 -- author              | VARCHAR(255)       | Author name
 -- google_drive_file_id| VARCHAR(500)       | Google Drive file ID
 -- download_url        | TEXT               | Download link
