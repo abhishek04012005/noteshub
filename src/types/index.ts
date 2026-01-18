@@ -32,6 +32,17 @@ export interface Purchase {
   download_url: string;
   created_at: string;
   updated_at: string;
+  // Note details
+  notes?: {
+    id: string;
+    university?: string;
+    course?: string;
+    branch?: string;
+    semester?: string;
+    subject: string;
+    chapter_no?: string;
+    title: string;
+  };
 }
 
 // Admin Types

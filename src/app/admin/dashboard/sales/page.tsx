@@ -10,6 +10,8 @@ import {
   AttachMoney,
   FolderOff,
   Logout,
+  Info,
+  Close,
 } from '@mui/icons-material';
 import { Purchase } from '@/types';
 import styles from './sales.module.css';
@@ -21,6 +23,7 @@ export default function AdminSalesPage() {
   const [loading, setLoading] = useState(true);
   const [totalSales, setTotalSales] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
+  const [selectedNote, setSelectedNote] = useState<Purchase['notes'] | null>(null);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('isAdminLoggedIn');
@@ -141,6 +144,7 @@ export default function AdminSalesPage() {
                     <th className={styles.tableHeader}>Email</th>
                     <th className={styles.tableHeader}>Amount</th>
                     <th className={styles.tableHeader}>Payment ID</th>
+                    <th className={styles.tableHeader}>Note Details</th>
                     <th className={styles.tableHeader}>Status</th>
                   </tr>
                 </thead>
@@ -152,6 +156,15 @@ export default function AdminSalesPage() {
                       <td className={`${styles.tableCell} ${styles.emailCell}`}>{purchase.customer_email || purchase.email || 'N/A'}</td>
                       <td className={`${styles.tableCell} ${styles.amountCell}`}>₹{purchase.amount?.toLocaleString('en-IN') || '0'}</td>
                       <td className={`${styles.tableCell} ${styles.transactionId}`}>{purchase.razorpay_payment_id?.substring(0, 12)}...</td>
+                      <td className={styles.tableCell}>
+                        <button 
+                          className={styles.infoButton}
+                          onClick={() => setSelectedNote(purchase.notes || null)}
+                          title="View note details"
+                        >
+                          <Info sx={{ fontSize: '1.25rem' }} />
+                        </button>
+                      </td>
                       <td className={styles.tableCell}>
                         <span className={`${styles.statusBadge} ${styles[`status${purchase.status?.charAt(0).toUpperCase() + purchase.status?.slice(1).toLowerCase() || 'Pending'}`]}`}>
                           {purchase.status?.charAt(0).toUpperCase() + purchase.status?.slice(1).toLowerCase() || 'Pending'}
@@ -165,6 +178,69 @@ export default function AdminSalesPage() {
           )}
         </section>
       </div>
+
+      {/* Note Details Modal */}
+      {selectedNote && (
+        <div className={styles.modalOverlay} onClick={() => setSelectedNote(null)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h2 className={styles.modalTitle}>Note Details</h2>
+              <button 
+                className={styles.modalCloseBtn}
+                onClick={() => setSelectedNote(null)}
+                title="Close"
+              >
+                <Close sx={{ fontSize: '1.5rem' }} />
+              </button>
+            </div>
+            
+            <div className={styles.modalContent}>
+              {selectedNote.title && (
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Title:</span>
+                  <span className={styles.detailValue}>{selectedNote.title}</span>
+                </div>
+              )}
+              {selectedNote.university && (
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>University:</span>
+                  <span className={styles.detailValue}>{selectedNote.university}</span>
+                </div>
+              )}
+              {selectedNote.course && (
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Course:</span>
+                  <span className={styles.detailValue}>{selectedNote.course}</span>
+                </div>
+              )}
+              {selectedNote.branch && (
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Branch:</span>
+                  <span className={styles.detailValue}>{selectedNote.branch}</span>
+                </div>
+              )}
+              {selectedNote.semester && (
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Semester:</span>
+                  <span className={styles.detailValue}>{selectedNote.semester}</span>
+                </div>
+              )}
+              {selectedNote.subject && (
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Subject:</span>
+                  <span className={styles.detailValue}>{selectedNote.subject}</span>
+                </div>
+              )}
+              {selectedNote.chapter_no && (
+                <div className={styles.detailRow}>
+                  <span className={styles.detailLabel}>Chapter:</span>
+                  <span className={styles.detailValue}>{selectedNote.chapter_no}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

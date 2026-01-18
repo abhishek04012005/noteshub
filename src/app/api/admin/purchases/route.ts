@@ -6,7 +6,19 @@ export async function GET(request: NextRequest) {
   try {
     const { data, error } = await supabase
       .from('purchases')
-      .select('*')
+      .select(
+        `*,
+        notes:notes_id(
+          id,
+          university,
+          course,
+          branch,
+          semester,
+          subject,
+          chapter_no,
+          title
+        )`
+      )
       .order('created_at', { ascending: false });
 
     if (error) {
