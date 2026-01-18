@@ -12,6 +12,8 @@ import {
   Logout,
   Info,
   Close,
+  Refresh,
+  Download,
 } from '@mui/icons-material';
 import { Purchase } from '@/types';
 import styles from './sales.module.css';
@@ -21,6 +23,7 @@ export default function AdminSalesPage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [totalSales, setTotalSales] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [selectedNote, setSelectedNote] = useState<Purchase | null>(null);
@@ -34,6 +37,10 @@ export default function AdminSalesPage() {
     }
     setIsAdmin(true);
     fetchSalesData();
+
+    // Auto-refresh sales data every 10 seconds to show latest downloads
+    const interval = setInterval(fetchSalesData, 10000);
+    return () => clearInterval(interval);
   }, [router]);
 
   const fetchSalesData = async () => {
@@ -53,7 +60,13 @@ export default function AdminSalesPage() {
       console.error('Error fetching sales data:', error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
+  };
+
+  const handleManualRefresh = async () => {
+    setRefreshing(true);
+    await fetchSalesData();
   };
 
   const handleLogout = () => {
@@ -95,6 +108,89 @@ export default function AdminSalesPage() {
     }
   };
 
+  const handleDownloadNotes = async (purchase: Purchase) => {
+    if (!purchase.download_url) {
+      alert('Download URL not available');
+      return;
+    }
+
+    try {
+      setIsUpdatingStatus(true);
+
+      // Open the download URL
+      const link = document.createElement('a');
+      link.href = purchase.download_url;
+      link.target = '_blank';
+      link.download = '';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Mark as downloaded in database
+      try {
+        const response = await axios.put('/api/admin/purchases', {
+          purchaseId: purchase.id,
+          markDownloaded: true,
+        });
+
+        if (response.data.success && response.data.data) {
+          const updatedRecord = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data;
+          
+          if (updatedRecord) {
+            // Update local state with the new data
+            const updatedPurchases = purchases.map(p => 
+              p.id === purchase.id ? { ...p, ...updatedRecord } : p
+            );
+            setPurchases(updatedPurchases);
+            
+            // Update selected note if it's open
+            if (selectedNote && selectedNote.id === purchase.id) {
+              setSelectedNote({ ...selectedNote, ...updatedRecord });
+            }
+          }
+        }
+      } catch (dbError) {
+        console.error('Error recording download:', dbError);
+        // Still allow download even if marking fails
+      }
+    } catch (error) {
+      console.error('Error downloading notes:', error);
+      alert('Failed to download notes');
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
+
+  const handleDownloadStatusToggle = async (newDownloadStatus: boolean) => {
+    if (!selectedNote) return;
+    
+    setIsUpdatingStatus(true);
+    try {
+      const response = await axios.put('/api/admin/purchases', {
+        purchaseId: selectedNote.id,
+        markDownloaded: newDownloadStatus,
+      });
+      
+      if (response.data.success && response.data.data) {
+        const updatedRecord = Array.isArray(response.data.data) ? response.data.data[0] : response.data.data;
+        
+        if (updatedRecord) {
+          // Update local state with the new data
+          const updatedPurchases = purchases.map(p => 
+            p.id === selectedNote.id ? { ...p, ...updatedRecord } : p
+          );
+          setPurchases(updatedPurchases);
+          setSelectedNote({ ...selectedNote, ...updatedRecord });
+        }
+      }
+    } catch (error) {
+      console.error('Error updating download status:', error);
+      alert('Failed to update download status');
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
+
   if (!isAdmin) {
     return (
       <div className={styles.loadingState}>
@@ -117,6 +213,16 @@ export default function AdminSalesPage() {
           </div>
 
           <div className={styles.headerActions}>
+            <button
+              onClick={handleManualRefresh}
+              className={styles.navBtn}
+              disabled={refreshing}
+              title="Refresh data"
+              style={{ opacity: refreshing ? 0.6 : 1 }}
+            >
+              <Refresh sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle', animation: refreshing ? 'spin 1s linear infinite' : 'none' }} />
+              {refreshing ? 'Refreshing...' : 'Refresh'}
+            </button>
             <button
               onClick={() => router.back()}
               className={styles.navBtn}
@@ -184,6 +290,7 @@ export default function AdminSalesPage() {
                     <th className={styles.tableHeader}>Amount</th>
                     <th className={styles.tableHeader}>Payment ID</th>
                     <th className={styles.tableHeader}>Note Details</th>
+                    <th className={styles.tableHeader}>Download</th>
                     <th className={styles.tableHeader}>Status</th>
                   </tr>
                 </thead>
@@ -214,6 +321,16 @@ export default function AdminSalesPage() {
                             title="View note details"
                           >
                             <Info sx={{ fontSize: '1.25rem' }} />
+                          </button>
+                        </td>
+                        <td className={styles.tableCell}>
+                          <button 
+                            className={styles.downloadTableBtn}
+                            onClick={() => handleDownloadNotes(purchase)}
+                            disabled={!purchase.download_url}
+                            title={purchase.download_url ? 'Download notes' : 'Download URL not available'}
+                          >
+                            <Download sx={{ fontSize: '1.25rem' }} />
                           </button>
                         </td>
                         <td className={styles.tableCell}>
@@ -289,6 +406,33 @@ export default function AdminSalesPage() {
                   <span className={styles.detailValue}>{selectedNote.notes.chapter_no}</span>
                 </div>
               )}
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Download Status:</span>
+                <div className={styles.statusControls}>
+                  <span className={`${styles.downloadBadge} ${styles[(selectedNote as any).download_marked_at ? 'downloadedBadge' : 'notDownloadedBadge']}`}>
+                    {(selectedNote as any).download_marked_at ? '✓ Downloaded' : '✗ Not Downloaded'}
+                  </span>
+                  <button
+                    onClick={() => handleDownloadStatusToggle(!(selectedNote as any).download_marked_at)}
+                    disabled={isUpdatingStatus}
+                    className={styles.toggleBtn}
+                    title="Toggle download status"
+                  >
+                    {(selectedNote as any).download_marked_at ? 'Mark Not Downloaded' : 'Mark Downloaded'}
+                  </button>
+                </div>
+              </div>
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}></span>
+                <button
+                  onClick={() => handleDownloadNotes(selectedNote)}
+                  disabled={!selectedNote.download_url || isUpdatingStatus}
+                  className={styles.downloadButton}
+                  title={selectedNote.download_url ? 'Download the notes' : 'Download URL not available'}
+                >
+                  {isUpdatingStatus ? 'Downloading...' : '⬇ Download Notes'}
+                </button>
+              </div>
               <div className={styles.detailRow}>
                 <span className={styles.detailLabel}>Payment Status:</span>
                 <div className={styles.statusControls}>

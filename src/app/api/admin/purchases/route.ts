@@ -35,30 +35,43 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Update purchase status
+// Update purchase status and download status
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
-    const { purchaseId, status } = body;
+    const { purchaseId, status, markDownloaded } = body;
 
-    if (!purchaseId || !status) {
+    if (!purchaseId) {
       return NextResponse.json(
-        { error: 'purchaseId and status are required' },
+        { error: 'purchaseId is required' },
         { status: 400 }
       );
     }
 
-    const validStatuses = ['pending', 'completed', 'failed', 'cancelled'];
-    if (!validStatuses.includes(status)) {
-      return NextResponse.json(
-        { error: 'Invalid status value' },
-        { status: 400 }
-      );
+    let updateData: any = { updated_at: new Date().toISOString() };
+
+    if (status) {
+      const validStatuses = ['pending', 'completed', 'failed', 'cancelled'];
+      if (!validStatuses.includes(status)) {
+        return NextResponse.json(
+          { error: 'Invalid status value' },
+          { status: 400 }
+        );
+      }
+      updateData.status = status;
+    }
+
+    if (markDownloaded !== undefined) {
+      if (markDownloaded === true) {
+        updateData.download_marked_at = new Date().toISOString();
+      } else if (markDownloaded === false) {
+        updateData.download_marked_at = null;
+      }
     }
 
     const { data, error } = await supabase
       .from('purchases')
-      .update({ status, updated_at: new Date().toISOString() })
+      .update(updateData)
       .eq('id', purchaseId)
       .select();
 
@@ -68,9 +81,9 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ success: true, data });
   } catch (error) {
-    console.error('Error updating purchase status:', error);
+    console.error('Error updating purchase:', error);
     return NextResponse.json(
-      { error: 'Failed to update purchase status' },
+      { error: 'Failed to update purchase' },
       { status: 500 }
     );
   }

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import { MenuBook, Add, TrendingUp, DeleteOutline, FolderOff, EditOutlined } from '@mui/icons-material';
+import { MenuBook, Add, TrendingUp, DeleteOutline, FolderOff, EditOutlined, Download } from '@mui/icons-material';
 import { Notes } from '@/types';
 import styles from './dashboard.module.css';
 
@@ -67,6 +67,27 @@ export default function AdminDashboardPage() {
     } catch (error) {
       console.error('Error deleting note:', error);
       alert('Failed to delete note');
+    }
+  };
+
+  const handleDownloadNotes = async (note: Notes) => {
+    if (!note.download_url) {
+      alert('Download URL not available for this note');
+      return;
+    }
+
+    try {
+      // Open the download URL
+      const link = document.createElement('a');
+      link.href = note.download_url;
+      link.target = '_blank';
+      link.download = '';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading notes:', error);
+      alert('Failed to download notes');
     }
   };
 
@@ -178,6 +199,14 @@ export default function AdminDashboardPage() {
                         </td>
                         <td className={styles.tableCell}>
                           <div className={styles.actionButtons}>
+                            <button
+                              onClick={() => handleDownloadNotes(note)}
+                              className={styles.downloadBtn}
+                              title={note.download_url ? 'Download notes' : 'Download URL not available'}
+                            >
+                              <Download sx={{ fontSize: '1rem', marginRight: '0.25rem' }} />
+                              Download
+                            </button>
                             <button
                               onClick={() => router.push(`/admin/dashboard/edit/${note.id}`)}
                               className={styles.editBtn}

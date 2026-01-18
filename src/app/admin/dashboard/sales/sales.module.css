@@ -504,6 +504,36 @@
   transform: scale(0.95);
 }
 
+/* ========== DOWNLOAD TABLE BUTTON ========== */
+
+.downloadTableBtn {
+  background: var(--success-100);
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: var(--success-600);
+}
+
+.downloadTableBtn:hover:not(:disabled) {
+  background: var(--success-200);
+  color: var(--success-700);
+  transform: scale(1.1);
+}
+
+.downloadTableBtn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.downloadTableBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ========== MODAL OVERLAY ========== */
 
 .modalOverlay {
@@ -734,6 +764,37 @@
   }
 }
 
+/* ========== TOGGLE BUTTON ========== */
+
+.toggleBtn {
+  padding: 0.5rem 1rem;
+  background: var(--primary-600);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggleBtn:hover:not(:disabled) {
+  background: var(--primary-700);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.toggleBtn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.toggleBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 /* ========== DOWNLOAD BUTTON ========== */
 
 .downloadButton {
@@ -767,4 +828,14 @@
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+}
+/* ========== ANIMATIONS ========== */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

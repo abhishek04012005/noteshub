@@ -14,6 +14,7 @@ export interface Notes {
   discounted_price: number;
   author: string;
   image_url?: string;
+  download_url?: string;
   created_at: string;
   updated_at: string;
 }

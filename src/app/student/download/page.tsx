@@ -17,6 +17,7 @@ import {
 } from '@mui/icons-material';
 
 interface Purchase {
+  id: string;
   download_url: string;
   notes_id: string;
 }
@@ -28,6 +29,7 @@ function DownloadContent() {
   const [purchase, setPurchase] = useState<Purchase | null>(null);
   const [loading, setLoading] = useState(true);
   const [paymentStatus, setPaymentStatus] = useState<'completed' | 'pending' | 'failed' | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     const fetchPurchase = async () => {
@@ -62,6 +64,24 @@ function DownloadContent() {
 
     fetchPurchase();
   }, [email]);
+
+  const handleDownload = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!purchase) return;
+    
+    try {
+      setIsDownloading(true);
+      // Mark the purchase as downloaded
+      await axios.put('/api/admin/purchases', {
+        purchaseId: purchase.id,
+        markDownloaded: true,
+      });
+    } catch (error) {
+      console.error('Error marking download:', error);
+      // Still allow download even if marking fails
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -211,9 +231,11 @@ function DownloadContent() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.downloadBtn}
+                  onClick={handleDownload}
+                  style={{ pointerEvents: isDownloading ? 'none' : 'auto', opacity: isDownloading ? 0.6 : 1 }}
                 >
                   <Download sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
-                  Download Your Notes
+                  {isDownloading ? 'Marking Download...' : 'Download Your Notes'}
                 </a>
               </div>
             )}
