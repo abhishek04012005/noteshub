@@ -28,12 +28,13 @@ export interface Purchase {
   amount: number;
   razorpay_payment_id: string;
   razorpay_order_id: string;
-  status: 'pending' | 'completed' | 'failed';
+  status: 'pending' | 'completed' | 'failed' | 'cancelled';
   download_url: string;
   created_at: string;
   updated_at: string;
   // Note details
   notes?: {
+    download_url: any;
     id: string;
     university?: string;
     course?: string;
