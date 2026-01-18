@@ -18,7 +18,7 @@ function slugify(text: string | undefined): string {
 
 export async function GET() {
   try {
-    // Fetch all published notes from Supabase
+    // Fetch all notes from Supabase
     const { data: notes, error } = await supabaseClient
       .from('notes')
       .select('id, title, university, course, subject, chapter_no, created_at, updated_at')
@@ -29,8 +29,8 @@ export async function GET() {
       throw error;
     }
 
-    // Base URL - Replace with your actual domain
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://noteshub.abhishekchoudhary.co.in';
+    // Base URL
+    const baseUrl = 'https://noteshub.abhishekchoudhary.co.in';
 
     // Generate sitemap XML
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -80,7 +80,7 @@ export async function GET() {
     // Return XML with proper headers
     return new Response(xml, {
       headers: {
-        'Content-Type': 'application/xml',
+        'Content-Type': 'application/xml; charset=utf-8',
         'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
       },
     });
@@ -102,7 +102,7 @@ export async function GET() {
 
     return new Response(fallbackXml, {
       headers: {
-        'Content-Type': 'application/xml',
+        'Content-Type': 'application/xml; charset=utf-8',
       },
     });
   }
