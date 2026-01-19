@@ -43,18 +43,59 @@ export default function Home() {
         </div>
 
         <div className={styles.heroContent}>
+          {/* Trust Badge */}
+          <div className={styles.heroBadge}>
+            <Star sx={{ fontSize: '1rem' }} />
+            <span>Trusted by 1000+ Students • 4.8★ Rating</span>
+          </div>
+
+          {/* Main Title */}
           <h1 className={styles.heroTitle}>
             Master Your Studies with <span className={styles.heroTitleHighlight}>Expert Notes</span>
           </h1>
 
+          {/* Subtitle */}
           <p className={styles.heroDescription}>
             Access premium study materials from top educators. Learn smarter, study less, achieve more.
           </p>
 
+          {/* Trust Indicators */}
+          <div className={styles.trustIndicators}>
+            <div className={styles.trustItem}>
+              <div className={styles.trustIcon}>✓</div>
+              <span>Instant Download</span>
+            </div>
+            <div className={styles.trustItem}>
+              <div className={styles.trustIcon}>🔒</div>
+              <span>100% Secure</span>
+            </div>
+            <div className={styles.trustItem}>
+              <div className={styles.trustIcon}>⭐</div>
+              <span>Verified Sellers</span>
+            </div>
+          </div>
+
+          {/* CTAs */}
           <div className={styles.heroCTAContainer}>
             <Link href="/student/browse" className={styles.heroCTAPrimary}>
               Browse Notes Now
             </Link>
+          </div>
+
+          {/* Stats Row */}
+          <div className={styles.statsRow}>
+            <div className={styles.statBox}>
+              <div className={styles.statNumber}>100%</div>
+              <div className={styles.statLabel}>Trusted</div>
+            </div>
+            <div className={styles.statBox}>
+              <div className={styles.statNumber}>₹5-99</div>
+              <div className={styles.statLabel}>Affordable Pricing</div>
+            </div>
+            <div className={styles.statBox}>
+              <div className={styles.statNumber}>24/7</div>
+              <div className={styles.statLabel}>Support</div>
+            </div>
           </div>
         </div>
       </section>
