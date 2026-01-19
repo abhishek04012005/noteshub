@@ -35,7 +35,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ========== HERO SECTION ========== */}
+      {/* ========== HERO SECTION =========== */}
       <section className={styles.hero}>
         <div className={styles.heroBackground}>
           <div className={styles.heroBlur1}></div>
