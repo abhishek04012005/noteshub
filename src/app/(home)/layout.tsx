@@ -6,6 +6,17 @@ export const metadata: Metadata = {
   title: `${SITE_NAME} - Buy & Sell Study Notes Online | Premium Marketplace`,
   description: SITE_DESCRIPTION,
   keywords: SITE_KEYWORDS,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-snippet': -1,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+    },
+  },
   openGraph: {
     title: `${SITE_NAME} - Premium Study Notes Marketplace`,
     description: 'Buy  quality study notes online. Join thousands of students earning from their knowledge.',

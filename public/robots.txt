@@ -39,5 +39,5 @@ User-agent: MJ12bot
 Disallow: /
 
 # Point to sitemap
-Sitemap: https://abhishekchoudhary.co.in/sitemap.xml
-Sitemap: https://abhishekchoudhary.co.in/sitemap-notes.xml
+Sitemap: https://noteshub.abhishekchoudhary.co.in/api/sitemap
+Sitemap: https://noteshub.abhishekchoudhary.co.in/sitemap-index.xml

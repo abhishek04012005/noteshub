@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Static pages sitemap -->
+  <!-- Static pages sitemap (generated from API) -->
   <sitemap>
-    <loc>https://abhishekchoudhary.co.in/sitemap.xml</loc>
-    <lastmod>2026-01-16</lastmod>
-  </sitemap>
-
-  <!-- Dynamic notes sitemap (generated from API) -->
-  <sitemap>
-    <loc>https://abhishekchoudhary.co.in/api/sitemap</loc>
-    <lastmod>2026-01-16</lastmod>
+    <loc>https://noteshub.abhishekchoudhary.co.in/api/sitemap</loc>
+    <lastmod>2026-01-19</lastmod>
   </sitemap>
 
   <!-- Future: Blog posts sitemap -->

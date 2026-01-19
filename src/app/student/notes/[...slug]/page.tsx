@@ -128,6 +128,17 @@ export async function generateMetadata(
       title: fullTitle,
       description: notes.description?.substring(0, 160) || `Quality study notes on ${notes.subject || 'Various Topics'} - Available on ${SITE_NAME}`,
       keywords: keywordsArray,
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-snippet': -1,
+          'max-image-preview': 'large',
+          'max-video-preview': -1,
+        },
+      },
       openGraph: {
         title: fullTitle,
         description: notes.description?.substring(0, 160) || `Premium study notes available on ${SITE_NAME}`,
@@ -165,6 +176,17 @@ export async function generateMetadata(
       title: `${fallbackTitle} | ${SITE_NAME}`,
       description: fallbackDescription,
       keywords: [university, course, subject, chapter, 'study notes', 'exam prep'],
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-snippet': -1,
+          'max-image-preview': 'large',
+          'max-video-preview': -1,
+        },
+      },
       openGraph: {
         title: `${fallbackTitle} | ${SITE_NAME}`,
         description: fallbackDescription,
@@ -192,6 +214,14 @@ export async function generateMetadata(
   return {
     title: `Study Notes | ${SITE_NAME}`,
     description: `View quality study notes on ${SITE_NAME} marketplace`,
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
     alternates: {
       canonical: getCanonical(`/student/notes/${slug.join('/')}`),
     },

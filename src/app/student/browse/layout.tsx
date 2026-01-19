@@ -6,6 +6,17 @@ export const metadata: Metadata = {
   title: `Browse Study Notes | ${SITE_NAME} - Premium Educational Materials`,
   description: 'Explore thousands of high-quality study notes across all subjects. Find exam-ready materials, course notes, and study guides from verified sellers.',
   keywords: ['browse notes', 'study materials', 'educational resources', 'notes for sale', 'study guides', 'course materials'],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-snippet': -1,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+    },
+  },
   openGraph: {
     title: `Browse Study Notes - ${SITE_NAME} Marketplace`,
     description: 'Discover quality study notes across multiple subjects and courses',
