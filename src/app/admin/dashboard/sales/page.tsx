@@ -38,7 +38,6 @@ export default function AdminSalesPage() {
     setIsAdmin(true);
     fetchSalesData();
 
-    // Auto-refresh sales data every 10 seconds to show latest downloads
     const interval = setInterval(fetchSalesData, 10000);
     return () => clearInterval(interval);
   }, [router]);

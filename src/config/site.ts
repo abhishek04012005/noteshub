@@ -21,7 +21,6 @@ export const OG_IMAGES = {
  */
 export const SITE_KEYWORDS = [
   'buy study notes',
-  'sell notes online',
   'study materials',
   'notes marketplace',
   'student notes',
@@ -43,13 +42,13 @@ export const SOCIAL_LINKS = {
  * Contact Information
  */
 export const CONTACT_INFO = {
-  email: 'support@noteshub.abhishekchoudhary.co.in',
-  phone: '+91-XXXXXXXXXX',
+  email: 'notesmarketplace07@gmail.com',
+  phone: '+91-9263767441',
   address: {
-    streetAddress: 'Your Address Here',
-    addressLocality: 'Your City',
-    addressRegion: 'Your State',
-    postalCode: 'XXXXX',
+    streetAddress: 'Vijay Nagar',
+    addressLocality: 'Indore',
+    addressRegion: 'Madhya Pradesh',
+    postalCode: '452010',
     addressCountry: 'IN',
   },
 };

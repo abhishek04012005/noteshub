@@ -3,7 +3,7 @@ import React from 'react';
 import { SITE_URL, SITE_DESCRIPTION, SITE_NAME, SITE_KEYWORDS, OG_IMAGES, getCanonical } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: `${SITE_NAME} - Buy & Sell Study Notes Online | Premium Marketplace`,
+  title: `${SITE_NAME} - Buy Study Notes Online | Premium Marketplace`,
   description: SITE_DESCRIPTION,
   keywords: SITE_KEYWORDS,
   robots: {
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${SITE_NAME} - Buy & Sell Study Notes`,
+    title: `${SITE_NAME} - Buy Study Notes`,
     description: 'Join the premier marketplace for educational notes',
     images: [OG_IMAGES.default],
   },
