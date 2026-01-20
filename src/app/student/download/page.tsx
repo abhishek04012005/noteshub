@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import styles from './download.module.css';
+import Loader from '../../../components/Loader';
 import {
   ArrowBack,
   HourglassEmpty,
@@ -85,12 +86,11 @@ function DownloadContent() {
 
   if (loading) {
     return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingContent}>
-          <div className={styles.spinner}></div>
-          <p className={styles.loadingText}>Loading your download...</p>
-        </div>
-      </div>
+      <Loader
+        message="Loading your download..."
+        size="large"
+        fullScreen={true}
+      />
     );
   }
 
@@ -244,7 +244,7 @@ function DownloadContent() {
             <div className={styles.infoBox}>
               <p className={styles.infoBgText}>
                 <Info sx={{ fontSize: '1rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
-                <span style={{ fontWeight: 600 }}>Tip:</span> The download link is also available in your email inbox for future reference.
+                <span style={{ fontWeight: 600 }}>Wish:</span> All the best for your future!.
               </p>
             </div>
 
@@ -267,12 +267,11 @@ export default function DownloadPage() {
   return (
     <Suspense
       fallback={
-        <div className={styles.fallback}>
-          <div className={styles.fallbackContent}>
-            <div className={styles.fallbackSpinner}></div>
-            <p className={styles.fallbackText}>Loading...</p>
-          </div>
-        </div>
+        <Loader
+          message="Loading..."
+          size="large"
+          fullScreen={true}
+        />
       }
     >
       <DownloadContent />

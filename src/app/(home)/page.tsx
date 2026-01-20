@@ -20,9 +20,9 @@ export default function Home() {
 
           <nav className={styles.nav}>
             {['Home', 'Browse', 'Features'].map((item) => (
-              <Link 
+              <Link
                 key={item}
-                href={item === 'Browse' ? '/student/browse' : '/'} 
+                href={item === 'Browse' ? '/student/browse' : '/'}
                 className={styles.navLink}>
                 {item}
               </Link>
@@ -78,8 +78,11 @@ export default function Home() {
           {/* CTAs */}
           <div className={styles.heroCTAContainer}>
             <Link href="/student/browse" className={styles.heroCTAPrimary}>
-              Browse Notes Now
+              Download Notes
             </Link>
+            {/* <Link href="/student/browse" className={styles.heroCTASecondary}>
+              Download Syllabus
+            </Link> */}
           </div>
 
           {/* Stats Row */}
@@ -110,25 +113,25 @@ export default function Home() {
 
           <div className={styles.featuresGrid}>
             {[
-              { 
+              {
                 icon: Lock,
-                title: 'Secure & Safe', 
-                desc: 'Your data is encrypted. Trusted payment gateway with zero fraud.' 
+                title: 'Secure & Safe',
+                desc: 'Your data is encrypted. Trusted payment gateway with zero fraud.'
               },
-              { 
+              {
                 icon: School,
-                title: 'Verified Experts', 
-                desc: 'Only notes from experienced educators and top performers.' 
+                title: 'Verified Experts',
+                desc: 'Only notes from experienced educators and top performers.'
               },
-              { 
+              {
                 icon: Phone,
-                title: 'Mobile Ready', 
-                desc: 'Perfect for phones, tablets, and all devices.' 
+                title: 'Mobile Ready',
+                desc: 'Perfect for phones, tablets, and all devices.'
               },
-              { 
+              {
                 icon: TrendingUp,
-                title: 'Affordable Prices', 
-                desc: 'Quality education at pocket-friendly rates.' 
+                title: 'Affordable Prices',
+                desc: 'Quality education at pocket-friendly rates.'
               }
             ].map((feature, i) => {
               const IconComponent = feature.icon;

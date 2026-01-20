@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { loadScript } from '../utils/razorpay-loader';
 import axios from 'axios';
 import styles from './BuyNotesButton.module.css';
+import SuccessModal from './SuccessModal';
 import {
   Payment as CreditCardIcon,
   HourglassEmpty,
@@ -25,6 +26,8 @@ export default function BuyNotesButton({
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successOrderId, setSuccessOrderId] = useState('');
 
   const handlePayment = async () => {
     if (!email || !name) {
@@ -74,15 +77,16 @@ export default function BuyNotesButton({
               notes_id: notesId,
             });
 
-            alert(
-              'Payment successful! Download link sent to your email.'
-            );
+            setSuccessOrderId(orderId);
+            setShowSuccessModal(true);
             setShowForm(false);
             setEmail('');
             setName('');
 
-            // Redirect to download page
-            window.location.href = `/student/download?order_id=${orderId}&email=${email}`;
+            // Redirect to download page after modal closes
+            setTimeout(() => {
+              window.location.href = `/student/download?order_id=${orderId}&email=${email}`;
+            }, 3000);
           } catch (error) {
             console.error('Payment verification failed:', error);
             alert('Payment verification failed');
@@ -106,6 +110,14 @@ export default function BuyNotesButton({
 
   return (
     <div className={styles.container}>
+      <SuccessModal
+        isOpen={showSuccessModal}
+        title="Payment Successful!"
+        message="Download link is generating. You will be redirected shortly."
+        onClose={() => setShowSuccessModal(false)}
+        autoCloseDuration={3000}
+      />
+
       {!showForm ? (
         <button
           onClick={() => setShowForm(true)}

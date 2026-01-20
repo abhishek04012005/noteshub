@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "pdf notes",
     "study materials",
   ],
-  authors: [{ name: "NotesHub Team" }],
+  authors: [{ name: "NotesHub" }],
   creator: "NotesHub",
   publisher: "NotesHub",
   formatDetection: {

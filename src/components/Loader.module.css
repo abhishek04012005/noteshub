@@ -1,0 +1,75 @@
+/* ========== LOADER ========== */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.fullScreenContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+/* ========== SPINNER ========== */
+
+.loader {
+  border: 4px solid var(--primary-100);
+  border-top: 4px solid var(--tertiary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.small {
+  width: 30px;
+  height: 30px;
+}
+
+.medium {
+  width: 50px;
+  height: 50px;
+}
+
+.large {
+  width: 70px;
+  height: 70px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========== MESSAGE ========== */
+
+.message {
+  font-size: 1rem;
+  color: var(--text-light);
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.3px;
+}

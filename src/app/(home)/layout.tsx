@@ -3,7 +3,7 @@ import React from 'react';
 import { SITE_URL, SITE_DESCRIPTION, SITE_NAME, SITE_KEYWORDS, OG_IMAGES, getCanonical } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: `${SITE_NAME} - Buy Study Notes Online | Premium Marketplace`,
+  title: `${SITE_NAME} - Buy All University Study Notes Online | Premium Marketplace | RGPV`,
   description: SITE_DESCRIPTION,
   keywords: SITE_KEYWORDS,
   robots: {
