@@ -14,6 +14,9 @@ import {
   Close,
   Refresh,
   Download,
+  Person,
+  DateRange,
+  CheckCircle,
 } from '@mui/icons-material';
 import { Purchase } from '@/types';
 import styles from './sales.module.css';
@@ -22,12 +25,28 @@ export default function AdminSalesPage() {
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [purchases, setPurchases] = useState<Purchase[]>([]);
+  const [filteredPurchases, setFilteredPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [totalSales, setTotalSales] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [selectedNote, setSelectedNote] = useState<Purchase | null>(null);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'completed' | 'failed' | 'cancelled'>('all');
+  const [filterDateRange, setFilterDateRange] = useState<'all' | 'today' | 'week' | 'month'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [stats, setStats] = useState({
+    totalSales: 0,
+    totalRevenue: 0,
+    todaysSales: 0,
+    thisMonthSales: 0,
+    uniqueCustomers: 0,
+    completionRate: '0%',
+  });
+
+  const itemsPerPage = 15;
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('isAdminLoggedIn');
@@ -42,19 +61,16 @@ export default function AdminSalesPage() {
     return () => clearInterval(interval);
   }, [router]);
 
+  useEffect(() => {
+    applyFilters();
+  }, [purchases, searchQuery, sortBy, filterStatus, filterDateRange]);
+
   const fetchSalesData = async () => {
     try {
       const response = await axios.get('/api/admin/purchases');
       const data = response.data.data || [];
       setPurchases(data);
-      
-      // Count only completed payments for total sales
-      const completedSales = data.filter((p: Purchase) => p.status === 'completed');
-      setTotalSales(completedSales.length);
-      
-      // Calculate revenue only from completed payments (excluding cancelled)
-      const revenue = completedSales.reduce((sum: number, purchase: Purchase) => sum + (purchase.amount || 0), 0);
-      setTotalRevenue(revenue);
+      calculateStats(data);
     } catch (error) {
       console.error('Error fetching sales data:', error);
     } finally {
@@ -63,9 +79,116 @@ export default function AdminSalesPage() {
     }
   };
 
-  const handleManualRefresh = async () => {
-    setRefreshing(true);
-    await fetchSalesData();
+  const calculateStats = (data: Purchase[]) => {
+    const completedSales = data.filter((p: Purchase) => p.status === 'completed');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const todaysSalesCount = completedSales.filter(
+      (p: Purchase) => new Date(p.created_at).getTime() >= today.getTime()
+    ).length;
+
+    const thisMonth = new Date();
+    const monthStart = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 1);
+    
+    const thisMonthSalesCount = completedSales.filter(
+      (p: Purchase) => new Date(p.created_at).getTime() >= monthStart.getTime()
+    ).length;
+
+    const revenue = completedSales.reduce((sum: number, purchase: Purchase) => sum + (purchase.amount || 0), 0);
+    const uniqueEmails = new Set(data.map(d => d.customer_email || d.email)).size;
+    const completionRate = data.length > 0 ? Math.round((completedSales.length / data.length) * 100) : 0;
+
+    setStats({
+      totalSales: completedSales.length,
+      totalRevenue: revenue,
+      todaysSales: todaysSalesCount,
+      thisMonthSales: thisMonthSalesCount,
+      uniqueCustomers: uniqueEmails,
+      completionRate: `${completionRate}%`,
+    });
+
+    setTotalSales(completedSales.length);
+    setTotalRevenue(revenue);
+  };
+
+  const applyFilters = () => {
+    let filtered = [...purchases];
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        p =>
+          (p.customer_name?.toLowerCase().includes(query) || false) ||
+          (p.customer_email?.toLowerCase().includes(query) || false) ||
+          (p.email?.toLowerCase().includes(query) || false)
+      );
+    }
+
+    // Status filter
+    if (filterStatus !== 'all') {
+      filtered = filtered.filter(p => p.status?.toLowerCase() === filterStatus);
+    }
+
+    // Date range filter
+    if (filterDateRange !== 'all') {
+      const now = new Date();
+      let startDate = new Date();
+
+      switch (filterDateRange) {
+        case 'today':
+          startDate.setHours(0, 0, 0, 0);
+          break;
+        case 'week':
+          startDate.setDate(now.getDate() - 7);
+          break;
+        case 'month':
+          startDate.setMonth(now.getMonth() - 1);
+          break;
+      }
+
+      filtered = filtered.filter(
+        p => new Date(p.created_at).getTime() >= startDate.getTime()
+      );
+    }
+
+    // Sort
+    if (sortBy === 'oldest') {
+      filtered.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    } else {
+      filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    }
+
+    setFilteredPurchases(filtered);
+    setCurrentPage(1);
+  };
+
+  // Pagination
+  const totalPages = Math.ceil(filteredPurchases.length / itemsPerPage);
+  const paginatedPurchases = filteredPurchases.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const exportToCSV = () => {
+    const headers = ['Date', 'Customer Name', 'Email', 'Amount', 'Payment ID', 'Status'];
+    const csvContent = [
+      headers.join(','),
+      ...purchases.map(p =>
+        `"${new Date(p.created_at).toLocaleDateString()}","${p.customer_name || 'N/A'}","${p.customer_email || p.email || 'N/A'}","${p.amount || '0'}","${p.razorpay_payment_id || 'N/A'}","${p.status || 'Pending'}"`
+      ),
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sales-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
   };
 
   const handleLogout = () => {
@@ -92,12 +215,7 @@ export default function AdminSalesPage() {
         );
         setPurchases(updatedPurchases);
         setSelectedNote({ ...selectedNote, status: newStatus });
-        
-        // Recalculate stats
-        const completedSales = updatedPurchases.filter((p: Purchase) => p.status?.toLowerCase() === 'completed');
-        setTotalSales(completedSales.length);
-        const revenue = completedSales.reduce((sum: number, purchase: Purchase) => sum + (purchase.amount || 0), 0);
-        setTotalRevenue(revenue);
+        calculateStats(updatedPurchases);
       }
     } catch (error) {
       console.error('Error updating status:', error);
@@ -201,258 +319,366 @@ export default function AdminSalesPage() {
   return (
     <main className={styles.main}>
       {/* Header */}
-      <header className={styles.headerFixed}>
+      <header className={styles.header}>
         <div className={styles.headerContainer}>
-          <div className={styles.headerInfo}>
-            <h1 className={styles.headerTitle}>
-              <TrendingUp sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} />
-              Sales Analytics
-            </h1>
-            <p className={styles.headerEmail}>Track your earnings and sales performance</p>
-          </div>
-
-          <div className={styles.headerActions}>
-            <button
-              onClick={handleManualRefresh}
-              className={styles.navBtn}
-              disabled={refreshing}
-              title="Refresh data"
-              style={{ opacity: refreshing ? 0.6 : 1 }}
-            >
-              <Refresh sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle', animation: refreshing ? 'spin 1s linear infinite' : 'none' }} />
-              {refreshing ? 'Refreshing...' : 'Refresh'}
-            </button>
-            <button
-              onClick={() => router.back()}
-              className={styles.navBtn}
-              title="Go back"
-            >
-              <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle' }} />
-              Back
-            </button>
-            <button onClick={handleLogout} className={styles.logoutBtn}>
-              <Logout sx={{ fontSize: '1rem', marginRight: '0.25rem' }} />
-              Logout
-            </button>
-          </div>
+          <a href="/admin/dashboard" className={styles.backLink}>
+            <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+            Dashboard
+          </a>
+          <h1 className={styles.title}>
+            <TrendingUp sx={{ fontSize: '1.75rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+            Sales Analytics
+          </h1>
+          <p className={styles.subtitle}>
+            Track your earnings, sales performance, and customer engagement
+          </p>
         </div>
       </header>
 
-      {/* Stats Section */}
-      <div style={{  padding: '2rem 1rem' }}>
-        <section className={styles.statsSection}>
-          {/* Total Sales Card */}
-          <div className={styles.statCard}>
-            <div className={styles.statIcon}>
-              <BarChart sx={{ fontSize: '2rem', color: 'var(--primary-600)' }} />
+      <div className={styles.contentWrapper}>
+        <div className={styles.contentContainer}>
+          {/* Stats Grid */}
+          <div className={styles.statsGrid}>
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>
+                <BarChart sx={{ fontSize: '1.75rem' }} />
+              </div>
+              <div className={styles.statContent}>
+                <p className={styles.statLabel}>Total Sales</p>
+                <p className={styles.statValue}>{stats.totalSales}</p>
+              </div>
             </div>
-            <div className={styles.statContent}>
-              <p className={styles.statLabel}>Total Sales</p>
-              <p className={styles.statValue}>{totalSales}</p>
+
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>
+                <AttachMoney sx={{ fontSize: '1.75rem' }} />
+              </div>
+              <div className={styles.statContent}>
+                <p className={styles.statLabel}>Total Revenue</p>
+                <p className={styles.statValue}>₹{stats.totalRevenue.toLocaleString('en-IN')}</p>
+              </div>
+            </div>
+
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>
+                <Person sx={{ fontSize: '1.75rem' }} />
+              </div>
+              <div className={styles.statContent}>
+                <p className={styles.statLabel}>Unique Customers</p>
+                <p className={styles.statValue}>{stats.uniqueCustomers}</p>
+              </div>
+            </div>
+
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>
+                <DateRange sx={{ fontSize: '1.75rem' }} />
+              </div>
+              <div className={styles.statContent}>
+                <p className={styles.statLabel}>Today's Sales</p>
+                <p className={styles.statValue}>{stats.todaysSales}</p>
+              </div>
+            </div>
+
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>
+                <BarChart sx={{ fontSize: '1.75rem' }} />
+              </div>
+              <div className={styles.statContent}>
+                <p className={styles.statLabel}>This Month</p>
+                <p className={styles.statValue}>{stats.thisMonthSales}</p>
+              </div>
+            </div>
+
+            <div className={styles.statCard}>
+              <div className={styles.statIcon}>
+                <CheckCircle sx={{ fontSize: '1.75rem' }} />
+              </div>
+              <div className={styles.statContent}>
+                <p className={styles.statLabel}>Completion Rate</p>
+                <p className={styles.statValue}>{stats.completionRate}</p>
+              </div>
             </div>
           </div>
 
-          {/* Total Revenue Card */}
-          <div className={styles.statCard}>
-            <div className={styles.statIcon}>
-              <AttachMoney sx={{ fontSize: '2rem', color: 'var(--success-600)' }} />
+          {/* Controls */}
+          <div className={styles.controls}>
+            <div className={styles.searchBar}>
+              <input
+                type="text"
+                placeholder="Search by customer name or email..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={styles.searchInput}
+              />
             </div>
-            <div className={styles.statContent}>
-              <p className={styles.statLabel}>Total Revenue</p>
-              <p className={styles.statValue}>₹{totalRevenue.toLocaleString('en-IN')}</p>
-            </div>
-          </div>
-        </section>
 
-        {/* Sales Table Section */}
-        <section className={styles.tableSection}>
-          <h2 className={styles.sectionTitle}>Recent Purchases</h2>
-          
-          {loading ? (
-            <div className={styles.loadingContainer}>
-              <p className={styles.loadingText}>Loading sales data...</p>
-            </div>
-          ) : purchases.length === 0 ? (
-            <div className={styles.emptyState}>
-              <FolderOff className={styles.emptyIcon} sx={{ fontSize: '3rem' }} />
-              <p className={styles.emptyMessage}>No sales yet</p>
-              <p className={styles.emptyMessage} style={{ fontSize: '0.875rem', opacity: 0.7 }}>Your sales will appear here once someone purchases your notes</p>
-            </div>
-          ) : (
-            <div className={styles.tableWrapper}>
-              <table className={styles.table}>
-                <thead className={styles.tableHead}>
-                  <tr>
-                    <th className={styles.tableHeader}>Date</th>
-                    <th className={styles.tableHeader}>Customer Name</th>
-                    <th className={styles.tableHeader}>Email</th>
-                    <th className={styles.tableHeader}>Amount</th>
-                    <th className={styles.tableHeader}>Payment ID</th>
-                    <th className={styles.tableHeader}>Note Details</th>
-                    <th className={styles.tableHeader}>Download</th>
-                    <th className={styles.tableHeader}>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {purchases.map((purchase) => {
-                    // Determine display status
-                    const normalizedStatus = purchase.status?.toLowerCase() || 'pending';
-                    let displayStatus = purchase.status?.charAt(0).toUpperCase() + purchase.status?.slice(1).toLowerCase() || 'Pending';
-                    let statusClass = displayStatus;
-                    
-                    // Check if payment is completed but notes not downloaded
-                    if (normalizedStatus === 'completed' && !purchase.download_url) {
-                      displayStatus = 'Completed - Not Downloaded';
-                      statusClass = 'CompletedNotDownloaded';
-                    }
-                    
-                    return (
-                      <tr key={purchase.id} className={styles.tableRow}>
-                        <td className={styles.tableCell}>{new Date(purchase.created_at).toLocaleDateString()}</td>
-                        <td className={`${styles.tableCell} ${styles.nameCell}`}>{purchase.customer_name || 'N/A'}</td>
-                        <td className={`${styles.tableCell} ${styles.emailCell}`}>{purchase.customer_email || purchase.email || 'N/A'}</td>
-                        <td className={`${styles.tableCell} ${styles.amountCell}`}>₹{purchase.amount?.toLocaleString('en-IN') || '0'}</td>
-                        <td className={`${styles.tableCell} ${styles.transactionId}`}>{purchase.razorpay_payment_id?.substring(0, 12)}...</td>
-                        <td className={styles.tableCell}>
-                          <button 
-                            className={styles.infoButton}
-                            onClick={() => setSelectedNote(purchase)}
-                            title="View note details"
-                          >
-                            <Info sx={{ fontSize: '1.25rem' }} />
-                          </button>
-                        </td>
-                        <td className={styles.tableCell}>
-                          <button 
-                            className={styles.downloadTableBtn}
-                            onClick={() => handleDownloadNotes(purchase)}
-                            disabled={!purchase.download_url}
-                            title={purchase.download_url ? 'Download notes' : 'Download URL not available'}
-                          >
-                            <Download sx={{ fontSize: '1.25rem' }} />
-                          </button>
-                        </td>
-                        <td className={styles.tableCell}>
-                          <span className={`${styles.statusBadge} ${styles[`status${statusClass}`]}`}>
-                            {displayStatus}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </section>
-      </div>
-
-      {/* Note Details Modal */}
-      {selectedNote && selectedNote.notes && (
-        <div className={styles.modalOverlay} onClick={() => setSelectedNote(null)}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>Note Details</h2>
-              <button 
-                className={styles.modalCloseBtn}
-                onClick={() => setSelectedNote(null)}
-                title="Close"
+            <div className={styles.filtersGroup}>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value as any)}
+                className={styles.filterSelect}
+                title="Filter by payment status"
               >
-                <Close sx={{ fontSize: '1.5rem' }} />
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="failed">Failed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+
+              <select
+                value={filterDateRange}
+                onChange={(e) => setFilterDateRange(e.target.value as any)}
+                className={styles.filterSelect}
+                title="Filter by date range"
+              >
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">Last 7 Days</option>
+                <option value="month">Last 30 Days</option>
+              </select>
+            </div>
+
+            <div className={styles.controlsRight}>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as 'newest' | 'oldest')}
+                className={styles.sortSelect}
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+              </select>
+
+              <button onClick={exportToCSV} className={styles.exportBtn}>
+                Export CSV
               </button>
             </div>
-            
-            <div className={styles.modalContent}>
-              {selectedNote.notes.title && (
-                <div className={styles.detailRow}>
-                  <span className={styles.detailLabel}>Title:</span>
-                  <span className={styles.detailValue}>{selectedNote.notes.title}</span>
+          </div>
+
+          {/* Sales Table Section */}
+          <div className={styles.tableSection}>
+            {loading ? (
+              <div className={styles.loadingContainer}>
+                <p className={styles.loadingText}>Loading sales data...</p>
+              </div>
+            ) : filteredPurchases.length === 0 ? (
+              <div className={styles.emptyState}>
+                <FolderOff sx={{ fontSize: '3rem', color: 'var(--text-light)', marginBottom: '1rem' }} />
+                <h3>No sales found</h3>
+                <p>Your sales will appear here once customers purchase your notes</p>
+              </div>
+            ) : (
+              <>
+                <div className={styles.tableWrapper}>
+                  <table className={styles.table}>
+                    <thead className={styles.tableHead}>
+                      <tr>
+                        <th>Note Details</th>
+                        <th>Customer Name</th>
+                        <th>Email</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className={styles.tableBody}>
+                      {paginatedPurchases.map((purchase, index) => {
+                        const normalizedStatus = purchase.status?.toLowerCase() || 'pending';
+                        let displayStatus = purchase.status?.charAt(0).toUpperCase() + purchase.status?.slice(1).toLowerCase() || 'Pending';
+                        
+                        if (normalizedStatus === 'completed' && !purchase.download_url) {
+                          displayStatus = 'Completed - Not Downloaded';
+                        }
+                        
+                        return (
+                          <tr key={purchase.id} className={index % 2 === 0 ? styles.rowAlternate : ''}>
+                            <td>
+                              <div className={styles.notesCell}>
+                                <div className={styles.notesTitle}>{purchase.notes?.title || 'N/A'}</div>
+                                <div className={styles.notesInfo}>
+                                  {purchase.notes?.university} • {purchase.notes?.course} • {purchase.notes?.branch}
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div className={styles.nameCell}>
+                                <Person sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+                                {purchase.customer_name || 'N/A'}
+                              </div>
+                            </td>
+                            <td>
+                              <div className={styles.emailCell}>
+                                {purchase.customer_email || purchase.email || 'N/A'}
+                              </div>
+                            </td>
+                            <td className={styles.amountCell}>₹{purchase.amount?.toLocaleString('en-IN') || '0'}</td>
+                            <td>
+                              {new Date(purchase.created_at).toLocaleString('en-IN', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </td>
+                            <td>
+                              <button
+                                className={styles.infoButton}
+                                onClick={() => setSelectedNote(purchase)}
+                                title="View details"
+                              >
+                                <Info sx={{ fontSize: '1.25rem' }} />
+                              </button>
+                            </td>
+                            <td>
+                              <span className={`${styles.badge} ${styles[`status${displayStatus.replace(/ /g, '')}`]}`}>
+                                {displayStatus}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
-              )}
-              {selectedNote.notes.university && (
-                <div className={styles.detailRow}>
-                  <span className={styles.detailLabel}>University:</span>
-                  <span className={styles.detailValue}>{selectedNote.notes.university}</span>
-                </div>
-              )}
-              {selectedNote.notes.course && (
-                <div className={styles.detailRow}>
-                  <span className={styles.detailLabel}>Course:</span>
-                  <span className={styles.detailValue}>{selectedNote.notes.course}</span>
-                </div>
-              )}
-              {selectedNote.notes.branch && (
-                <div className={styles.detailRow}>
-                  <span className={styles.detailLabel}>Branch:</span>
-                  <span className={styles.detailValue}>{selectedNote.notes.branch}</span>
-                </div>
-              )}
-              {selectedNote.notes.semester && (
-                <div className={styles.detailRow}>
-                  <span className={styles.detailLabel}>Semester:</span>
-                  <span className={styles.detailValue}>{selectedNote.notes.semester}</span>
-                </div>
-              )}
-              {selectedNote.notes.subject && (
-                <div className={styles.detailRow}>
-                  <span className={styles.detailLabel}>Subject:</span>
-                  <span className={styles.detailValue}>{selectedNote.notes.subject}</span>
-                </div>
-              )}
-              {selectedNote.notes.chapter_no && (
-                <div className={styles.detailRow}>
-                  <span className={styles.detailLabel}>Chapter:</span>
-                  <span className={styles.detailValue}>{selectedNote.notes.chapter_no}</span>
-                </div>
-              )}
-              <div className={styles.detailRow}>
-                <span className={styles.detailLabel}>Download Status:</span>
-                <div className={styles.statusControls}>
-                  <span className={`${styles.downloadBadge} ${styles[(selectedNote as any).download_marked_at ? 'downloadedBadge' : 'notDownloadedBadge']}`}>
-                    {(selectedNote as any).download_marked_at ? '✓ Downloaded' : '✗ Not Downloaded'}
-                  </span>
-                  <button
-                    onClick={() => handleDownloadStatusToggle(!(selectedNote as any).download_marked_at)}
-                    disabled={isUpdatingStatus}
-                    className={styles.toggleBtn}
-                    title="Toggle download status"
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className={styles.pagination}>
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                      className={styles.paginationBtn}
+                    >
+                      Previous
+                    </button>
+
+                    <div className={styles.pageInfo}>
+                      Page {currentPage} of {totalPages}
+                    </div>
+
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      disabled={currentPage === totalPages}
+                      className={styles.paginationBtn}
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
+          {/* Note Details Modal */}
+          {selectedNote && selectedNote.notes && (
+            <div className={styles.modalOverlay} onClick={() => setSelectedNote(null)}>
+              <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+                <div className={styles.modalHeader}>
+                  <h2 className={styles.modalTitle}>Note Details</h2>
+                  <button 
+                    className={styles.modalCloseBtn}
+                    onClick={() => setSelectedNote(null)}
+                    title="Close"
                   >
-                    {(selectedNote as any).download_marked_at ? 'Mark Not Downloaded' : 'Mark Downloaded'}
+                    <Close sx={{ fontSize: '1.5rem' }} />
                   </button>
                 </div>
-              </div>
-              <div className={styles.detailRow}>
-                <span className={styles.detailLabel}></span>
-                <button
-                  onClick={() => handleDownloadNotes(selectedNote)}
-                  disabled={!selectedNote.download_url || isUpdatingStatus}
-                  className={styles.downloadButton}
-                  title={selectedNote.download_url ? 'Download the notes' : 'Download URL not available'}
-                >
-                  {isUpdatingStatus ? 'Downloading...' : '⬇ Download Notes'}
-                </button>
-              </div>
-              <div className={styles.detailRow}>
-                <span className={styles.detailLabel}>Payment Status:</span>
-                <div className={styles.statusControls}>
-                  <select 
-                    value={selectedNote.status || 'pending'}
-                    onChange={(e) => handleStatusChange(e.target.value as 'pending' | 'completed' | 'failed' | 'cancelled')}
-                    disabled={isUpdatingStatus}
-                    className={styles.statusSelect}
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                    <option value="failed">Failed</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                  {isUpdatingStatus && <span className={styles.updatingText}>Updating...</span>}
+                
+                <div className={styles.modalContent}>
+                  {selectedNote.notes.title && (
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Title:</span>
+                      <span className={styles.detailValue}>{selectedNote.notes.title}</span>
+                    </div>
+                  )}
+                  {selectedNote.notes.university && (
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>University:</span>
+                      <span className={styles.detailValue}>{selectedNote.notes.university}</span>
+                    </div>
+                  )}
+                  {selectedNote.notes.course && (
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Course:</span>
+                      <span className={styles.detailValue}>{selectedNote.notes.course}</span>
+                    </div>
+                  )}
+                  {selectedNote.notes.branch && (
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Branch:</span>
+                      <span className={styles.detailValue}>{selectedNote.notes.branch}</span>
+                    </div>
+                  )}
+                  {selectedNote.notes.semester && (
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Semester:</span>
+                      <span className={styles.detailValue}>{selectedNote.notes.semester}</span>
+                    </div>
+                  )}
+                  {selectedNote.notes.subject && (
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Subject:</span>
+                      <span className={styles.detailValue}>{selectedNote.notes.subject}</span>
+                    </div>
+                  )}
+                  {selectedNote.notes.chapter_no && (
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Chapter:</span>
+                      <span className={styles.detailValue}>{selectedNote.notes.chapter_no}</span>
+                    </div>
+                  )}
+                  <div className={styles.detailRow}>
+                    <span className={styles.detailLabel}>Download Status:</span>
+                    <div className={styles.statusControls}>
+                      <span className={`${styles.downloadBadge} ${styles[(selectedNote as any).download_marked_at ? 'downloadedBadge' : 'notDownloadedBadge']}`}>
+                        {(selectedNote as any).download_marked_at ? '✓ Downloaded' : '✗ Not Downloaded'}
+                      </span>
+                      <button
+                        onClick={() => handleDownloadStatusToggle(!(selectedNote as any).download_marked_at)}
+                        disabled={isUpdatingStatus}
+                        className={styles.toggleBtn}
+                        title="Toggle download status"
+                      >
+                        {(selectedNote as any).download_marked_at ? 'Mark Not Downloaded' : 'Mark Downloaded'}
+                      </button>
+                    </div>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <span className={styles.detailLabel}></span>
+                    <button
+                      onClick={() => handleDownloadNotes(selectedNote)}
+                      disabled={!selectedNote.download_url || isUpdatingStatus}
+                      className={styles.downloadButton}
+                      title={selectedNote.download_url ? 'Download the notes' : 'Download URL not available'}
+                    >
+                      {isUpdatingStatus ? 'Downloading...' : '⬇ Download Notes'}
+                    </button>
+                  </div>
+                  <div className={styles.detailRow}>
+                    <span className={styles.detailLabel}>Payment Status:</span>
+                    <div className={styles.statusControls}>
+                      <select 
+                        value={selectedNote.status || 'pending'}
+                        onChange={(e) => handleStatusChange(e.target.value as 'pending' | 'completed' | 'failed' | 'cancelled')}
+                        disabled={isUpdatingStatus}
+                        className={styles.statusSelect}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                        <option value="failed">Failed</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                      {isUpdatingStatus && <span className={styles.updatingText}>Updating...</span>}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </main>
   );
 }

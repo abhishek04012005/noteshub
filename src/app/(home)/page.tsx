@@ -80,9 +80,9 @@ export default function Home() {
             <Link href="/student/browse" className={styles.heroCTAPrimary}>
               Download Notes
             </Link>
-            {/* <Link href="/student/browse" className={styles.heroCTASecondary}>
+            <Link href="/student/syllabus" className={styles.heroCTASecondary}>
               Download Syllabus
-            </Link> */}
+            </Link>
           </div>
 
           {/* Stats Row */}

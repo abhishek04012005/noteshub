@@ -29,6 +29,13 @@ export async function GET() {
       throw error;
     }
 
+    // Fetch syllabuses
+    const { data: syllabuses } = await supabaseClient
+      .from('syllabuses')
+      .select('id, title, university, course, branch, semester, created_at, updated_at')
+      .eq('is_free', true)
+      .order('updated_at', { ascending: false });
+
     // Base URL
     const baseUrl = 'https://noteshub.abhishekchoudhary.co.in';
 
@@ -41,6 +48,7 @@ export async function GET() {
     const staticPages = [
       { loc: '/', changefreq: 'weekly', priority: 1.0 },
       { loc: '/student/browse', changefreq: 'daily', priority: 0.9 },
+      { loc: '/student/syllabuses', changefreq: 'daily', priority: 0.85 },
       { loc: '/admin/login', changefreq: 'monthly', priority: 0.7 },
     ];
 
@@ -70,6 +78,28 @@ export async function GET() {
           xml += `    <lastmod>${new Date(note.updated_at).toISOString().split('T')[0]}</lastmod>\n`;
           xml += '    <changefreq>monthly</changefreq>\n';
           xml += '    <priority>0.8</priority>\n';
+          xml += '  </url>\n';
+        }
+      });
+    }
+
+    // Add dynamic syllabus pages
+    if (syllabuses && syllabuses.length > 0) {
+      syllabuses.forEach((syllabus) => {
+        // Build slug from university/course/branch/semester
+        const university = slugify(syllabus.university);
+        const course = slugify(syllabus.course);
+        const branch = slugify(syllabus.branch);
+        const semester = slugify(syllabus.semester);
+
+        // Only add if we have all the required fields
+        if (university && course && branch && semester) {
+          const syllabusUrl = `${baseUrl}/student/syllabus-download/${syllabus.id}`;
+          xml += '  <url>\n';
+          xml += `    <loc>${syllabusUrl}</loc>\n`;
+          xml += `    <lastmod>${new Date(syllabus.updated_at).toISOString().split('T')[0]}</lastmod>\n`;
+          xml += '    <changefreq>monthly</changefreq>\n';
+          xml += '    <priority>0.7</priority>\n';
           xml += '  </url>\n';
         }
       });

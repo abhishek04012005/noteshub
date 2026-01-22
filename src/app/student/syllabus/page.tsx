@@ -2,16 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import styles from './syllabuses.module.css';
 import Loader from '../../../components/Loader';
-import SyllabusCard from '../../../components/SyllabusCard';
 import Link from 'next/link';
 import {
   Search as SearchIcon,
   WarningOutlined as AlertIcon,
   FilterList,
   ArrowBack,
+  FilePresent,
 } from '@mui/icons-material';
+import styles from '../syllabuses/syllabuses.module.css';
+import SyllabusCard from '../../../components/SyllabusCard';
 
 interface Syllabus {
   id: string;
@@ -28,7 +29,7 @@ interface Syllabus {
   created_at: string;
 }
 
-export default function SyllabusesPage() {
+export default function SyllabusPage() {
   const [syllabuses, setSyllabuses] = useState<Syllabus[]>([]);
   const [filteredSyllabuses, setFilteredSyllabuses] = useState<Syllabus[]>([]);
   const [loading, setLoading] = useState(true);
@@ -144,23 +145,30 @@ export default function SyllabusesPage() {
       <header className={styles.header}>
         <div className={styles.headerContainer}>
           <Link href="/" className={styles.backLink}>
-            <ArrowBack sx={{ fontSize: '1rem' }} />
+            <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
             Back Home
           </Link>
-          <h1 className={styles.title}>Browse All Syllabuses</h1>
-          <p className={styles.subtitle}>Explore our collection of quality study materials</p>
+          <div className={styles.headerContent}>
+            <h1 className={styles.title}>
+              <FilePresent sx={{ fontSize: '2.5rem', marginRight: '1rem' }} style={{ display: 'inline' }} />
+              Free Syllabuses
+            </h1>
+            <p className={styles.subtitle}>
+              Download syllabuses from your university, branch, and semester
+            </p>
+          </div>
         </div>
       </header>
 
       {/* Search and Filters Section */}
       <section className={styles.filterSection}>
-        <div className={styles.filterControls}>
+        <div className={styles.filterContainer}>
           {/* Search Bar */}
           <div className={styles.searchBar}>
-            <SearchIcon sx={{ fontSize: '1.25rem' }} />
+            <SearchIcon sx={{ fontSize: '1.25rem', color: 'var(--text-light)' }} />
             <input
               type="text"
-              placeholder="Search by title, university, or branch..."
+              placeholder="Search by title, description, or author..."
               className={styles.searchInput}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -172,7 +180,7 @@ export default function SyllabusesPage() {
             className={styles.filterToggleBtn}
             onClick={() => setShowFilters(!showFilters)}
           >
-            <FilterList sx={{ fontSize: '1rem' }} />
+            <FilterList sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
             Filters
           </button>
         </div>
@@ -253,7 +261,10 @@ export default function SyllabusesPage() {
 
       {/* Results Info */}
       <div className={styles.resultsInfo}>
-        Found <span className={styles.resultCount}>{filteredSyllabuses.length}</span> syllabuses
+        <p>
+          Found <span className={styles.resultCount}>{filteredSyllabuses.length}</span> of{' '}
+          <span className={styles.totalCount}>{syllabuses.length}</span> syllabuses
+        </p>
       </div>
 
       {/* Syllabuses Grid */}

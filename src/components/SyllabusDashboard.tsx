@@ -9,7 +9,7 @@ import {
   Edit as EditIcon,
   FilePresent,
   Search as SearchIcon,
-  Alert as AlertIcon,
+  Info as InfoIcon,
 } from '@mui/icons-material';
 
 interface Syllabus {
@@ -183,7 +183,7 @@ export default function SyllabusDashboard() {
       {/* Syllabuses List */}
       {filteredSyllabuses.length === 0 ? (
         <div className={styles.emptyState}>
-          <AlertIcon sx={{ fontSize: '3rem', color: 'var(--text-light)', marginBottom: '1rem' }} />
+          <InfoIcon sx={{ fontSize: '3rem', color: 'var(--text-light)', marginBottom: '1rem' }} />
           <h3>No syllabuses found</h3>
           <p>Try adjusting your search or filters</p>
         </div>

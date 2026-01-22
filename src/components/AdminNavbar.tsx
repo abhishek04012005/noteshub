@@ -61,6 +61,12 @@ export default function AdminNavbar() {
       icon: <TrendingUp sx={{ fontSize: '1.2rem' }} />,
       match: (path: string) => path.includes('sales'),
     },
+    {
+      label: 'Syllabus Downloads',
+      href: '/admin/dashboard/syllabus-downloads',
+      icon: <School sx={{ fontSize: '1.2rem' }} />,
+      match: (path: string) => path.includes('syllabus-downloads'),
+    },
   ];
 
   const adminEmail = typeof localStorage !== 'undefined' 
