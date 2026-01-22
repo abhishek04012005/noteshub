@@ -96,7 +96,7 @@ export async function uploadToDrive(
     const response = await drive.files.create({
       requestBody: fileMetadata as any,
       media: media,
-      fields: 'id, name, webViewLink, mimeType',
+      fields: 'id, name, webViewLink, mimeType, size',
       supportsAllDrives: true,
     } as any);
 
@@ -123,6 +123,7 @@ export async function uploadToDrive(
       file_name: uploadedFileName || fileName,
       web_view_link: webViewLink || '',
       download_link: downloadLink,
+      file_size: response.data.size ? parseInt(response.data.size as string) : 0,
     };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);

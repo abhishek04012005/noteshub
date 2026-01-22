@@ -4,8 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import { MenuBook, Add, TrendingUp, DeleteOutline, FolderOff, EditOutlined, Download } from '@mui/icons-material';
-import { Notes } from '@/types';
+import { MenuBook, Add, TrendingUp, DeleteOutline, FolderOff, EditOutlined, Download, School } from '@mui/icons-material';import AdminNavbar from '@/components/AdminNavbar';import { Notes } from '@/types';
 import styles from './dashboard.module.css';
 
 export default function AdminDashboardPage() {
@@ -33,22 +32,6 @@ export default function AdminDashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleLogout = async () => {
-    try {
-      // Call logout endpoint to clear server-side cookie
-      await axios.post('/api/admin/logout');
-    } catch (err) {
-      console.error('Logout error:', err);
-    }
-    
-    // Clear client-side data
-    localStorage.removeItem('adminEmail');
-    localStorage.removeItem('adminId');
-    localStorage.removeItem('isAdminLoggedIn');
-    
-    router.push('/admin/login');
   };
 
   const handleDelete = async (noteId: string) => {
@@ -101,6 +84,8 @@ export default function AdminDashboardPage() {
 
   return (
     <main className={styles.main}>
+      <AdminNavbar />
+      
       {/* Header */}
       <header className={styles.headerFixed}>
         <div className={styles.headerContainer}>
@@ -112,19 +97,6 @@ export default function AdminDashboardPage() {
             <p className={styles.headerEmail}>
               {localStorage.getItem('adminEmail')}
             </p>
-          </div>
-          <div className={styles.headerActions}>
-            <Link href="/admin/dashboard/upload" className={styles.uploadBtn}>
-              <Add sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
-              Upload Notes
-            </Link>
-            <Link href="/admin/dashboard/sales" className={styles.salesBtn}>
-              <TrendingUp sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
-              View Sales
-            </Link>
-            <button onClick={handleLogout} className={styles.logoutBtn}>
-              Logout
-            </button>
           </div>
         </div>
       </header>

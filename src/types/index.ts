@@ -62,6 +62,7 @@ export interface GoogleDriveUploadResponse {
   file_name: string;
   web_view_link: string;
   download_link: string;
+  file_size: number;
 }
 
 // Razorpay Order Response

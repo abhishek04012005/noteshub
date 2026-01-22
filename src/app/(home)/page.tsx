@@ -181,7 +181,7 @@ export default function Home() {
           <div className={styles.testimonialCard}>
             <div className={styles.testimonialStars}>
               {[...Array(5)].map((_, i) => (
-                <Star key={i} sx={{ fontSize: '1.5rem', color: '#FFB800' }} />
+                <Star key={i} sx={{ fontSize: '1.5rem', color: 'var(--star, #FFB800)' }} />
               ))}
             </div>
             <h3 className={styles.testimonialTitle}>Join Thousands of Successful Students</h3>

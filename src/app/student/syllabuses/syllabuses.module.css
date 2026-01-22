@@ -1,0 +1,442 @@
+/* ========== SYLLABUSES PAGE ========== */
+
+.container {
+  background: linear-gradient(135deg, var(--neutral-50) 0%, var(--background) 100%);
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+/* ========== HEADER ========== */
+
+.header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%);
+  color: white;
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.headerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+/* ========== FILTERS ========== */
+
+.filtersSection {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  background: white;
+  border: 1px solid var(--neutral-200);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.searchBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.searchBar svg {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-light);
+  z-index: 1;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border: 1px solid var(--neutral-300);
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+}
+
+.filterGroup {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.filterSelect {
+  padding: 0.75rem;
+  border: 1px solid var(--neutral-300);
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  background-color: white;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%231E3A5F' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2rem;
+  appearance: none;
+}
+
+.filterSelect:hover,
+.filterSelect:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+}
+
+/* ========== RESULTS INFO ========== */
+
+.resultsInfo {
+  max-width: 1200px;
+  margin: 0 auto 1.5rem;
+  padding: 1rem;
+  background-color: var(--primary-50);
+  border-left: 4px solid var(--primary);
+  border-radius: 0.5rem;
+  color: var(--text-light);
+  font-size: 0.95rem;
+}
+
+.resultCount,
+.totalCount {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ========== GRID ========== */
+
+.syllabusesGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* ========== SYLLABUS CARD ========== */
+
+.syllabusCard {
+  background: white;
+  border: 1px solid var(--neutral-200);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: var(--shadow-sm);
+  hover-lift: true;
+}
+
+.syllabusCard:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-6px);
+  border-color: var(--primary);
+}
+
+.cardHeader {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  border-bottom: 1px solid var(--neutral-100);
+  background: linear-gradient(135deg, var(--primary-50) 0%, var(--background) 100%);
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary);
+  line-height: 1.4;
+  margin: 0;
+  flex: 1;
+}
+
+.freeTag {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--success), var(--tertiary));
+  color: white;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(42, 157, 143, 0.3);
+}
+
+.metadata {
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  border-bottom: 1px solid var(--neutral-100);
+  background-color: var(--neutral-50);
+}
+
+.metaRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metaLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.metaValue {
+  font-size: 0.9rem;
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+.description {
+  padding: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 1.6;
+  flex: 1;
+  border-bottom: 1px solid var(--neutral-100);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ========== STATS ========== */
+
+.stats {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  background-color: var(--neutral-50);
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.statValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* ========== DOWNLOAD BUTTON ========== */
+
+.downloadBtn {
+  margin: 1.5rem;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary), var(--tertiary));
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(30, 58, 95, 0.2);
+}
+
+.downloadBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(30, 58, 95, 0.3);
+}
+
+.downloadBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.downloadBtn:active {
+  transform: translateY(0);
+}
+
+/* ========== EMPTY STATE ========== */
+
+.emptyState {
+  max-width: 1200px;
+  margin: 3rem auto;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: white;
+  border: 2px dashed var(--neutral-300);
+  border-radius: 1rem;
+}
+
+.emptyState h3 {
+  color: var(--foreground);
+  font-size: 1.5rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.emptyState p {
+  color: var(--text-light);
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (max-width: 1024px) {
+  .syllabusesGrid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 0.5rem;
+  }
+
+  .header {
+    padding: 2rem 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    gap: 0.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .filtersSection {
+    margin: 0 0.5rem 1.5rem;
+    padding: 1rem;
+  }
+
+  .filterGroup {
+    grid-template-columns: 1fr;
+  }
+
+  .syllabusesGrid {
+    grid-template-columns: 1fr;
+    margin: 0 0.5rem;
+    gap: 1rem;
+  }
+
+  .metadata {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .stats {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .statLabel,
+  .metaLabel {
+    font-size: 0.7rem;
+  }
+
+  .downloadBtn {
+    margin: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .header {
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .syllabusesGrid {
+    gap: 0.75rem;
+  }
+
+  .syllabusCard {
+    border-radius: 0.5rem;
+  }
+
+  .cardHeader {
+    padding: 1rem;
+  }
+
+  .metadata {
+    padding: 0.75rem;
+  }
+
+  .description {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .downloadBtn {
+    margin: 0.75rem;
+    font-size: 0.85rem;
+  }
+}
