@@ -305,7 +305,7 @@ export default function SyllabusDownloadPage() {
         <SuccessModal
           isOpen={showSuccess}
           title="Download Ready!"
-          message={`Your download link has been sent to ${formData.email}. Redirecting in 5 seconds...`}
+          message={`Redirecting in 5 seconds...`}
           onClose={handleCloseSuccess}
           autoCloseDuration={5000}
         />

@@ -219,8 +219,7 @@ function DownloadContent() {
 
             {/* Message */}
             <p className={styles.message}>
-              Thank you for your purchase. Your download link has been sent to<br />
-              <span className={styles.emailHighlight}>{email}</span>
+              Thank you for your purchase. 
             </p>
 
             {/* Download Button */}
