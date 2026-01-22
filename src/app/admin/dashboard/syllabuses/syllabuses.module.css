@@ -103,7 +103,7 @@
 }
 
 .contentContainer {
-  max-width: 1200px;
+  /* max-width: 1200px; */
   margin: 0 auto;
 }
 
@@ -237,7 +237,8 @@
 }
 
 .deleteBtn,
-.downloadBtn {
+.downloadBtn,
+.editBtn {
   padding: 0.5rem 0.75rem;
   color: white;
   border: none;
@@ -254,6 +255,8 @@
   background: var(--tertiary);
 }
 
+
+
 .downloadBtn:hover {
   background: var(--primary);
   transform: scale(1.05);
@@ -266,6 +269,10 @@
 .deleteBtn:hover {
   opacity: 0.9;
   transform: scale(1.05);
+}
+
+.editBtn {
+  background: var(--secondary);
 }
 
 /* ========== EMPTY STATE ========== */
