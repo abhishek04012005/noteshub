@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NotesHub - Premium Study Notes Marketplace | Buy  Notes Online",
+  title: "NotesHub - Premium Study Notes Marketplace | Buy  Notes Online | Syllabus Download",
   description: "Access premium quality study notes from top educators. Browse thousands of notes for engineering, arts, and commerce students. Secure payments and instant downloads.",
   keywords: [
     "study notes",
