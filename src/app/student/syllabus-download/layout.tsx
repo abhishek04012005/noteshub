@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Download Syllabus | NotesHub - Free Study Materials',
+  title: 'Download Syllabus | NotesHub -  Study Materials',
   description:
-    'Download your free syllabus with instant access. Enter your name and email to get the complete syllabus PDF. Fast, secure, and completely free.',
+    'Download your  syllabus with instant access. Enter your name and email to get the complete syllabus PDF. Fast, secure, and completely free.',
   robots: {
     index: true,
     follow: true,

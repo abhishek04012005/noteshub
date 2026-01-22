@@ -151,7 +151,7 @@ export default function SyllabusPage() {
           <div className={styles.headerContent}>
             <h1 className={styles.title}>
               <FilePresent sx={{ fontSize: '2.5rem', marginRight: '1rem' }} style={{ display: 'inline' }} />
-              Free Syllabuses
+            Syllabuses
             </h1>
             <p className={styles.subtitle}>
               Download syllabuses from your university, branch, and semester

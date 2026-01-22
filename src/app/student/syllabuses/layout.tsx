@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Free Syllabuses Download | NotesHub - Study Materials',
+  title: 'Syllabuses Download | NotesHub - Study Materials',
   description:
-    'Download free syllabuses for your university, course, and branch. Access comprehensive syllabus documents from verified educators. No registration required.',
+    'Download syllabuses for your university, course, and branch. Access comprehensive syllabus documents from verified educators. No registration required.',
   keywords:
-    'syllabus, free download, university syllabus, course curriculum, study materials, academic documents',
+    'syllabus,  download, university syllabus, course curriculum, study materials, academic documents',
   openGraph: {
     type: 'website',
     locale: 'en_IN',
     url: 'https://noteshub.abhishekchoudhary.co.in/student/syllabuses',
-    title: 'Free Syllabuses | NotesHub',
-    description: 'Download free study syllabuses for your course and university',
+    title: ' Syllabuses | NotesHub',
+    description: 'Download  study syllabuses for your course and university',
     siteName: 'NotesHub',
   },
   robots: {

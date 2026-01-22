@@ -1,5 +1,5 @@
 import { Metadata, ResolvingMetadata } from 'next';
-import axios from 'axios';
+import { createClient } from '@supabase/supabase-js';
 
 interface Syllabus {
   id: string;
@@ -16,6 +16,11 @@ interface Props {
   children: React.ReactNode;
 }
 
+const supabaseClient = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+);
+
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
@@ -23,20 +28,22 @@ export async function generateMetadata(
   try {
     const { id } = await params;
     
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/syllabuses/${id}`
-    );
-    
-    const syllabus: Syllabus = response.data.data;
+    // Fetch directly from Supabase
+    const { data: syllabus, error } = await supabaseClient
+      .from('syllabuses')
+      .select('id, title, university, course, branch, semester, description')
+      .eq('id', id)
+      .single();
 
-    if (!syllabus) {
+    if (error || !syllabus) {
+      console.error('Error fetching syllabus:', error);
       return {
         title: 'Syllabus Download | NotesHub',
         description: 'Download syllabus from NotesHub',
       };
     }
 
-    const pageTitle = `${syllabus.title} - ${syllabus.university} ${syllabus.course} ${syllabus.branch} Sem ${syllabus.semester}`;
+    const pageTitle = `${syllabus.title} | ${syllabus.university} ${syllabus.course} ${syllabus.branch} - Semester ${syllabus.semester}`;
     const pageDescription = `Download ${syllabus.title} syllabus for ${syllabus.university} ${syllabus.course} ${syllabus.branch} Semester ${syllabus.semester}. Free PDF download available on NotesHub.`;
 
     return {
@@ -72,7 +79,7 @@ export async function generateMetadata(
     console.error('Error generating metadata:', error);
     return {
       title: 'Syllabus Download | NotesHub',
-      description: 'Download free syllabuses from NotesHub',
+      description: 'Download  syllabuses from NotesHub',
     };
   }
 }

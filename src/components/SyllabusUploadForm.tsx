@@ -161,7 +161,7 @@ export default function SyllabusUploadForm({ onSuccess }: SyllabusUploadFormProp
     <form onSubmit={handleSubmit} className={styles.formCard}>
       <h2 className={styles.formTitle}>
         <CloudUpload sx={{ fontSize: '1.5rem', marginRight: '0.5rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
-        Upload Syllabus (Free)
+        Upload Syllabus 
       </h2>
 
       {success && (
@@ -362,7 +362,7 @@ export default function SyllabusUploadForm({ onSuccess }: SyllabusUploadFormProp
       </button>
 
       <p className={styles.footerText}>
-        Maximum file size: 50MB | Supported format: PDF only | FREE for all students
+        Maximum file size: 50MB | Supported format: PDF only |  for all students
       </p>
     </form>
   );

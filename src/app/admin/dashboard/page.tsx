@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import { MenuBook, Add, TrendingUp, DeleteOutline, FolderOff, EditOutlined, Download, School } from '@mui/icons-material';import AdminNavbar from '@/components/AdminNavbar';import { Notes } from '@/types';
+import { MenuBook, Add, DeleteOutline, FolderOff, EditOutlined, Download, School } from '@mui/icons-material';import AdminNavbar from '@/components/AdminNavbar';import { Notes } from '@/types';
 import styles from './dashboard.module.css';
 
 export default function AdminDashboardPage() {

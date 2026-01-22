@@ -123,7 +123,7 @@ export default function SyllabusDashboard() {
             <FilePresent sx={{ fontSize: '2rem', marginRight: '0.5rem' }} style={{ display: 'inline' }} />
             Syllabus Management
           </h1>
-          <p className={styles.subtitle}>Manage free syllabuses for students</p>
+          <p className={styles.subtitle}>Manage syllabuses for students</p>
         </div>
       </div>
 
@@ -194,7 +194,6 @@ export default function SyllabusDashboard() {
               {/* Card Header */}
               <div className={styles.cardHeader}>
                 <h3 className={styles.cardTitle}>{syllabus.title}</h3>
-                <span className={styles.freeTag}>FREE</span>
               </div>
 
               {/* Metadata */}
