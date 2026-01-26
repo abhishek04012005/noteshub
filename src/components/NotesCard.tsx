@@ -131,39 +131,32 @@ export function NotesList({
 
   // Filter notes based on search query and filters
   const filteredNotes = notes.filter((note) => {
-    const searchLower = searchQuery.toLowerCase();
-    const universityLower = filterUniversity.toLowerCase();
-    const courseLower = filterCourse.toLowerCase();
-    const branchLower = filterBranch.toLowerCase();
-    const semesterLower = filterSemester.toLowerCase();
-    const subjectLower = filterSubject.toLowerCase();
-
     // Search query filter
-    const matchesSearch = searchLower === '' ||
-      note.title?.toLowerCase().includes(searchLower) ||
-      note.subject?.toLowerCase().includes(searchLower) ||
-      note.author?.toLowerCase().includes(searchLower) ||
-      note.description?.toLowerCase().includes(searchLower);
+    const matchesSearch = !searchQuery.trim() ||
+      note.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      note.subject?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      note.author?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      note.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    // University filter
-    const matchesUniversity = universityLower === '' ||
-      note.university?.toLowerCase().includes(universityLower);
+    // University filter (exact match after trim)
+    const matchesUniversity = !filterUniversity ||
+      note.university?.trim().toLowerCase() === filterUniversity.trim().toLowerCase();
 
-    // Course filter
-    const matchesCourse = courseLower === '' ||
-      note.course?.toLowerCase().includes(courseLower);
+    // Course filter (exact match after trim)
+    const matchesCourse = !filterCourse ||
+      note.course?.trim().toLowerCase() === filterCourse.trim().toLowerCase();
 
-    // Branch filter
-    const matchesBranch = branchLower === '' ||
-      note.branch?.toLowerCase().includes(branchLower);
+    // Branch filter (exact match after trim)
+    const matchesBranch = !filterBranch ||
+      note.branch?.trim().toLowerCase() === filterBranch.trim().toLowerCase();
 
-    // Semester filter
-    const matchesSemester = semesterLower === '' ||
-      note.semester?.toLowerCase().includes(semesterLower);
+    // Semester filter (exact match after trim)
+    const matchesSemester = !filterSemester ||
+      note.semester?.trim().toLowerCase() === filterSemester.trim().toLowerCase();
 
-    // Subject filter
-    const matchesSubject = subjectLower === '' ||
-      note.subject?.toLowerCase().includes(subjectLower);
+    // Subject filter (exact match after trim)
+    const matchesSubject = !filterSubject ||
+      note.subject?.trim().toLowerCase() === filterSubject.trim().toLowerCase();
 
     return matchesSearch && matchesUniversity && matchesCourse && matchesBranch && matchesSemester && matchesSubject;
   });

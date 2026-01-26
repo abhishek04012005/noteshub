@@ -61,16 +61,28 @@ export default function SyllabusesPage() {
       const data = response.data.data || [];
       setSyllabuses(data);
 
+      // Helper function to extract and deduplicate values
+      const getUniqueValues = (values: (string | null | undefined)[]) => {
+        return Array.from(
+          new Set(
+            values
+              .filter((v): v is string => Boolean(v))
+              .map(v => v.trim())
+              .filter(v => v.length > 0)
+          )
+        ).sort();
+      };
+
       // Extract unique values
-      const uniqueUniversities = [...new Set(data.map((s: Syllabus) => s.university))].sort();
-      const uniqueCourses = [...new Set(data.map((s: Syllabus) => s.course))].sort();
-      const uniqueBranches = [...new Set(data.map((s: Syllabus) => s.branch))].sort();
-      const uniqueSemesters = [...new Set(data.map((s: Syllabus) => s.semester))].sort();
+      const uniqueUniversities = getUniqueValues(data.map((s: Syllabus) => s.university));
+      const uniqueCourses = getUniqueValues(data.map((s: Syllabus) => s.course));
+      const uniqueBranches = getUniqueValues(data.map((s: Syllabus) => s.branch));
+      const uniqueSemesters = getUniqueValues(data.map((s: Syllabus) => s.semester));
       
-      setUniversities(uniqueUniversities as string[]);
-      setCourses(uniqueCourses as string[]);
-      setBranches(uniqueBranches as string[]);
-      setSemesters(uniqueSemesters as string[]);
+      setUniversities(uniqueUniversities);
+      setCourses(uniqueCourses);
+      setBranches(uniqueBranches);
+      setSemesters(uniqueSemesters);
     } catch (error) {
       console.error('Error fetching syllabuses:', error);
     } finally {
@@ -94,22 +106,22 @@ export default function SyllabusesPage() {
 
     // University filter
     if (filterUniversity) {
-      filtered = filtered.filter((s) => s.university === filterUniversity);
+      filtered = filtered.filter((s) => s.university?.trim() === filterUniversity.trim());
     }
 
     // Course filter
     if (filterCourse) {
-      filtered = filtered.filter((s) => s.course === filterCourse);
+      filtered = filtered.filter((s) => s.course?.trim() === filterCourse.trim());
     }
 
     // Branch filter
     if (filterBranch) {
-      filtered = filtered.filter((s) => s.branch === filterBranch);
+      filtered = filtered.filter((s) => s.branch?.trim() === filterBranch.trim());
     }
 
     // Semester filter
     if (filterSemester) {
-      filtered = filtered.filter((s) => s.semester === filterSemester);
+      filtered = filtered.filter((s) => s.semester?.trim() === filterSemester.trim());
     }
 
     setFilteredSyllabuses(filtered);

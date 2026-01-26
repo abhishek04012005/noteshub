@@ -32,26 +32,24 @@ export default function BrowseNotesPage() {
         const response = await axios.get('/api/notes');
         const notes: Notes[] = response.data.data || [];
 
+        // Helper function to extract and deduplicate values
+        const getUniqueValues = (values: (string | null | undefined)[]) => {
+          return Array.from(
+            new Set(
+              values
+                .filter((v): v is string => Boolean(v))
+                .map(v => v.trim())
+                .filter(v => v.length > 0)
+            )
+          ).sort();
+        };
+
         // Extract unique values
-        const uniqueUniversities = Array.from(
-          new Set(notes.map(n => n.university).filter(Boolean))
-        ).sort() as string[];
-        
-        const uniqueCourses = Array.from(
-          new Set(notes.map(n => n.course).filter(Boolean))
-        ).sort() as string[];
-        
-        const uniqueBranches = Array.from(
-          new Set(notes.map(n => n.branch).filter(Boolean))
-        ).sort() as string[];
-        
-        const uniqueSemesters = Array.from(
-          new Set(notes.map(n => n.semester).filter(Boolean))
-        ).sort() as string[];
-        
-        const uniqueSubjects = Array.from(
-          new Set(notes.map(n => n.subject).filter(Boolean))
-        ).sort() as string[];
+        const uniqueUniversities = getUniqueValues(notes.map(n => n.university));
+        const uniqueCourses = getUniqueValues(notes.map(n => n.course));
+        const uniqueBranches = getUniqueValues(notes.map(n => n.branch));
+        const uniqueSemesters = getUniqueValues(notes.map(n => n.semester));
+        const uniqueSubjects = getUniqueValues(notes.map(n => n.subject));
 
         setUniversities(uniqueUniversities);
         setCourses(uniqueCourses);
