@@ -3,17 +3,30 @@
 # Allow all major search engines to crawl the site
 User-agent: *
 Allow: /
+Allow: /student/
 Allow: /student/browse
+Allow: /student/browse/
 Allow: /student/notes/
-Allow: /
+Allow: /student/syllabuses
+Allow: /student/syllabuses/
+Allow: /student/syllabus
+Allow: /student/syllabus/
 Allow: /api/notes
+Allow: /sitemap-index.xml
+Allow: /api/sitemap
 
 # Disallow admin pages and sensitive paths
 Disallow: /admin/
+Disallow: /api/admin/
 Disallow: /api/payment/
 Disallow: /api/upload-notes/
+Disallow: /api/upload-syllabus/
 Disallow: /api/purchases/
 Disallow: /student/download
+Disallow: /student/download/
+Disallow: /student/notes/download
+Disallow: /*.json
+Disallow: /debug/
 
 # Allow search engines to crawl API notes (for rich snippets)
 Allow: /api/notes/
@@ -21,7 +34,7 @@ Allow: /api/notes/
 # Specific rules for Google
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 1
+Crawl-delay: 0
 
 # Specific rules for Bing
 User-agent: Bingbot
@@ -38,6 +51,12 @@ Disallow: /
 User-agent: MJ12bot
 Disallow: /
 
+User-agent: DotBot
+Disallow: /
+
+User-agent: MojeekBot
+Disallow: /
+
 # Point to sitemap
-Sitemap: https://noteshub.abhishekchoudhary.co.in/api/sitemap
 Sitemap: https://noteshub.abhishekchoudhary.co.in/sitemap-index.xml
+Sitemap: https://noteshub.abhishekchoudhary.co.in/api/sitemap
