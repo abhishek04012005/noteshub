@@ -934,7 +934,7 @@
 .finalCTATitle {
   font-size: 1.875rem;
   font-weight: bold;
-  color: white;
+  color: var(--primary);
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -953,7 +953,7 @@
 
 .finalCTADesc {
   font-size: 1rem;
-  color: white;
+  color: var(--secondary);
   opacity: 0.9;
   margin-bottom: 2rem;
   max-width: 32rem;

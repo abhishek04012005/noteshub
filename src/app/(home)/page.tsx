@@ -6,6 +6,7 @@ import { MenuBook, Lock, School, Phone, TrendingUp, Star, Search, Payment, Downl
 import styles from './page.module.css';
 
 export default function Home() {
+  const currentYear = new Date().getFullYear();
   return (
     <main className={styles.main}>
       {/* ========== NAVIGATION ========== */}
@@ -247,33 +248,19 @@ export default function Home() {
               <ul className={styles.footerList}>
                 <li><Link href="/" className={styles.footerLink}>Home</Link></li>
                 <li><Link href="/student/browse" className={styles.footerLink}>Browse Notes</Link></li>
-              </ul>
-            </div>
-            <div className={styles.footerColumn}>
-              <h4>For Educators</h4>
-              <ul className={styles.footerList}>
-                <li><Link href="/admin/login" className={styles.footerLink}>Upload Notes</Link></li>
-                <li><Link href="/admin/login" className={styles.footerLink}>Dashboard</Link></li>
-              </ul>
-            </div>
-            <div className={styles.footerColumn}>
-              <h4>Legal</h4>
-              <ul className={styles.footerList}>
-                <li><Link href="#" className={styles.footerLink}>Privacy</Link></li>
-                <li><Link href="#" className={styles.footerLink}>Terms</Link></li>
+                <li><Link href="/student/syllabus" className={styles.footerLink}>Browse Syllabuses</Link></li>
               </ul>
             </div>
             <div className={styles.footerColumn}>
               <h4>Contact</h4>
               <ul className={styles.footerList}>
-                <li><a href="mailto:support@noteshub.com" className={styles.footerLink}>Email</a></li>
-                <li><a href="#" className={styles.footerLink}>Support</a></li>
+                <li><a href="mailto:notesmarketplace07@gmail.com" className={styles.footerLink}>Email</a></li>
               </ul>
             </div>
           </div>
 
           <div className={styles.footerBottom}>
-            <p className={styles.footerCopy}>© 2024 NotesHub. All rights reserved.</p>
+            <p className={styles.footerCopy}>© {currentYear} NotesHub. All rights reserved.</p>
             <p className={styles.footerCopy}>Made with ❤️ by the NotesHub Team</p>
           </div>
         </div>
