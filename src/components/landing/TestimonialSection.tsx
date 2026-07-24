@@ -7,6 +7,7 @@ export function TestimonialSection() {
     <section className={styles.testimonial}>
       <div className={styles.container}>
         <div className={styles.card}>
+          <div className={styles.accent} />
           <div className={styles.stars}>
             {[...Array(5)].map((_, index) => (
               <Star key={index} sx={{ fontSize: '1.4rem', color: 'var(--secondary)' }} />
@@ -16,9 +17,12 @@ export function TestimonialSection() {
           <p className={styles.description}>
             From quick revision to deep understanding, our collection keeps your preparation simple and effective.
           </p>
-          <Link href="/student/browse" className={styles.btn}>
-            Start your journey
-          </Link>
+          <div className={styles.actions}>
+            <Link href="/student/browse" className={styles.btn}>
+              Start your journey
+            </Link>
+            <span className={styles.note}>Trusted by learners across campus and online</span>
+          </div>
         </div>
       </div>
     </section>

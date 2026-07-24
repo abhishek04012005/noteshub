@@ -310,7 +310,7 @@ export default function SyllabusDownloadPage() {
 
             {/* Continue Shopping */}
             <Link
-              href="/student/syllabuses"
+              href="/student/syllabus"
               className={styles.continueBtn}
             >
               <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />

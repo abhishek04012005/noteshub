@@ -14,6 +14,9 @@ export function ProcessSection() {
         <div className={styles.header}>
           <p className={styles.eyebrow}>How it works</p>
           <h2 className={styles.title}>Simple steps to your next study win</h2>
+          <p className={styles.subtitle}>
+            From finding the right resource to downloading it in seconds, the journey is built to stay effortless.
+          </p>
         </div>
 
         <div className={styles.grid}>
@@ -23,7 +26,7 @@ export function ProcessSection() {
               <div key={index} className={styles.card}>
                 <div className={styles.step}>{item.step}</div>
                 <div className={styles.iconWrap}>
-                  <Icon sx={{ fontSize: '1.7rem', color: 'var(--primary)' }} />
+                  <Icon sx={{ fontSize: '1.7rem', color: 'white' }} />
                 </div>
                 <h3 className={styles.cardTitle}>{item.title}</h3>
                 <p className={styles.cardDesc}>{item.desc}</p>

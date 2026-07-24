@@ -7,6 +7,14 @@ export function FooterSection() {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
+        <div className={styles.hero}>
+          <div>
+            <p className={styles.eyebrow}>NotesHub</p>
+            <h4 className={styles.heroTitle}>Study smarter with curated resources that actually help.</h4>
+          </div>
+          <Link href="/student/browse" className={styles.cta}>Explore now</Link>
+        </div>
+
         <div className={styles.grid}>
           <div>
             <h4 className={styles.title}>Platform</h4>
