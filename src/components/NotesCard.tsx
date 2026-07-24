@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-import { MenuBook } from '@mui/icons-material';
-import { Notes } from '@/types';
+import { MenuBook, Verified } from '@mui/icons-material';
+import { Notes, Purchase } from '@/types';
+import { selectFeaturedNotes } from '@/utils/featured-notes';
 import styles from './NotesCard.module.css';
 
 export default function NotesCard({ notes }: { notes: Notes }) {
@@ -26,46 +27,33 @@ export default function NotesCard({ notes }: { notes: Notes }) {
   };
 
   const notesLink = createUrlPath();
+  const accentClass = [styles.cardAccentA, styles.cardAccentB, styles.cardAccentC][Math.abs((notes.subject?.length || 0) + (notes.title?.length || 0)) % 3];
 
   return (
     <Link href={notesLink} className={styles.cardLink}>
-      <div className={styles.card}>
-        {/* Image Placeholder */}
+      <div className={`${styles.card} ${accentClass}`}>
         <div className={styles.imageContainer}>
-          <MenuBook sx={{ fontSize: '2.5rem', color: 'white' }} />
+          <div className={styles.iconWrap}>
+            <MenuBook sx={{ fontSize: '2.2rem', color: 'white' }} />
+          </div>
+          <span className={styles.premiumBadge}><Verified sx={{ fontSize: '0.95rem' }} /> Premium</span>
         </div>
 
         <div className={styles.content}>
-          {/* University, Course, Branch, Semester Badge */}
           {(notes.university || notes.course || notes.branch || notes.semester) && (
             <span className={styles.badge}>
               {[notes.university, notes.course, notes.branch, notes.semester].filter(Boolean).join(' • ')}
             </span>
           )}
 
-          {/* Subject & Chapter Badge */}
           <div className={styles.badgeRow}>
-            <span className={styles.badge}>
-              {notes.subject}
-            </span>
-            {notes.chapter_no && (
-              <span className={styles.badge}>
-                {notes.chapter_no}
-              </span>
-            )}
+            <span className={styles.badge}>{notes.subject}</span>
+            {notes.chapter_no && <span className={styles.badge}>{notes.chapter_no}</span>}
           </div>
 
-          {/* Title */}
-          <h3 className={styles.title}>
-            {notes.title}
-          </h3>
+          <h3 className={styles.title}>{notes.title}</h3>
+          <p className={styles.description}>{notes.description}</p>
 
-          {/* Description */}
-          <p className={styles.description}>
-            {notes.description}
-          </p>
-
-          {/* Footer */}
           <div className={styles.footer}>
             <div className={styles.footerRow}>
               <div className={styles.priceSection}>
@@ -79,11 +67,7 @@ export default function NotesCard({ notes }: { notes: Notes }) {
               </div>
               <span className={styles.author}>By {notes.author}</span>
             </div>
-            <button
-              className={styles.viewButton}
-            >
-              Buy Now
-            </button>
+            <span className={styles.viewButton}>Buy Now</span>
           </div>
         </div>
       </div>
@@ -98,6 +82,7 @@ export function NotesList({
   filterBranch = '',
   filterSemester = '',
   filterSubject = '',
+  featured = false,
 }: {
   searchQuery?: string;
   filterUniversity?: string;
@@ -105,8 +90,10 @@ export function NotesList({
   filterBranch?: string;
   filterSemester?: string;
   filterSubject?: string;
+  featured?: boolean;
 }) {
   const [notes, setNotes] = useState<Notes[]>([]);
+  const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -114,13 +101,19 @@ export function NotesList({
     const fetchNotes = async () => {
       try {
         setError(null);
-        const response = await axios.get('/api/notes');
-        setNotes(response.data.data || []);
+        const [notesResponse, purchasesResponse] = await Promise.all([
+          axios.get('/api/notes'),
+          axios.get('/api/admin/purchases'),
+        ]);
+
+        setNotes(notesResponse.data.data || []);
+        setPurchases(purchasesResponse.data.data || []);
       } catch (error: any) {
         console.error('Error fetching notes:', error);
         // Don't show error for 400s - just show empty list
         setError(error.response?.status === 400 ? null : 'Failed to load notes');
         setNotes([]);
+        setPurchases([]);
       } finally {
         setLoading(false);
       }
@@ -161,10 +154,14 @@ export function NotesList({
     return matchesSearch && matchesUniversity && matchesCourse && matchesBranch && matchesSemester && matchesSubject;
   });
 
+  const displayNotes = featured
+    ? selectFeaturedNotes(notes, purchases)
+    : filteredNotes;
+
   if (loading) {
     return (
       <div className={styles.skeletonContainer}>
-        {[...Array(6)].map((_, i) => (
+        {[...Array(featured ? 3 : 6)].map((_, i) => (
           <div key={i} className={styles.skeleton}>
             <div className={styles.skeletonImage}></div>
             <div className={styles.skeletonContent}>
@@ -197,11 +194,13 @@ export function NotesList({
     );
   }
 
-  if (filteredNotes.length === 0) {
+  if (displayNotes.length === 0) {
     return (
       <div className={styles.emptyContainer}>
         <p className={styles.emptyText}>
-          No notes found matching your filters. Try adjusting your search criteria.
+          {featured
+            ? 'No featured notes available yet. Check back soon!'
+            : 'No premium notes match your current filters. Try adjusting your search or selection.'}
         </p>
       </div>
     );
@@ -209,11 +208,13 @@ export function NotesList({
 
   return (
     <>
-      <div className={styles.resultsInfo}>
-        <p>Found <strong>{filteredNotes.length}</strong> note{filteredNotes.length !== 1 ? 's' : ''}</p>
-      </div>
+      {!featured && (
+        <div className={styles.resultsInfo}>
+          <p>Found <strong>{displayNotes.length}</strong> note{displayNotes.length !== 1 ? 's' : ''}</p>
+        </div>
+      )}
       <div className={styles.listContainer}>
-        {filteredNotes.map((note) => (
+        {displayNotes.map((note) => (
           <NotesCard key={note.id} notes={note} />
         ))}
       </div>

@@ -25,11 +25,16 @@ interface SyllabusCardProps {
 }
 
 export default function SyllabusCard({ syllabus, downloading, onDownload }: SyllabusCardProps) {
+  const accentClass = [styles.cardAccentA, styles.cardAccentB, styles.cardAccentC][Math.abs((syllabus.id?.length || 0) + (syllabus.title?.length || 0)) % 3];
+
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${accentClass}`}>
       {/* Image Placeholder with Gradient */}
       <div className={styles.imageContainer}>
-        <FilePresent sx={{ fontSize: '2.5rem', color: 'white' }} />
+        <div className={styles.iconWrap}>
+          <FilePresent sx={{ fontSize: '2.5rem', color: 'white' }} />
+        </div>
+        <span className={styles.premiumBadge}>Premium</span>
       </div>
 
       {/* Content Section */}
@@ -50,7 +55,6 @@ export default function SyllabusCard({ syllabus, downloading, onDownload }: Syll
 
         {/* Footer Section */}
         <div className={styles.footer}>
-          
           <button
             onClick={() => onDownload(syllabus.id)}
             disabled={downloading}

@@ -2,7 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { deleteFromDrive } from '@/utils/google-drive-syllabus';
 
-// GET: Fetch a single syllabus by ID
+function slugify(value: string | undefined): string {
+  if (!value) return '';
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function buildSyllabusSlug(syllabus: { university?: string; course?: string; branch?: string; semester?: string; title?: string; id?: string }) {
+  const parts = [slugify(syllabus.university), slugify(syllabus.course), slugify(syllabus.branch), slugify(syllabus.semester), slugify(syllabus.title)].filter(Boolean);
+  return parts.length > 0 ? parts.join('-') : syllabus.id || 'syllabus';
+}
+
+function isUuid(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
+}
+
+// GET: Fetch a single syllabus by ID or slug
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -12,11 +30,29 @@ export async function GET(
 
     console.log(`📖 Fetching syllabus: ${id}`);
 
-    const { data, error } = await supabaseAdmin
-      .from('syllabuses')
-      .select('*')
-      .eq('id', id)
-      .single();
+    let data = null;
+    let error = null;
+
+    if (isUuid(id)) {
+      const result = await supabaseAdmin
+        .from('syllabuses')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+
+      data = result.data;
+      error = result.error;
+    } else {
+      const result = await supabaseAdmin
+        .from('syllabuses')
+        .select('*');
+
+      if (result.error) {
+        error = result.error;
+      } else {
+        data = result.data?.find((item) => buildSyllabusSlug(item) === id) ?? null;
+      }
+    }
 
     if (error || !data) {
       console.error('❌ Syllabus not found:', error);

@@ -1,10 +1,14 @@
 'use client';
 
 import { NotesList } from '@/components/NotesCard';
+import { HeaderSection } from '@/components/landing/HeaderSection';
+import { FooterSection } from '@/components/landing/FooterSection';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './browse.module.css';
+import { BreadcrumbSchema } from '@/components/SchemaOrg';
+import { SITE_URL, getCanonical } from '@/config/site';
 import { ArrowBack, Search, FilterList } from '@mui/icons-material';
 import { Notes } from '@/types';
 
@@ -76,46 +80,62 @@ export default function BrowseNotesPage() {
   };
 
   return (
-    <main className={styles.main}>
-      {/* Header */}
-      <header className={styles.header}>
+    <>
+      <HeaderSection />
+      <main className={styles.main}>
+        <BreadcrumbSchema items={[{ name: 'Home', url: SITE_URL }, { name: 'Browse', url: getCanonical('/student/browse') }]} />
+        {/* Header */}
+        <header className={styles.header}>
         <div className={styles.headerContainer}>
-          <Link href="/" className={styles.backLink}>
-            <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
-            Back Home
-          </Link>
-          <h1 className={styles.title}>
-            Browse All Notes
-          </h1>
-          <p className={styles.subtitle}>
-            Explore our collection of quality study materials
-          </p>
+          <div className={styles.headerCard}>
+            <div className={styles.headerContent}>
+              <Link href="/" className={styles.backLink}>
+                <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
+                Back Home
+              </Link>
+              <h1 className={styles.title}>Browse Premium Notes</h1>
+              <p className={styles.subtitle}>
+                Explore high-quality study resources available for purchase, designed to support confident revision and faster exam prep.
+              </p>
+            </div>
+            <div className={styles.headerStat}>
+              <span className={styles.statLabel}>Available now</span>
+              <span className={styles.statValue}>Fresh resources</span>
+            </div>
+          </div>
         </div>
       </header>
 
       {/* Search and Filters Section */}
       <section className={styles.filterSection}>
         <div className={styles.filterContainer}>
-          {/* Search Bar */}
-          <div className={styles.searchBar}>
-            <Search sx={{ fontSize: '1.25rem', color: 'var(--text-light)' }} />
-            <input
-              type="text"
-              placeholder="Search by title, subject, or author..."
-              className={styles.searchInput}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
+          <div className={styles.searchBarWrap}>
+            <div className={styles.searchBar}>
+              <Search sx={{ fontSize: '1.25rem', color: 'var(--text-light)' }} />
+              <input
+                type="text"
+                placeholder="Search by title, subject, or author..."
+                className={styles.searchInput}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
 
-          {/* Filter Toggle Button */}
-          <button
-            className={styles.filterToggleBtn}
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            <FilterList sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
-            Filters
-          </button>
+            <button
+              className={styles.filterToggleBtn}
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <FilterList sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
+              {showFilters ? 'Hide Filters' : 'Advanced Filters'}
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.filterSummary}>
+          <span>{searchQuery ? `Searching “${searchQuery}”` : 'Browse all premium notes'}</span>
+          {(filterUniversity || filterCourse || filterBranch || filterSemester || filterSubject) && (
+            <button className={styles.filterChip} onClick={handleReset}>Clear active filters</button>
+          )}
         </div>
 
         {/* Filter Options */}
@@ -226,6 +246,8 @@ export default function BrowseNotesPage() {
           />
         </div>
       </div>
-    </main>
+      </main>
+      <FooterSection />
+    </>
   );
 }

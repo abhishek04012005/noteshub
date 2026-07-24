@@ -1,0 +1,57 @@
+.featured {
+  padding: 5rem 1.25rem;
+  background: var(--background);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--tertiary);
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.title {
+  color: var(--primary);
+  font-size: clamp(1.5rem, 2.7vw, 2.1rem);
+}
+
+.viewAll {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.ctaRow {
+  margin-top: 1.6rem;
+  text-align: center;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.3rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--background);
+  font-weight: 700;
+}
+
+.primaryBtn:hover {
+  background: var(--tertiary);
+  color: var(--background);
+}
