@@ -1,0 +1,51 @@
+.testimonial {
+  padding: 5rem 1.25rem;
+  background: linear-gradient(135deg, var(--primary-50), var(--secondary-50));
+}
+
+.container {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.card {
+  padding: 2rem;
+  border-radius: 1.5rem;
+  background: var(--background);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-bottom: 0.8rem;
+}
+
+.title {
+  color: var(--primary);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  margin-bottom: 0.7rem;
+}
+
+.description {
+  color: var(--neutral-600);
+  margin-bottom: 1.2rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.3rem;
+  border-radius: 999px;
+  font-weight: 700;
+  background: var(--primary);
+  color: var(--background);
+}
+
+.btn:hover {
+  background: var(--tertiary);
+  color: var(--background);
+}
