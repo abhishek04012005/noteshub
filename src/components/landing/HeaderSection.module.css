@@ -134,6 +134,37 @@
   border-color: var(--neutral-200);
 }
 
+.whatsappFloat {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.8rem 0.95rem;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(18, 140, 126, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whatsappFloat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px rgba(18, 140, 126, 0.34);
+}
+
+.whatsappBubble {
+  display: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 @media (min-width: 768px) {
   .mobileToggle {
     display: none;
@@ -148,6 +179,12 @@
   }
 }
 
+@media (min-width: 768px) {
+  .whatsappBubble {
+    display: inline-block;
+  }
+}
+
 @media (max-width: 480px) {
   .container {
     padding: 0.8rem 1rem;
@@ -159,5 +196,11 @@
 
   .adminBtn {
     display: none;
+  }
+
+  .whatsappFloat {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.75rem;
   }
 }
