@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { SITE_URL, getCanonical } from '@/config/site';
 
 const supabaseClient = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
@@ -11,9 +12,13 @@ function slugify(text: string | undefined): string {
   return text
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function buildSyllabusSlug(syllabus: { university?: string; course?: string; branch?: string; semester?: string; title?: string; id?: string }) {
+  const parts = [slugify(syllabus.university), slugify(syllabus.course), slugify(syllabus.branch), slugify(syllabus.semester), slugify(syllabus.title)].filter(Boolean);
+  return parts.length > 0 ? parts.join('-') : syllabus.id || 'syllabus';
 }
 
 export async function GET() {
@@ -36,8 +41,8 @@ export async function GET() {
       .eq('is_free', true)
       .order('updated_at', { ascending: false });
 
-    // Base URL
-    const baseUrl = 'https://noteshub.abhishekchoudhary.co.in';
+    // Base URL (from site config)
+    const baseUrl = SITE_URL || 'https://noteshub.abhishekchoudhary.co.in';
 
     // Generate sitemap XML
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -46,36 +51,35 @@ export async function GET() {
 
     // Add static pages
     const staticPages = [
-      { loc: '/', changefreq: 'weekly', priority: 1.0 },
-      { loc: '/student/browse', changefreq: 'daily', priority: 0.9 },
-      { loc: '/student/syllabuses', changefreq: 'daily', priority: 0.85 },
-      { loc: '/admin/login', changefreq: 'monthly', priority: 0.7 },
+      { loc: getCanonical('/'), changefreq: 'weekly', priority: 1.0 },
+      { loc: getCanonical('/student/browse'), changefreq: 'daily', priority: 0.9 },
+      { loc: getCanonical('/student/syllabuses'), changefreq: 'daily', priority: 0.85 },
+      { loc: getCanonical('/admin/login'), changefreq: 'monthly', priority: 0.7 },
     ];
 
     staticPages.forEach((page) => {
       xml += '  <url>\n';
-      xml += `    <loc>${baseUrl}${page.loc}</loc>\n`;
+      xml += `    <loc>${page.loc}</loc>\n`;
       xml += `    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>\n`;
       xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
       xml += `    <priority>${page.priority}</priority>\n`;
       xml += '  </url>\n';
     });
 
-    // Add dynamic note pages with nested URL structure
+    // Add dynamic note pages using the same slug-based route structure rendered by the app
     if (notes && notes.length > 0) {
       notes.forEach((note) => {
-        // Build slug from university/course/subject/chapter
+        const lastMod = note.updated_at || note.created_at || new Date().toISOString();
         const university = slugify(note.university);
         const course = slugify(note.course);
         const subject = slugify(note.subject);
         const chapter = slugify(note.chapter_no);
 
-        // Only add if we have all the required fields
         if (university && course && subject && chapter) {
           const noteUrl = `${baseUrl}/student/notes/${university}/${course}/${subject}/${chapter}`;
           xml += '  <url>\n';
           xml += `    <loc>${noteUrl}</loc>\n`;
-          xml += `    <lastmod>${new Date(note.updated_at).toISOString().split('T')[0]}</lastmod>\n`;
+          xml += `    <lastmod>${new Date(lastMod).toISOString().split('T')[0]}</lastmod>\n`;
           xml += '    <changefreq>monthly</changefreq>\n';
           xml += '    <priority>0.8</priority>\n';
           xml += '  </url>\n';
@@ -86,18 +90,12 @@ export async function GET() {
     // Add dynamic syllabus pages
     if (syllabuses && syllabuses.length > 0) {
       syllabuses.forEach((syllabus) => {
-        // Build slug from university/course/branch/semester
-        const university = slugify(syllabus.university);
-        const course = slugify(syllabus.course);
-        const branch = slugify(syllabus.branch);
-        const semester = slugify(syllabus.semester);
-
-        // Only add if we have all the required fields
-        if (university && course && branch && semester) {
-          const syllabusUrl = `${baseUrl}/student/syllabus-download/${syllabus.id}`;
+        const lastMod = syllabus.updated_at || syllabus.created_at || new Date().toISOString();
+        if (syllabus.id) {
+          const syllabusUrl = getCanonical(`/student/syllabus-download/${buildSyllabusSlug(syllabus)}`);
           xml += '  <url>\n';
           xml += `    <loc>${syllabusUrl}</loc>\n`;
-          xml += `    <lastmod>${new Date(syllabus.updated_at).toISOString().split('T')[0]}</lastmod>\n`;
+          xml += `    <lastmod>${new Date(lastMod).toISOString().split('T')[0]}</lastmod>\n`;
           xml += '    <changefreq>monthly</changefreq>\n';
           xml += '    <priority>0.7</priority>\n';
           xml += '  </url>\n';

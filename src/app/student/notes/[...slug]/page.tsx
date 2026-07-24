@@ -145,7 +145,7 @@ export async function generateMetadata(
         type: 'website',
         url: getCanonical(`/student/notes/${slug.length === 4 ? slug.join('/') : slug[0]}`),
         images: [{
-          url: OG_IMAGES.notes,
+          url: notes.image_url || OG_IMAGES.notes,
           width: 1200,
           height: 630,
           alt: notes.title,

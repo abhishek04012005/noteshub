@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './browse.module.css';
+import { BreadcrumbSchema } from '@/components/SchemaOrg';
+import { SITE_URL, getCanonical } from '@/config/site';
 import { ArrowBack, Search, FilterList } from '@mui/icons-material';
 import { Notes } from '@/types';
 
@@ -77,6 +79,7 @@ export default function BrowseNotesPage() {
 
   return (
     <main className={styles.main}>
+      <BreadcrumbSchema items={[{ name: 'Home', url: SITE_URL }, { name: 'Browse', url: getCanonical('/student/browse') }]} />
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerContainer}>

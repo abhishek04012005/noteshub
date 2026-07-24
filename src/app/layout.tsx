@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { SITE_NAME, SITE_DESCRIPTION, SITE_URL, OG_IMAGES, SITE_KEYWORDS } from '@/config/site';
+import { HomePageSchema, NotesMarketplaceSchema } from '@/components/SchemaOrg';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,23 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NotesHub - Premium Study Notes Marketplace | Buy  Notes Online | Syllabus Download",
-  description: "Access premium quality study notes from top educators. Browse thousands of notes for engineering, arts, and commerce students. Secure payments and instant downloads.",
-  keywords: [
-    "study notes",
-    "class notes",
-    "lecture notes",
-    "exam preparation",
-    "engineering notes",
-    "university notes",
-    "notes marketplace",
-    "buy notes online",
-    "pdf notes",
-    "study materials",
-  ],
-  authors: [{ name: "NotesHub" }],
-  creator: "NotesHub",
-  publisher: "NotesHub",
+  title: `${SITE_NAME} - Premium Study Notes Marketplace | Buy Notes Online`,
+  description: SITE_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   formatDetection: {
     email: false,
     address: false,
@@ -38,24 +29,24 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://abhishekchoudhary.co.in",
-    title: "NotesHub - Premium Study Notes Marketplace",
-    description: "Buy  quality study notes online. Instant access with secure payment.",
-    siteName: "NotesHub",
+    url: SITE_URL,
+    title: `${SITE_NAME} - Premium Study Notes Marketplace`,
+    description: SITE_DESCRIPTION,
+    siteName: SITE_NAME,
     images: [
       {
-        url: "https://abhishekchoudhary.co.in/og-image.png",
+        url: OG_IMAGES.default,
         width: 1200,
         height: 630,
-        alt: "NotesHub - Study Notes Marketplace",
+        alt: `${SITE_NAME} - Study Notes Marketplace`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "NotesHub - Premium Study Notes",
-    description: "Browse and buy quality study notes from top educators",
-    images: ["https://abhishekchoudhary.co.in/twitter-image.png"],
+    title: `${SITE_NAME} - Premium Study Notes`,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGES.default],
   },
   robots: {
     index: true,
@@ -72,7 +63,7 @@ export const metadata: Metadata = {
     google: "LqdrH0oG-qXmeIiCTO9ba4rSrJ6Uek0HqYP8rnS_ZN8",
   },
   alternates: {
-    canonical: "https://abhishekchoudhary.co.in",
+    canonical: SITE_URL,
   },
 };
 
@@ -87,6 +78,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <HomePageSchema />
+        <NotesMarketplaceSchema />
         {children}
       </body>
     </html>

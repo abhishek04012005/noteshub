@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
@@ -14,6 +14,8 @@ import {
   ErrorOutline,
 } from '@mui/icons-material';
 import Link from 'next/link';
+import { BreadcrumbSchema, SyllabusSchema } from '@/components/SchemaOrg';
+import { getCanonical, SITE_URL } from '@/config/site';
 
 interface Syllabus {
   id: string;
@@ -174,6 +176,24 @@ export default function SyllabusDownloadPage() {
 
   return (
     <main className={styles.main}>
+      <SyllabusSchema
+        id={syllabus.id}
+        title={syllabus.title}
+        description={syllabus.title}
+        university={syllabus.university}
+        course={syllabus.course}
+        branch={syllabus.branch}
+        semester={syllabus.semester}
+        downloadUrl={syllabus.download_url}
+      />
+
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: SITE_URL },
+          { name: 'Syllabuses', url: getCanonical('/student/syllabuses') },
+          { name: syllabus.title, url: getCanonical(`/student/syllabus-download/${syllabus.id}`) },
+        ]}
+      />
       {/* Header */}
       <header className={styles.headerFixed}>
         <div className={styles.headerContainer}>

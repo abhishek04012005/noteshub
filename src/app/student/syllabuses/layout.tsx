@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { OG_IMAGES, getCanonical } from '@/config/site';
 
 export const metadata: Metadata = {
   title: 'Syllabuses Download | NotesHub - Study Materials',
@@ -9,10 +10,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: 'https://noteshub.abhishekchoudhary.co.in/student/syllabuses',
+    url: getCanonical('/student/syllabuses'),
     title: ' Syllabuses | NotesHub',
     description: 'Download  study syllabuses for your course and university',
     siteName: 'NotesHub',
+    images: [{ url: OG_IMAGES.default }],
   },
   robots: {
     index: true,

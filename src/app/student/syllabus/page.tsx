@@ -14,6 +14,20 @@ import {
 import styles from '../syllabuses/syllabuses.module.css';
 import SyllabusCard from '../../../components/SyllabusCard';
 
+function slugify(value: string | undefined): string {
+  if (!value) return '';
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function buildSyllabusSlug(syllabus: { university?: string; course?: string; branch?: string; semester?: string; title?: string; id?: string }) {
+  const parts = [slugify(syllabus.university), slugify(syllabus.course), slugify(syllabus.branch), slugify(syllabus.semester), slugify(syllabus.title)].filter(Boolean);
+  return parts.length > 0 ? parts.join('-') : syllabus.id || 'syllabus';
+}
+
 interface Syllabus {
   id: string;
   university: string;
@@ -138,9 +152,10 @@ export default function SyllabusPage() {
 
   const handleDownload = async (syllabusId: string) => {
     try {
+      const currentSyllabus = syllabuses.find((item) => item.id === syllabusId);
+      const slug = currentSyllabus ? buildSyllabusSlug(currentSyllabus) : syllabusId;
       setDownloading(syllabusId);
-      // Navigate to download form page
-      window.location.href = `/student/syllabus-download/${syllabusId}`;
+      window.location.href = `/student/syllabus-download/${slug}`;
     } catch (error) {
       console.error('Error during download:', error);
       setDownloading(null);

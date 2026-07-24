@@ -4,6 +4,8 @@ import { Notes } from '@/types';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import { ProductSchema, BreadcrumbSchema } from '@/components/SchemaOrg';
+import { getCanonical, SITE_URL } from '@/config/site';
 import {
   ArrowBack,
   MenuBook,
@@ -242,6 +244,49 @@ export default function NotesDetailClient({
 
   return (
     <main className={styles.main}>
+      <ProductSchema
+        id={notes.id}
+        title={notes.title}
+        description={notes.description || ''}
+        author={notes.author || 'Unknown'}
+        price={notes.discounted_price || notes.price || 0}
+        imageUrl={notes.image_url}
+        university={notes.university}
+        course={notes.course}
+      />
+
+      <BreadcrumbSchema
+        items={(() => {
+          const items: Array<{ name: string; url: string }> = [
+            { name: 'Home', url: SITE_URL },
+            { name: 'Browse', url: getCanonical('/student/browse') },
+          ];
+
+          if (notes.university) {
+            items.push({
+              name: notes.university,
+              url: getCanonical(`/student/browse?university=${encodeURIComponent(notes.university)}`),
+            });
+          }
+
+          if (notes.course) {
+            items.push({
+              name: notes.course,
+              url: getCanonical(`/student/browse?course=${encodeURIComponent(notes.course)}`),
+            });
+          }
+
+          if (notes.subject) {
+            items.push({
+              name: notes.subject,
+              url: getCanonical(`/student/browse?subject=${encodeURIComponent(notes.subject)}`),
+            });
+          }
+
+          items.push({ name: notes.title, url: getCanonical(`/student/notes/${notes.id}`) });
+          return items;
+        })()}
+      />
       {/* Header */}
       <header className={styles.headerFixed}>
         <div className={styles.headerContainer}>
