@@ -1,44 +1,72 @@
 /* ========== SYLLABUS CARD ========== */
 
 .card {
-  background-color: var(--background, #ffffff);
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 255, 0.96));
+  border-radius: 1.1rem;
+  box-shadow: 0 16px 35px rgba(15, 23, 42, 0.08);
   transition: all 0.3s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
-  border: 1px solid #e0e0e0;
+  border: 1px solid rgba(30, 58, 95, 0.08);
 }
 
 .card:hover {
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-  transform: translateY(-4px);
+  box-shadow: 0 22px 45px rgba(15, 23, 42, 0.12);
+  transform: translateY(-5px);
 }
 
-/* ========== IMAGE PLACEHOLDER ========== */
+.cardAccentA {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(240, 247, 255, 0.95));
+}
+
+.cardAccentB {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 242, 255, 0.95));
+}
+
+.cardAccentC {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(242, 249, 243, 0.95));
+}
 
 .imageContainer {
   width: 100%;
-  height: 12rem;
+  height: 11.5rem;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.25rem;
-  background: linear-gradient(135deg, var(--primary, #1e3a5f) 0%, var(--tertiary, #2ba5a8) 100%);
-  flex-shrink: 0;
+  padding: 1rem;
 }
 
-.imageContainer svg {
-  color: white;
-  font-size: 2.5rem !important;
+.iconWrap {
+  width: 4.4rem;
+  height: 4.4rem;
+  border-radius: 1.15rem;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%);
+  box-shadow: 0 14px 28px rgba(30, 58, 95, 0.22);
 }
 
-/* ========== CARD CONTENT ========== */
+.premiumBadge {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary);
+  font-size: 0.77rem;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+}
 
 .content {
-  padding: 1.25rem;
+  padding: 1.15rem 1.15rem 1.25rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -47,65 +75,55 @@
 .badge {
   display: inline-block;
   width: fit-content;
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.25rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.28rem 0.7rem;
   border-radius: 9999px;
-  margin-bottom: 0.75rem;
-  background: rgba(30, 58, 95, 0.1);
-  color: var(--tertiary, #2ba5a8);
-  text-decoration: none;
-  border: none;
+  margin-bottom: 0.6rem;
+  background: rgba(30, 58, 95, 0.08);
+  color: var(--tertiary);
 }
 
 .badgeRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  gap: 0.45rem;
+  margin-bottom: 0.35rem;
 }
 
 .title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  margin: 0 0 0.5rem 0;
+  font-size: 1.08rem;
+  font-weight: 800;
+  margin: 0.15rem 0 0.45rem;
   flex-grow: 1;
-  color: var(--foreground, #1f2937);
+  color: var(--foreground);
   display: -webkit-box;
-  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  word-wrap: break-word;
 }
 
 .description {
-  font-size: 0.875rem;
-  margin: 0 0 1rem 0;
-  color: var(--text-light, #666);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+  color: var(--neutral-600);
   display: -webkit-box;
-  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  word-wrap: break-word;
+  line-height: 1.6;
 }
 
-/* ========== FOOTER ========== */
-
 .footer {
-  padding-top: 1rem;
-  border-top: 1px solid #e0e0e0;
-  margin-top: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(30, 58, 95, 0.08);
 }
 
 .footerRow {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  margin-bottom: 0.8rem;
   gap: 1rem;
 }
 
@@ -114,7 +132,7 @@
   align-items: center;
   gap: 0.35rem;
   font-size: 0.75rem;
-  color: var(--text-light, #666);
+  color: var(--neutral-500);
   font-weight: 500;
 }
 
@@ -122,43 +140,30 @@
   font-size: 0.85rem !important;
 }
 
-.freeTag {
-  display: inline-block;
-  background: linear-gradient(135deg, #2aa569, #2da878);
-  color: white;
-  padding: 0.35rem 0.85rem;
-  border-radius: 0.25rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
+.author {
+  font-size: 0.78rem;
+  color: var(--neutral-500);
+  text-align: right;
 }
 
 .downloadBtn {
+  display: inline-flex;
+  justify-content: center;
   width: 100%;
-  padding: 0.5rem 1rem;
-  background-color: var(--primary, #1e3a5f);
+  padding: 0.7rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--tertiary) 100%);
   color: white;
   border: none;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 600;
+  border-radius: 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
   transition: all 0.3s ease;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.downloadBtn svg {
-  font-size: 0.875rem !important;
+  gap: 0.45rem;
 }
 
 .downloadBtn:hover:not(:disabled) {
-  background-color: var(--tertiary, #2ba5a8);
-  box-shadow: 0 10px 25px rgba(30, 58, 95, 0.3);
+  box-shadow: 0 10px 20px rgba(30, 58, 95, 0.2);
   transform: translateY(-2px);
 }
 
@@ -166,8 +171,6 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
-
-/* ========== RESPONSIVE ========== */
 
 @media (max-width: 768px) {
   .imageContainer {
@@ -203,8 +206,7 @@
 
   .downloadBtn {
     font-size: 0.8rem;
-    padding: 0.4rem;
-    margin-top: 0.5rem;
+    padding: 0.6rem;
   }
 }
 
@@ -240,14 +242,8 @@
     font-size: 0.7rem;
   }
 
-  .freeTag {
-    font-size: 0.65rem;
-    padding: 0.3rem 0.6rem;
-  }
-
   .downloadBtn {
     font-size: 0.75rem;
-    padding: 0.4rem;
-    margin-top: 0.5rem;
+    padding: 0.55rem;
   }
 }

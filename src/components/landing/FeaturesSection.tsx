@@ -25,22 +25,30 @@ const features = [
 ];
 
 export function FeaturesSection() {
+  const accentClasses = [styles.cardAccentA, styles.cardAccentB, styles.cardAccentC, styles.cardAccentD];
+
   return (
     <section id="features" className={styles.features}>
       <div className={styles.container}>
         <div className={styles.header}>
+          <span className={styles.highlight}>Built for better study flow</span>
           <p className={styles.eyebrow}>Why students choose us</p>
           <h2 className={styles.title}>Everything you need for confident studying</h2>
-          <p className={styles.subtitle}>A clean experience from discovery to download, built around your academic success.</p>
+          <p className={styles.subtitle}>A calm, modern experience from discovery to download, crafted around your academic success.</p>
         </div>
 
         <div className={styles.grid}>
           {features.map((feature, index) => {
             const Icon = feature.icon;
+            const accentClass = accentClasses[index % accentClasses.length];
+
             return (
-              <div key={index} className={styles.card}>
-                <div className={styles.iconWrap}>
-                  <Icon sx={{ fontSize: '1.7rem', color: 'var(--primary)' }} />
+              <div key={index} className={`${styles.card} ${accentClass}`}>
+                <div className={styles.cardTop}>
+                  <div className={styles.iconWrap}>
+                    <Icon sx={{ fontSize: '1.7rem', color: 'var(--primary)' }} />
+                  </div>
+                  <span className={styles.cardNumber}>0{index + 1}</span>
                 </div>
                 <h3 className={styles.cardTitle}>{feature.title}</h3>
                 <p className={styles.cardDesc}>{feature.desc}</p>

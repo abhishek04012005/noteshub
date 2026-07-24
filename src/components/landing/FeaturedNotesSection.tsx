@@ -17,7 +17,7 @@ export function FeaturedNotesSection() {
           </Link>
         </div>
 
-        <NotesList />
+        <NotesList featured />
 
         <div className={styles.ctaRow}>
           <Link href="/student/browse" className={styles.primaryBtn}>
