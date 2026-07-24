@@ -253,7 +253,6 @@ export default function SyllabusDownloadPage() {
 
             {/* Download Form */}
             <form onSubmit={handleSubmit} className={styles.downloadForm}>
-              {/* Name Field */}
               <div className={styles.formGroup}>
                 <label htmlFor="name" className={styles.label}>
                   <Person sx={{ fontSize: '1rem' }} />
