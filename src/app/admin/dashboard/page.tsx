@@ -14,6 +14,9 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedUniversity, setSelectedUniversity] = useState('');
+  const [selectedBranch, setSelectedBranch] = useState('');
+  const [selectedSemester, setSelectedSemester] = useState('');
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('isAdminLoggedIn');
@@ -76,6 +79,18 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const universities = useMemo(() => {
+    return Array.from(new Set(notes.map((note) => note.university).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+  }, [notes]);
+
+  const branches = useMemo(() => {
+    return Array.from(new Set(notes.map((note) => note.branch).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+  }, [notes]);
+
+  const semesters = useMemo(() => {
+    return Array.from(new Set(notes.map((note) => note.semester).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+  }, [notes]);
+
   const subjects = useMemo(() => {
     return Array.from(new Set(notes.map((note) => note.subject).filter(Boolean))).sort((a, b) => a.localeCompare(b));
   }, [notes]);
@@ -91,9 +106,13 @@ export default function AdminDashboardPage() {
           .some((value) => value.toLowerCase().includes(query));
 
       const matchesSubject = !selectedSubject || note.subject === selectedSubject;
-      return matchesQuery && matchesSubject;
+      const matchesUniversity = !selectedUniversity || note.university === selectedUniversity;
+      const matchesBranch = !selectedBranch || note.branch === selectedBranch;
+      const matchesSemester = !selectedSemester || note.semester === selectedSemester;
+
+      return matchesQuery && matchesSubject && matchesUniversity && matchesBranch && matchesSemester;
     });
-  }, [notes, searchTerm, selectedSubject]);
+  }, [notes, searchTerm, selectedSubject, selectedUniversity, selectedBranch, selectedSemester]);
 
   if (!isAdmin) {
     return (
@@ -156,9 +175,48 @@ export default function AdminDashboardPage() {
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className={styles.filterInput}
-                      placeholder="Search by title, subject, chapter or author"
+                      placeholder="Search by title, subject, chapter, university, branch or author"
                       aria-label="Search notes"
                     />
+                    <select
+                      value={selectedUniversity}
+                      onChange={(e) => setSelectedUniversity(e.target.value)}
+                      className={styles.filterSelect}
+                      aria-label="Filter by university"
+                    >
+                      <option value="">All universities</option>
+                      {universities.map((university) => (
+                        <option key={university} value={university}>
+                          {university}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      value={selectedBranch}
+                      onChange={(e) => setSelectedBranch(e.target.value)}
+                      className={styles.filterSelect}
+                      aria-label="Filter by branch"
+                    >
+                      <option value="">All branches</option>
+                      {branches.map((branch) => (
+                        <option key={branch} value={branch}>
+                          {branch}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      value={selectedSemester}
+                      onChange={(e) => setSelectedSemester(e.target.value)}
+                      className={styles.filterSelect}
+                      aria-label="Filter by semester"
+                    >
+                      <option value="">All semesters</option>
+                      {semesters.map((semester) => (
+                        <option key={semester} value={semester}>
+                          {semester}
+                        </option>
+                      ))}
+                    </select>
                     <select
                       value={selectedSubject}
                       onChange={(e) => setSelectedSubject(e.target.value)}
@@ -172,13 +230,16 @@ export default function AdminDashboardPage() {
                         </option>
                       ))}
                     </select>
-                    {(searchTerm || selectedSubject) && (
+                    {(searchTerm || selectedSubject || selectedUniversity || selectedBranch || selectedSemester) && (
                       <button
                         type="button"
                         className={styles.clearFilterBtn}
                         onClick={() => {
                           setSearchTerm('');
                           setSelectedSubject('');
+                          setSelectedUniversity('');
+                          setSelectedBranch('');
+                          setSelectedSemester('');
                         }}
                       >
                         Clear
