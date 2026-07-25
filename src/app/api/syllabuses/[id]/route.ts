@@ -4,16 +4,23 @@ import { deleteFromDrive } from '@/utils/google-drive-syllabus';
 
 function slugify(value: string | undefined): string {
   if (!value) return '';
-  return value
+
+  const normalized = value
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/[^a-z0-9]+/g, '-');
+
+  const slug = normalized.replace(/^-+|-+$/g, '');
+  return slug === 'b-tech' || slug === 'btech' ? 'btech' : slug;
 }
 
 function buildSyllabusSlug(syllabus: { university?: string; course?: string; branch?: string; semester?: string; title?: string; id?: string }) {
   const parts = [slugify(syllabus.university), slugify(syllabus.course), slugify(syllabus.branch), slugify(syllabus.semester), slugify(syllabus.title)].filter(Boolean);
   return parts.length > 0 ? parts.join('-') : syllabus.id || 'syllabus';
+}
+
+function normalizeForComparison(value: string | undefined): string {
+  return slugify(value).replace(/-/g, '');
 }
 
 function isUuid(value: string): boolean {
@@ -50,7 +57,12 @@ export async function GET(
       if (result.error) {
         error = result.error;
       } else {
-        data = result.data?.find((item) => buildSyllabusSlug(item) === id) ?? null;
+        const normalizedLookup = normalizeForComparison(id);
+        data = result.data?.find((item) => {
+          const slug = buildSyllabusSlug(item);
+          const normalizedSlug = normalizeForComparison(slug);
+          return normalizedSlug === normalizedLookup || slug === id;
+        }) ?? null;
       }
     }
 

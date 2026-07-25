@@ -24,6 +24,10 @@ function slugifyValue(str: string | undefined): string {
     .replace(/^-+|-+$/g, '');
 }
 
+function normalizeForComparison(str: string | undefined): string {
+  return slugifyValue(str).replace(/-/g, '');
+}
+
 // Helper function to find note by university, course, subject, chapter
 async function findNoteByDetails(
   slugArray: string[]
@@ -39,18 +43,18 @@ async function findNoteByDetails(
     );
     const notes: NotesType[] = response.data.data || [];
 
-    const normalizedUniversity = slugifyValue(university);
-    const normalizedCourse = slugifyValue(course);
-    const normalizedSubject = slugifyValue(subject);
-    const normalizedChapter = chapter ? slugifyValue(chapter) : '';
+    const normalizedUniversity = normalizeForComparison(university);
+    const normalizedCourse = normalizeForComparison(course);
+    const normalizedSubject = normalizeForComparison(subject);
+    const normalizedChapter = chapter ? normalizeForComparison(chapter) : '';
 
     console.log('Looking for:', { normalizedUniversity, normalizedCourse, normalizedSubject, normalizedChapter });
 
     const exactMatch = notes.find((note) => {
-      const noteUniversity = slugifyValue(note.university);
-      const noteCourse = slugifyValue(note.course);
-      const noteSubject = slugifyValue(note.subject);
-      const noteChapter = slugifyValue(note.chapter_no);
+      const noteUniversity = normalizeForComparison(note.university);
+      const noteCourse = normalizeForComparison(note.course);
+      const noteSubject = normalizeForComparison(note.subject);
+      const noteChapter = normalizeForComparison(note.chapter_no);
 
       const match =
         noteUniversity === normalizedUniversity &&
@@ -71,9 +75,9 @@ async function findNoteByDetails(
 
     if (slugArray.length === 4) {
       const partialMatch = notes.find((note) => {
-        const noteUniversity = slugifyValue(note.university);
-        const noteCourse = slugifyValue(note.course);
-        const noteSubject = slugifyValue(note.subject);
+        const noteUniversity = normalizeForComparison(note.university);
+        const noteCourse = normalizeForComparison(note.course);
+        const noteSubject = normalizeForComparison(note.subject);
 
         return (
           noteUniversity === normalizedUniversity &&

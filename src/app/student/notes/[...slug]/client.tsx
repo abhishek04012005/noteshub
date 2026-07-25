@@ -39,6 +39,10 @@ function slugifyValue(str: string | undefined): string {
     .replace(/^-+|-+$/g, '');
 }
 
+function normalizeForComparison(str: string | undefined): string {
+  return slugifyValue(str).replace(/-/g, '');
+}
+
 // Helper function to find note by university, course, subject, chapter
 async function findNoteByDetails(slugArray: string[]): Promise<Notes | null> {
   if (slugArray.length >= 3) {
@@ -57,18 +61,18 @@ async function findNoteByDetails(slugArray: string[]): Promise<Notes | null> {
       // For 4 parts: university/course/subject/chapter
       if (slugArray.length === 4) {
         const [university, course, subject, chapter] = slugArray;
-        const normalizedUniversity = slugifyValue(university);
-        const normalizedCourse = slugifyValue(course);
-        const normalizedSubject = slugifyValue(subject);
-        const normalizedChapter = slugifyValue(chapter);
+        const normalizedUniversity = normalizeForComparison(university);
+        const normalizedCourse = normalizeForComparison(course);
+        const normalizedSubject = normalizeForComparison(subject);
+        const normalizedChapter = normalizeForComparison(chapter);
 
         console.log('Searching for 4-part match:', { normalizedUniversity, normalizedCourse, normalizedSubject, normalizedChapter });
 
         const found = allNotes.find((note) => {
-          const noteUniversity = slugifyValue(note.university);
-          const noteCourse = slugifyValue(note.course);
-          const noteSubject = slugifyValue(note.subject);
-          const noteChapter = slugifyValue(note.chapter_no);
+          const noteUniversity = normalizeForComparison(note.university);
+          const noteCourse = normalizeForComparison(note.course);
+          const noteSubject = normalizeForComparison(note.subject);
+          const noteChapter = normalizeForComparison(note.chapter_no);
 
           return (
             noteUniversity === normalizedUniversity &&
@@ -86,9 +90,9 @@ async function findNoteByDetails(slugArray: string[]): Promise<Notes | null> {
         // Fallback: try to match just university, course, subject
         console.log('No exact 4-part match found, trying 3-part match');
         const partialMatch = allNotes.find((note) => {
-          const noteUniversity = slugifyValue(note.university);
-          const noteCourse = slugifyValue(note.course);
-          const noteSubject = slugifyValue(note.subject);
+          const noteUniversity = normalizeForComparison(note.university);
+          const noteCourse = normalizeForComparison(note.course);
+          const noteSubject = normalizeForComparison(note.subject);
 
           return (
             noteUniversity === normalizedUniversity &&
@@ -106,17 +110,16 @@ async function findNoteByDetails(slugArray: string[]): Promise<Notes | null> {
       // For 3 parts: university/course/subject
       if (slugArray.length === 3) {
         const [university, course, subject] = slugArray;
-        const normalizedUniversity = slugifyValue(university);
-        const normalizedCourse = slugifyValue(course);
-        const normalizedSubject = slugifyValue(subject);
+      const normalizedUniversity = normalizeForComparison(university);
+      const normalizedCourse = normalizeForComparison(course);
+      const normalizedSubject = normalizeForComparison(subject);
 
-        console.log('Searching for 3-part match:', { normalizedUniversity, normalizedCourse, normalizedSubject });
+      console.log('Searching for 3-part match:', { normalizedUniversity, normalizedCourse, normalizedSubject });
 
-        const found = allNotes.find((note) => {
-          const noteUniversity = slugifyValue(note.university);
-          const noteCourse = slugifyValue(note.course);
-          const noteSubject = slugifyValue(note.subject);
-
+      const found = allNotes.find((note) => {
+        const noteUniversity = normalizeForComparison(note.university);
+        const noteCourse = normalizeForComparison(note.course);
+        const noteSubject = normalizeForComparison(note.subject);
           return (
             noteUniversity === normalizedUniversity &&
             noteCourse === normalizedCourse &&

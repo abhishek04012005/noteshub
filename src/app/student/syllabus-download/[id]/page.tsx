@@ -163,7 +163,7 @@ export default function SyllabusDownloadPage() {
               </div>
               <h1 className={styles.successTitle}>Syllabus Not Found</h1>
               <p className={styles.message}>The syllabus you're looking for doesn't exist.</p>
-              <Link href="/student/syllabuses" className={styles.continueBtn}>
+              <Link href="/student/syllabus" className={styles.continueBtn}>
                 <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
                 Back to Syllabuses
               </Link>

@@ -15,9 +15,21 @@ function slugify(text: string | undefined): string {
     .replace(/^-+|-+$/g, '');
 }
 
+function buildAbsoluteUrl(path: string, baseUrl: string): string | null {
+  try {
+    const url = new URL(path, baseUrl);
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      return null;
+    }
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
 function buildSyllabusSlug(syllabus: { university?: string; course?: string; branch?: string; semester?: string; title?: string; id?: string }) {
   const parts = [slugify(syllabus.university), slugify(syllabus.course), slugify(syllabus.branch), slugify(syllabus.semester), slugify(syllabus.title)].filter(Boolean);
-  return parts.length > 0 ? parts.join('-') : syllabus.id || 'syllabus';
+  return parts.length > 0 ? parts.join('-') : syllabus.id || '';
 }
 
 export async function GET() {
@@ -59,8 +71,10 @@ export async function GET() {
     ];
 
     staticPages.forEach((page) => {
+      const pageUrl = buildAbsoluteUrl(page.loc, baseUrl);
+      if (!pageUrl) return;
       xml += '  <url>\n';
-      xml += `    <loc>${page.loc}</loc>\n`;
+      xml += `    <loc>${pageUrl}</loc>\n`;
       xml += `    <lastmod>${page.lastmod}</lastmod>\n`;
       xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
       xml += `    <priority>${page.priority}</priority>\n`;
@@ -76,7 +90,10 @@ export async function GET() {
         const chapter = slugify(note.chapter_no);
 
         if (university && course && subject && chapter) {
-          const noteUrl = `${baseUrl}/student/notes/${university}/${course}/${subject}/${chapter}`;
+          const notePath = `/student/notes/${university}/${course}/${subject}/${chapter}`;
+          const noteUrl = buildAbsoluteUrl(notePath, baseUrl);
+          if (!noteUrl) return;
+
           xml += '  <url>\n';
           xml += `    <loc>${noteUrl}</loc>\n`;
           xml += `    <lastmod>${new Date(note.updated_at).toISOString().split('T')[0]}</lastmod>\n`;
@@ -90,15 +107,19 @@ export async function GET() {
     // Add dynamic syllabus pages using the actual syllabus download route
     if (syllabuses && syllabuses.length > 0) {
       syllabuses.forEach((syllabus) => {
-        if (syllabus.id) {
-          const syllabusUrl = `${baseUrl}/student/syllabus-download/${buildSyllabusSlug(syllabus)}`;
-          xml += '  <url>\n';
-          xml += `    <loc>${syllabusUrl}</loc>\n`;
-          xml += `    <lastmod>${new Date(syllabus.updated_at).toISOString().split('T')[0]}</lastmod>\n`;
-          xml += '    <changefreq>monthly</changefreq>\n';
-          xml += '    <priority>0.75</priority>\n';
-          xml += '  </url>\n';
-        }
+        const slug = buildSyllabusSlug(syllabus);
+        if (!syllabus.id || !slug) return;
+
+        const syllabusPath = `/student/syllabus-download/${slug}`;
+        const syllabusUrl = buildAbsoluteUrl(syllabusPath, baseUrl);
+        if (!syllabusUrl) return;
+
+        xml += '  <url>\n';
+        xml += `    <loc>${syllabusUrl}</loc>\n`;
+        xml += `    <lastmod>${new Date(syllabus.updated_at).toISOString().split('T')[0]}</lastmod>\n`;
+        xml += '    <changefreq>monthly</changefreq>\n';
+        xml += '    <priority>0.75</priority>\n';
+        xml += '  </url>\n';
       });
     }
 
