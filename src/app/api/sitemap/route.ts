@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { SITE_URL, getCanonical } from '@/config/site';
 
 const supabaseClient = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || '',
@@ -8,11 +9,14 @@ const supabaseClient = createClient(
 // Helper function to convert string to URL-friendly slug
 function slugify(text: string | undefined): string {
   if (!text) return '';
-  return text
+
+  const normalized = text
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/[^a-z0-9]+/g, '-');
+
+  const slug = normalized.replace(/^-+|-+$/g, '');
+  return slug === 'b-tech' || slug === 'btech' ? 'btech' : slug;
 }
 
 function buildAbsoluteUrl(path: string, baseUrl: string): string | null {
@@ -54,8 +58,7 @@ export async function GET() {
       console.error('Error fetching syllabuses for sitemap:', syllabusesError);
     }
 
-    // Base URL - Replace with your actual domain
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://noteshub.abhishekchoudhary.co.in';
+    const baseUrl = SITE_URL;
 
     // Generate sitemap XML
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -64,10 +67,10 @@ export async function GET() {
 
     // Add static pages with proper priorities
     const staticPages = [
-      { loc: '/', changefreq: 'weekly', priority: 1.0, lastmod: new Date().toISOString().split('T')[0] },
-      { loc: '/student/browse', changefreq: 'daily', priority: 0.95, lastmod: new Date().toISOString().split('T')[0] },
-      { loc: '/student/syllabuses', changefreq: 'daily', priority: 0.95, lastmod: new Date().toISOString().split('T')[0] },
-      { loc: '/student/syllabus', changefreq: 'daily', priority: 0.9, lastmod: new Date().toISOString().split('T')[0] },
+      { loc: getCanonical('/'), changefreq: 'weekly', priority: 1.0, lastmod: new Date().toISOString().split('T')[0] },
+      { loc: getCanonical('/student/browse'), changefreq: 'daily', priority: 0.95, lastmod: new Date().toISOString().split('T')[0] },
+      { loc: getCanonical('/student/syllabuses'), changefreq: 'daily', priority: 0.95, lastmod: new Date().toISOString().split('T')[0] },
+      { loc: getCanonical('/student/syllabus'), changefreq: 'daily', priority: 0.9, lastmod: new Date().toISOString().split('T')[0] },
     ];
 
     staticPages.forEach((page) => {

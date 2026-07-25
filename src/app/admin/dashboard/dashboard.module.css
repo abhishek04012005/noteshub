@@ -155,8 +155,67 @@
 .sectionTitle {
   font-size: 1.5rem;
   font-weight: 700;
-  margin: 0 0 2rem 0;
+  margin: 0 0 1.5rem 0;
   color: var(--foreground);
+}
+
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--neutral-200);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.filterControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.filterInput,
+.filterSelect {
+  border: 1px solid var(--neutral-300);
+  border-radius: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.95rem;
+  color: var(--foreground);
+  background: white;
+  min-width: 220px;
+}
+
+.filterInput:focus,
+.filterSelect:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.clearFilterBtn {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.7rem 1rem;
+  background: var(--neutral-200);
+  color: var(--foreground);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.clearFilterBtn:hover {
+  background: var(--neutral-300);
+}
+
+.resultsInfo {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 /* ========== TABLE WRAPPER ========== */
@@ -232,6 +291,11 @@
 
 .authorCell {
   color: var(--text-light);
+}
+
+.chapterCell {
+  color: var(--foreground);
+  font-weight: 600;
 }
 
 .dateCell {
@@ -387,6 +451,22 @@
 
   .sectionTitle {
     font-size: 1.25rem;
+  }
+
+  .filterBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filterControls {
+    flex-direction: column;
+  }
+
+  .filterInput,
+  .filterSelect,
+  .clearFilterBtn {
+    width: 100%;
+    min-width: unset;
   }
 }
 

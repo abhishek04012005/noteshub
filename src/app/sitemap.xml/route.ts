@@ -68,8 +68,8 @@ export async function GET() {
     // Add static pages
     const staticPages = [
       { loc: getCanonical('/'), changefreq: 'weekly', priority: 1.0 },
-      { loc: getCanonical('/student/browse'), changefreq: 'daily', priority: 0.9 },
-      { loc: getCanonical('/student/syllabus'), changefreq: 'daily', priority: 0.85 },
+      { loc: getCanonical('/student/browse'), changefreq: 'daily', priority: 0.95 },
+      { loc: getCanonical('/student/syllabus'), changefreq: 'daily', priority: 0.9 },
       { loc: getCanonical('/admin/login'), changefreq: 'monthly', priority: 0.7 },
     ];
 
