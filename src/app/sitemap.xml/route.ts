@@ -69,7 +69,7 @@ export async function GET() {
     const staticPages = [
       { loc: getCanonical('/'), changefreq: 'weekly', priority: 1.0 },
       { loc: getCanonical('/student/browse'), changefreq: 'daily', priority: 0.9 },
-      { loc: getCanonical('/student/syllabuses'), changefreq: 'daily', priority: 0.85 },
+      { loc: getCanonical('/student/syllabus'), changefreq: 'daily', priority: 0.85 },
       { loc: getCanonical('/admin/login'), changefreq: 'monthly', priority: 0.7 },
     ];
 
