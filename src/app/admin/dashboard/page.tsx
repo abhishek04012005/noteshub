@@ -80,19 +80,23 @@ export default function AdminDashboardPage() {
   };
 
   const universities = useMemo(() => {
-    return Array.from(new Set(notes.map((note) => note.university).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+    const values = notes.map((note) => note.university).filter((value): value is string => Boolean(value));
+    return Array.from(new Set(values)).sort((a, b) => a.localeCompare(b));
   }, [notes]);
 
   const branches = useMemo(() => {
-    return Array.from(new Set(notes.map((note) => note.branch).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+    const values = notes.map((note) => note.branch).filter((value): value is string => Boolean(value));
+    return Array.from(new Set(values)).sort((a, b) => a.localeCompare(b));
   }, [notes]);
 
   const semesters = useMemo(() => {
-    return Array.from(new Set(notes.map((note) => note.semester).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+    const values = notes.map((note) => note.semester).filter((value): value is string => Boolean(value));
+    return Array.from(new Set(values)).sort((a, b) => a.localeCompare(b));
   }, [notes]);
 
   const subjects = useMemo(() => {
-    return Array.from(new Set(notes.map((note) => note.subject).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+    const values = notes.map((note) => note.subject).filter((value): value is string => Boolean(value));
+    return Array.from(new Set(values)).sort((a, b) => a.localeCompare(b));
   }, [notes]);
 
   const filteredNotes = useMemo(() => {
@@ -169,6 +173,30 @@ export default function AdminDashboardPage() {
             ) : (
               <>
                 <div className={styles.filterBar}>
+                  <div className={styles.filterHeader}>
+                    <div>
+                      <p className={styles.filterTitle}>Refine note search</p>
+                      <p className={styles.filterSubtitle}>
+                        Use search and filters to quickly find notes by university, branch, semester, subject, or chapter.
+                      </p>
+                    </div>
+                    {(searchTerm || selectedSubject || selectedUniversity || selectedBranch || selectedSemester) && (
+                      <button
+                        type="button"
+                        className={styles.clearFilterBtn}
+                        onClick={() => {
+                          setSearchTerm('');
+                          setSelectedSubject('');
+                          setSelectedUniversity('');
+                          setSelectedBranch('');
+                          setSelectedSemester('');
+                        }}
+                      >
+                        Reset filters
+                      </button>
+                    )}
+                  </div>
+
                   <div className={styles.filterControls}>
                     <input
                       type="text"
@@ -230,21 +258,6 @@ export default function AdminDashboardPage() {
                         </option>
                       ))}
                     </select>
-                    {(searchTerm || selectedSubject || selectedUniversity || selectedBranch || selectedSemester) && (
-                      <button
-                        type="button"
-                        className={styles.clearFilterBtn}
-                        onClick={() => {
-                          setSearchTerm('');
-                          setSelectedSubject('');
-                          setSelectedUniversity('');
-                          setSelectedBranch('');
-                          setSelectedSemester('');
-                        }}
-                      >
-                        Clear
-                      </button>
-                    )}
                   </div>
                   <p className={styles.resultsInfo}>
                     Showing {filteredNotes.length} of {notes.length} notes
