@@ -18,11 +18,21 @@ export default function NotesCard({ notes }: { notes: Notes }) {
 
   // Create URL path from university, course, subject, and chapter
   const createUrlPath = () => {
-    const university = notes.university?.toLowerCase().replace(/\s+/g, '-') || 'unknown';
-    const course = notes.course?.toLowerCase().replace(/\s+/g, '-').replace(/\./g, '') || 'unknown';
-    const subject = notes.subject?.toLowerCase().replace(/\s+/g, '-') || 'unknown';
-    const chapter = notes.chapter_no?.toLowerCase().replace(/\s+/g, '-') || 'chapter1';
-    
+    const slugifyValue = (value?: string) => {
+      if (!value) return 'unknown';
+      return String(value)
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    };
+
+    const university = slugifyValue(notes.university);
+    const course = slugifyValue(notes.course);
+    const subject = slugifyValue(notes.subject);
+    const chapter = slugifyValue(notes.chapter_no) || 'chapter1';
+
     return `/student/notes/${university}/${course}/${subject}/${chapter}`;
   };
 

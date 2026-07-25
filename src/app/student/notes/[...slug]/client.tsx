@@ -28,14 +28,15 @@ function extractIdFromSlug(slug: string): string {
 }
 
 // Helper function to normalize strings for comparison
-function normalizeString(str: string | undefined): string {
+function slugifyValue(str: string | undefined): string {
   if (!str) return '';
-  return str
+
+  return decodeURIComponent(String(str))
     .toLowerCase()
     .trim()
-    .replace(/-/g, ' ')
-    .replace(/\.\s*/g, '') // Remove dots and spaces around them
-    .replace(/\s+/g, ' ');
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 // Helper function to find note by university, course, subject, chapter
@@ -56,18 +57,18 @@ async function findNoteByDetails(slugArray: string[]): Promise<Notes | null> {
       // For 4 parts: university/course/subject/chapter
       if (slugArray.length === 4) {
         const [university, course, subject, chapter] = slugArray;
-        const normalizedUniversity = normalizeString(decodeURIComponent(university));
-        const normalizedCourse = normalizeString(decodeURIComponent(course));
-        const normalizedSubject = normalizeString(decodeURIComponent(subject));
-        const normalizedChapter = normalizeString(decodeURIComponent(chapter));
+        const normalizedUniversity = slugifyValue(university);
+        const normalizedCourse = slugifyValue(course);
+        const normalizedSubject = slugifyValue(subject);
+        const normalizedChapter = slugifyValue(chapter);
 
         console.log('Searching for 4-part match:', { normalizedUniversity, normalizedCourse, normalizedSubject, normalizedChapter });
 
         const found = allNotes.find((note) => {
-          const noteUniversity = normalizeString(note.university);
-          const noteCourse = normalizeString(note.course);
-          const noteSubject = normalizeString(note.subject);
-          const noteChapter = normalizeString(note.chapter_no);
+          const noteUniversity = slugifyValue(note.university);
+          const noteCourse = slugifyValue(note.course);
+          const noteSubject = slugifyValue(note.subject);
+          const noteChapter = slugifyValue(note.chapter_no);
 
           return (
             noteUniversity === normalizedUniversity &&
@@ -85,9 +86,9 @@ async function findNoteByDetails(slugArray: string[]): Promise<Notes | null> {
         // Fallback: try to match just university, course, subject
         console.log('No exact 4-part match found, trying 3-part match');
         const partialMatch = allNotes.find((note) => {
-          const noteUniversity = normalizeString(note.university);
-          const noteCourse = normalizeString(note.course);
-          const noteSubject = normalizeString(note.subject);
+          const noteUniversity = slugifyValue(note.university);
+          const noteCourse = slugifyValue(note.course);
+          const noteSubject = slugifyValue(note.subject);
 
           return (
             noteUniversity === normalizedUniversity &&
@@ -105,16 +106,16 @@ async function findNoteByDetails(slugArray: string[]): Promise<Notes | null> {
       // For 3 parts: university/course/subject
       if (slugArray.length === 3) {
         const [university, course, subject] = slugArray;
-        const normalizedUniversity = normalizeString(decodeURIComponent(university));
-        const normalizedCourse = normalizeString(decodeURIComponent(course));
-        const normalizedSubject = normalizeString(decodeURIComponent(subject));
+        const normalizedUniversity = slugifyValue(university);
+        const normalizedCourse = slugifyValue(course);
+        const normalizedSubject = slugifyValue(subject);
 
         console.log('Searching for 3-part match:', { normalizedUniversity, normalizedCourse, normalizedSubject });
 
         const found = allNotes.find((note) => {
-          const noteUniversity = normalizeString(note.university);
-          const noteCourse = normalizeString(note.course);
-          const noteSubject = normalizeString(note.subject);
+          const noteUniversity = slugifyValue(note.university);
+          const noteCourse = slugifyValue(note.course);
+          const noteSubject = slugifyValue(note.subject);
 
           return (
             noteUniversity === normalizedUniversity &&
@@ -142,7 +143,7 @@ async function findNoteByDetails(slugArray: string[]): Promise<Notes | null> {
 export default function NotesDetailClient({
   params,
 }: {
-  params: Promise<{ slug: string[] }>;
+  params: { slug?: string[] };
 }) {
   const [notes, setNotes] = useState<Notes | null>(null);
   const [loading, setLoading] = useState(true);
@@ -151,7 +152,7 @@ export default function NotesDetailClient({
   useEffect(() => {
     const loadNotes = async () => {
       try {
-        const { slug } = await params;
+        const slug = Array.isArray(params?.slug) ? params.slug : [];
         console.log('Current URL slug:', slug);
         setLoading(true);
 
