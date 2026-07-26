@@ -130,6 +130,27 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
     setLoading(true);
 
     try {
+      const presignResponse = await axios.post('/api/upload-notes/presign', {
+        fileName: file.name,
+        contentType: file.type || 'application/pdf',
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('adminEmail')}`,
+        },
+      });
+
+      const { uploadUrl, storagePath, publicUrl } = presignResponse.data;
+
+      if (!uploadUrl) {
+        throw new Error('Failed to prepare upload storage');
+      }
+
+      await axios.put(uploadUrl, file, {
+        headers: {
+          'Content-Type': file.type || 'application/pdf',
+        },
+      });
+
       const uploadFormData = new FormData();
       uploadFormData.append('university', formData.university);
       uploadFormData.append('course', formData.course);
@@ -142,7 +163,8 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
       uploadFormData.append('original_price', formData.original_price);
       uploadFormData.append('discounted_price', formData.discounted_price);
       uploadFormData.append('author', formData.author);
-      uploadFormData.append('file', file);
+      uploadFormData.append('storage_path', storagePath);
+      uploadFormData.append('download_url', publicUrl);
 
       const response = await axios.post('/api/upload-notes', uploadFormData, {
         headers: {

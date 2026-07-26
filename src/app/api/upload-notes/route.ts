@@ -8,7 +8,9 @@ export async function POST(request: NextRequest) {
     console.log('📝 Received upload request');
     
     const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const file = formData.get('file') as File | null;
+    const storagePath = formData.get('storage_path') as string | null;
+    const downloadUrl = formData.get('download_url') as string | null;
     const university = formData.get('university') as string;
     const course = formData.get('course') as string;
     const branch = formData.get('branch') as string;
@@ -27,8 +29,8 @@ export async function POST(request: NextRequest) {
       fileName: file?.name 
     });
 
-    if (!file) {
-      console.error('❌ No file provided');
+    if (!file && !storagePath) {
+      console.error('❌ No file or storage path provided');
       return NextResponse.json(
         { error: 'No file provided' },
         { status: 400 }
@@ -64,17 +66,30 @@ export async function POST(request: NextRequest) {
     // Upload file to Google Drive
     let driveResponse;
     try {
-      console.log('🔄 Converting file to buffer...');
-      const buffer = await file.arrayBuffer();
-      const bufferSize = buffer.byteLength;
-      console.log(`✅ Buffer created (${bufferSize} bytes)`);
+      if (file) {
+        console.log('🔄 Converting file to buffer...');
+        const buffer = await file.arrayBuffer();
+        const bufferSize = buffer.byteLength;
+        console.log(`✅ Buffer created (${bufferSize} bytes)`);
 
-      console.log(`📤 Uploading to Google Drive: ${file.name} in subject folder: ${subject}`);
-      driveResponse = await uploadToDrive(
-        Buffer.from(buffer),
-        file.name,
-        subject
-      );
+        console.log(`📤 Uploading to Google Drive: ${file.name} in subject folder: ${subject}`);
+        driveResponse = await uploadToDrive(
+          Buffer.from(buffer),
+          file.name,
+          subject
+        );
+      } else if (downloadUrl) {
+        driveResponse = {
+          file_id: storagePath || 'storage-upload',
+          file_name: title || 'uploaded-file',
+          web_view_link: downloadUrl,
+          download_link: downloadUrl,
+          file_size: 0,
+        };
+      } else {
+        throw new Error('No file content or storage URL available');
+      }
+
       console.log('✅ Google Drive upload successful:', driveResponse);
     } catch (driveError) {
       console.error('❌ Google Drive upload error:', driveError);
