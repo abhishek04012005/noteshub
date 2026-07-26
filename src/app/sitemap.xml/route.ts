@@ -92,18 +92,19 @@ export async function GET() {
         const chapter = slugify(note.chapter_no);
 
         if (university && course && subject) {
-          const notePath = chapter
-            ? `/student/notes/${university}/${course}/${subject}/${chapter}`
-            : `/student/notes/${university}/${course}/${subject}`;
-          const noteUrl = buildAbsoluteUrl(notePath, baseUrl);
-          if (!noteUrl) return;
-
-          xml += '  <url>\n';
-          xml += `    <loc>${noteUrl}</loc>\n`;
-          xml += `    <lastmod>${new Date(lastMod).toISOString().split('T')[0]}</lastmod>\n`;
-          xml += '    <changefreq>monthly</changefreq>\n';
-          xml += '    <priority>0.8</priority>\n';
-          xml += '  </url>\n';
+          // Add 4-segment URL with chapter if available
+          if (chapter) {
+            const notePath = `/student/notes/${university}/${course}/${subject}/${chapter}`;
+            const noteUrl = buildAbsoluteUrl(notePath, baseUrl);
+            if (noteUrl) {
+              xml += '  <url>\n';
+              xml += `    <loc>${noteUrl}</loc>\n`;
+              xml += `    <lastmod>${new Date(lastMod).toISOString().split('T')[0]}</lastmod>\n`;
+              xml += '    <changefreq>monthly</changefreq>\n';
+              xml += '    <priority>0.8</priority>\n';
+              xml += '  </url>\n';
+            }
+          }
         }
       });
     }
