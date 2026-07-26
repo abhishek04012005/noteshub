@@ -13,6 +13,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      return NextResponse.json({
+        success: false,
+        fallback: true,
+        error: 'Storage upload is not configured on this server. Falling back to the standard upload flow.',
+      }, { status: 503 });
+    }
+
     const body = await request.json();
     const fileName = body?.fileName as string | undefined;
     const contentType = body?.contentType as string | undefined;

@@ -130,28 +130,7 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
     setLoading(true);
 
     try {
-      const presignResponse = await axios.post('/api/upload-notes/presign', {
-        fileName: file.name,
-        contentType: file.type || 'application/pdf',
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('adminEmail')}`,
-        },
-      });
-
-      const { uploadUrl, storagePath, publicUrl } = presignResponse.data;
-
-      if (!uploadUrl) {
-        throw new Error('Failed to prepare upload storage');
-      }
-
-      await axios.put(uploadUrl, file, {
-        headers: {
-          'Content-Type': file.type || 'application/pdf',
-        },
-      });
-
-      const uploadFormData = new FormData();
+      let uploadFormData = new FormData();
       uploadFormData.append('university', formData.university);
       uploadFormData.append('course', formData.course);
       uploadFormData.append('branch', formData.branch);
@@ -163,13 +142,44 @@ export default function UploadNotesForm({ onSuccess }: UploadNotesFormProps) {
       uploadFormData.append('original_price', formData.original_price);
       uploadFormData.append('discounted_price', formData.discounted_price);
       uploadFormData.append('author', formData.author);
-      uploadFormData.append('storage_path', storagePath);
-      uploadFormData.append('download_url', publicUrl);
+
+      try {
+        const presignResponse = await axios.post('/api/upload-notes/presign', {
+          fileName: file.name,
+          contentType: file.type || 'application/pdf',
+        }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('adminEmail')}`,
+          },
+        });
+
+        const { uploadUrl, storagePath, publicUrl, fallback } = presignResponse.data || {};
+
+        if (!fallback && uploadUrl) {
+          await axios.put(uploadUrl, file, {
+            headers: {
+              'Content-Type': file.type || 'application/pdf',
+            },
+            maxBodyLength: Infinity,
+            maxContentLength: Infinity,
+          });
+
+          uploadFormData.append('storage_path', storagePath);
+          uploadFormData.append('download_url', publicUrl);
+        } else {
+          uploadFormData.append('file', file);
+        }
+      } catch (presignError) {
+        console.warn('Presign upload not available, falling back to direct upload:', presignError);
+        uploadFormData.append('file', file);
+      }
 
       const response = await axios.post('/api/upload-notes', uploadFormData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('adminEmail')}`,
         },
+        maxBodyLength: Infinity,
+        maxContentLength: Infinity,
       });
 
       setSuccess(true);
