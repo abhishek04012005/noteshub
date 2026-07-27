@@ -220,10 +220,29 @@ export default function NotesDetailClient({
 
   if (loading) {
     return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingContent}>
-          <div className={styles.spinner}></div>
-          <p className={styles.loadingText}>Loading notes...</p>
+      <div className={styles.skeletonContainer}>
+        <div className={styles.skeletonCard}>
+          <div className={styles.skeletonBackLink}></div>
+          <div className={styles.skeletonGrid}>
+            <div className={styles.skeletonImage}></div>
+            <div className={styles.skeletonDetails}>
+              <div className={styles.skeletonTag}></div>
+              <div className={styles.skeletonLineLarge}></div>
+              <div className={styles.skeletonLineMedium}></div>
+              <div className={styles.skeletonLineSmall}></div>
+              <div className={styles.skeletonMetaGrid}>
+                <div className={styles.skeletonMetaItem}></div>
+                <div className={styles.skeletonMetaItem}></div>
+                <div className={styles.skeletonMetaItem}></div>
+              </div>
+              <div className={styles.skeletonInfoGrid}>
+                <div className={styles.skeletonInfoItem}></div>
+                <div className={styles.skeletonInfoItem}></div>
+                <div className={styles.skeletonInfoItem}></div>
+              </div>
+              <div className={styles.skeletonButton}></div>
+            </div>
+          </div>
         </div>
       </div>
     );
