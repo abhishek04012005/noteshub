@@ -239,53 +239,8 @@ export async function generateMetadata(
     };
   }
 
-  // Fallback metadata when note is not found but URL has proper structure
-  if (slug.length === 4) {
-    const [university, course, subject, chapter] = slug.map(s =>
-      decodeURIComponent(s).replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
-    );
-
-    const fallbackTitle = `${subject} - Chapter ${chapter.replace(/^chapter-?/, '')} | ${university} ${course}`;
-    const fallbackDescription = `Study notes for ${subject} at ${university} in ${course} course. Chapter ${chapter.replace(/^chapter-?/, '')} notes available.`;
-
-    return {
-      title: `${fallbackTitle} | ${SITE_NAME}`,
-      description: fallbackDescription,
-      keywords: [university, course, subject, chapter, 'study notes', 'exam prep'],
-      robots: {
-        index: true,
-        follow: true,
-        googleBot: {
-          index: true,
-          follow: true,
-          'max-snippet': -1,
-          'max-image-preview': 'large',
-          'max-video-preview': -1,
-        },
-      },
-      openGraph: {
-        title: `${fallbackTitle} | ${SITE_NAME}`,
-        description: fallbackDescription,
-        type: 'website',
-        url: getCanonical(fullPath),
-        images: [{
-          url: OG_IMAGES.notes,
-          width: 1200,
-          height: 630,
-          alt: subject,
-        }],
-      },
-      twitter: {
-        card: 'summary',
-        title: `${fallbackTitle} | ${SITE_NAME}`,
-        description: fallbackDescription,
-        images: [OG_IMAGES.notes],
-      },
-      alternates: {
-        canonical: getCanonical(`/student/notes/${slug.join('/')}`),
-      },
-    };
-  }
+  // Do not use structured-slug fallback metadata. If the note cannot be resolved,
+  // fall back to a generic site-level metadata entry instead.
 
   return {
     title: `Study Notes | ${SITE_NAME}`,
