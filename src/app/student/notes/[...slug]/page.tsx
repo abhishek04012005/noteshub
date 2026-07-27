@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
-import axios from 'axios';
 import { Notes as NotesType } from '@/types';
 import { SITE_NAME, OG_IMAGES, getCanonical } from '@/config/site';
+import { supabase } from '@/lib/supabase';
 import NotesDetailClient from './client';
 
 // Helper function to extract UUID from slug
@@ -38,10 +38,17 @@ async function findNoteByDetails(
 
   const [university, course, subject, chapter] = slugArray;
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/notes`
-    );
-    const notes: NotesType[] = response.data.data || [];
+    const { data, error } = await supabase
+      .from('notes')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching notes for metadata:', error.message);
+      return null;
+    }
+
+    const notes: NotesType[] = (data || []) as NotesType[];
 
     const normalizedUniversity = normalizeForComparison(university);
     const normalizedCourse = normalizeForComparison(course);
@@ -99,6 +106,22 @@ async function findNoteByDetails(
   }
 }
 
+async function fetchNoteById(id: string): Promise<NotesType | null> {
+  try {
+    const { data, error } = await supabase.from('notes').select('*').eq('id', id).maybeSingle();
+
+    if (error) {
+      console.error('Error fetching note by id for metadata:', error.message);
+      return null;
+    }
+
+    return data as NotesType | null;
+  } catch (error) {
+    console.error('Error fetching note by id for metadata:', error);
+    return null;
+  }
+}
+
 export async function generateMetadata(
   { params }: { params: Promise<{ slug?: string[] }> | { slug?: string[] } }
 ): Promise<Metadata> {
@@ -120,12 +143,7 @@ export async function generateMetadata(
 
   // If not found by nested parameters and we have a traditional ID, fetch it
   if (!notes && id) {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/notes/${id}`);
-      notes = response.data.data;
-    } catch (error) {
-      // Note not found
-    }
+    notes = await fetchNoteById(id);
   }
 
   const fullPath = `/student/notes/${slug.join('/')}`;
