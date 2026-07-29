@@ -257,8 +257,8 @@ export default function NotesDetailClient({
           </div>
           <p className={styles.errorMessage}>Notes not found</p>
           <Link href="/student/browse" className={styles.errorLink}>
-            <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.5rem' }} />
-            Back to Browse
+            <ArrowBack sx={{ fontSize: '1.2rem', marginRight: '0.5rem' }} />
+            More Notes
           </Link>
         </div>
       </div>
@@ -315,7 +315,7 @@ export default function NotesDetailClient({
         <div className={styles.headerContainer}>
           <Link href="/student/browse" className={styles.backLink}>
             <ArrowBack sx={{ fontSize: '1rem', marginRight: '0.25rem', verticalAlign: 'middle' }} style={{ display: 'inline' }} />
-            Back to Browse
+            More Notes
           </Link>
         </div>
       </header>
