@@ -343,7 +343,7 @@ export default function NotesDetailClient({
               {/* Right Column - Details */}
               <div className={styles.detailsSection}>
                 <div>
-                  {/* Subject Badge */}
+                  {/* Subject Badges */}
                   <span className={styles.badge}>
                     {notes.subject}
                   </span>
