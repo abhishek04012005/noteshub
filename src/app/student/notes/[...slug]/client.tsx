@@ -310,7 +310,7 @@ export default function NotesDetailClient({
           return items;
         })()}
       />
-      {/* Header */}
+      {/* Headerd */}
       <header className={styles.headerFixed}>
         <div className={styles.headerContainer}>
           <Link href="/student/browse" className={styles.backLink}>
